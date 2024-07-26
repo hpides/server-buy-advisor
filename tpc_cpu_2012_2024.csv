@@ -32,6 +32,6 @@ year, model, model_launch_year, frequency, processors, cores, threads, TDP/CPU (
 2021, Intel Xeon Gold 6354 CPU, 2021, 3.00GHz, 2, 36, 72,205,410
 2022, Intel Xeon Gold 6354 CPU, 2021, 3.00GHz, 2, 36, 72,205,410
 2022, AMD EPYC 7343, 2021, 3.20 GHz, 2, 32, 64,190,380
-2023, Intel Xeon Platinum 8255C, null, 2.50 GHz, 3300, 79344, 158866,165,544500
+2023, Intel Xeon Platinum 8255C, 2019, 2.50 GHz, 3300, 79344, 158866,165,544500
 2023, Intel Xeon Gold 6354 CPU, 2021, 3.00GHz, 2, 36, 72,205,410
 2024, Intel Xeon Silver 4410Y, 2023, 2.00 GHz, 1, 12, 24,150,150
