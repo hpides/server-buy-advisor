@@ -1,3 +1,4 @@
+import json
 import os.path
 
 import pandas as pd
@@ -73,14 +74,17 @@ def list_files(directory):
 
 
 if __name__ == '__main__':
-    # NOTE: to parse the files, we currently have to open them once in excel and delete the image, then save again as xls file
-    root_path = '/Users/nils/Downloads/dl325g10'
-    list_of_files = list_files(root_path)
-    dl325g10_parsed_data = parse_list_of_files(root_path, list_of_files)
-    print(dl325g10_parsed_data)
+    input_data_path = './raw_data_no_image/'
+    parsed_data_dir = './parsed_data'
+    types = ['dl325g10', 'dl325g11']
 
-    root_path = '/Users/nils/Downloads/dl325g11'
-    list_of_files = list_files(root_path)
-    dl325g11_parsed_data = parse_list_of_files(root_path, list_of_files)
-    print(dl325g11_parsed_data)
+    for _type in types:
+        root_path = os.path.join(input_data_path, _type)
+        list_of_files = list_files(root_path)
+        parsed_data = parse_list_of_files(root_path, list_of_files)
+        print(parsed_data)
+        output_file_path = os.path.join(parsed_data_dir, f'{_type}.json')
+        with open(output_file_path, 'w') as file:
+            json.dump(parsed_data, file)
+
 
