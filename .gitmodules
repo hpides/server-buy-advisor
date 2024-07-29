@@ -1,0 +1,3 @@
+[submodule "intel-ark-crawler"]
+	path = intel-ark-crawler
+	url = https://github.com/mweisgut/intel-ark-crawler
