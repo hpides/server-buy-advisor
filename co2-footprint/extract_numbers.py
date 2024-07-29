@@ -1,3 +1,5 @@
+import os.path
+
 import pandas as pd
 
 
@@ -46,11 +48,22 @@ def extract_values(df):
     return result
 
 
+def parse_list_of_files(root_path, list_of_files):
+    result = {}
+    for file in list_of_files:
+        file_path = os.path.join(root_path, file)
+        df = read_xls_file(file_path)
+        result[file] = extract_values(df)
+
+    return result
+
+
 if __name__ == '__main__':
-    file_path = '/Users/nils/Downloads/test.xls'
-    df = read_xls_file(file_path)
+    # NOTE: to parse the files, we currently have to open them once in excel and delete the image, then save again as xls file
+    root_path = '/Users/nils/Downloads/'
+    list_of_files = ['test.xls']
 
-    values_of_interest = extract_values(df)
+    parsed_data = parse_list_of_files(root_path, list_of_files)
 
-    print(values_of_interest)
+    print(parsed_data)
 
