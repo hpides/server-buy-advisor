@@ -1,0 +1,197 @@
+# of AVX-512 FMA Units
+# of Displays Supported
+# of Efficient-cores
+# of Low Power Efficient-cores
+# of Performance-cores
+# of Processing Die Transistors
+# of QPI Links
+# of USB Ports
+4G WiMAX Wireless Technology
+4K Support
+64
+Active Management Technology (AMT)
+Adaptix Technology
+Additional Information
+AES New Instructions
+AI Software Frameworks Supported by CPU
+AI Software Frameworks Supported by GPU
+AI Software Frameworks Supported by NPU
+Anti-Theft Technology
+AV1 Encode/Decode
+Boot Guard
+Bus Speed
+Bus Speed
+Cache
+Cache
+Chipset / PCH PCIe Revision
+Clear Video HD Technology
+Clear Video Technology
+Code Name
+Configurable TDP-down
+Configurable TDP-down Base Frequency
+Configurable TDP-up
+Configurable TDP-up Base Frequency
+Control-Flow Enforcement Technology
+Datasheet
+Deep Learning Boost ( DL Boost) on CPU
+Deep Learning Boost ( DL Boost) on CPU
+Deep Learning Boost ( DL Boost) on GPU
+Demand Based Switching
+Description
+Device ID
+DirectX* Support
+ECC Memory Supported
+Efficient-core Base Frequency
+Efficient-core Max Turbo Frequency
+Embedded Options Available
+End of Servicing Updates Date
+Enhanced SpeedStep Technology
+Execute Disable Bit
+Execution Units
+Expected Discontinuance
+Fast Memory Access
+Flex Memory Access
+Flexible Display Interface ( FDI)
+FSB Parity
+Functional Safety (FuSa) Documentation Available
+Gaussian & Neural Accelerator
+General Purpose IO
+GPU Name
+Graphics Base Frequency
+Graphics Max Dynamic Frequency
+Graphics Output
+Graphics Video Max Memory
+H.264 Hardware Encode/Decode
+H.265 (HEVC) Hardware Encode/Decode
+Hardware Shield Eligibility
+HD Audio Technology
+High Definition Audio
+Hyper-Threading Technology
+id
+Identity Protection Technology
+Idle States
+Image Processing Unit
+Included Items
+Instruction Set
+Instruction Set Extensions
+Integrated IDE
+Integrated LAN
+InTru 3D Technology
+Launch Date
+Lithography
+Low Power Efficient-core Base Frequency
+Low Power Efficient-core Max Turbo Frequency
+Macrovision* License Required
+Marketing Status
+Matrix Storage Technology
+Max # of Memory Channels
+Max # of PCI Express Lanes
+Max # of SATA 6.0 Gb/s Ports
+Max CPU Configuration
+Max Frequency
+Max Memory Bandwidth
+Max Memory Size (dependent on memory type)
+Max Operating Temperature
+Max Resolution (DP)
+Max Resolution (eDP - Integrated Flat Panel)
+Max Resolution (HDMI)
+Max Resolution (VGA)
+Max Turbo Frequency
+Maximum Turbo Power
+ME Firmware Version
+Memory Protection Extensions ( MPX)
+Memory Types
+Microprocessor PCIe Revision
+Minimum Assured Power
+Minimum Operating Temperature
+MIPI SoundWire*
+Mode-based Execute Control (MBEC)
+Multi-Format Codec Engines
+My WiFi Technology
+name
+NPU Name
+number
+One-Click Recovery
+OpenCL* Support
+OpenGL* Support
+Optane Memory Supported
+OS Guard
+Package Size
+PCI Express Configurations
+PCI Express Revision
+PCI Support
+Performance-core Base Frequency
+Performance-core Max Turbo Frequency
+Physical Address Extensions
+Physical Core Count
+Processing Die Size
+Processor Base Frequency
+Processor Base Frequency
+Processor Base Power
+Processor Number
+Product Brief
+Product Collection
+Product Tuning (Embedded Uses)
+Quick Sync Video
+Rapid Storage Technology
+Ray Tracing
+Remote Platform Erase (RPE)
+Scalability
+Scenario Design Power (SDP)
+Scenario Design Power (SDP)
+Secure Key
+Servicing Status
+Smart Connect Technology
+Smart Response Technology
+Smart Sound Technology
+socket
+Sockets Supported
+Software Guard Extensions ( SGX)
+Sparsity Support
+Speed Shift Technology
+Stable IT Platform Program (SIPP)
+Standard Manageability (ISM)
+TCASE
+TDP
+TDP
+Thermal Monitoring Technologies
+Thermal Solution Specification
+Thermal Velocity Boost
+Thermal Velocity Boost Frequency
+Thermal Velocity Boost Temperature
+Thread Director
+Threat Detection Technology (TDT)
+Thunderbolt 4
+Time Coordinated Computing ( TCC)
+TJUNCTION
+Total # of SATA Ports
+Total Cores
+Total Memory Encryption
+Total Memory Encryption - Multi Key
+Total Threads
+Transactional Synchronization Extensions
+Trusted Execution Technology
+Turbo Boost Max Technology 3.0
+Turbo Boost Max Technology 3.0 Frequency
+Turbo Boost Technology
+Turbo Boost Technology 2.0 Frequency
+UART
+URL
+USB Revision
+Use Conditions
+Use Conditions
+Vertical Segment
+VID Voltage Range
+Virtualization Technology (VT-x)
+Virtualization Technology (VT-x)
+Virtualization Technology for Directed I/O (VT-d)
+Virtualization Technology for Directed I/O (VT-d)
+Virtualization Technology with Redirect Protection (VT-rp)
+Volume Management Device (VMD)
+VP9 Bitstream & Decoding
+vPro Eligibility
+VT-x with Extended Page Tables (EPT)
+VT-x with Extended Page Tables (EPT)
+Wake on Voice
+Windows Studio Effects Support
+Xe-cores
