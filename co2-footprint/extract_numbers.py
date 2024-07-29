@@ -3,6 +3,9 @@ import os.path
 
 import pandas as pd
 
+DL325_g_10 = 'dl325g10'
+DL325_g_11 = 'dl325g11'
+
 
 def read_xls_file(file_path):
     try:
@@ -76,15 +79,22 @@ def list_files(directory):
 if __name__ == '__main__':
     input_data_path = './raw_data_no_image/'
     parsed_data_dir = './parsed_data'
-    types = ['dl325g10', 'dl325g11']
+    types = [DL325_g_10, DL325_g_11]
+
+    additional_fields = {
+        DL325_g_10: {"example1": "42"},
+        DL325_g_11: {"example1": "42"},
+    }
 
     for _type in types:
         root_path = os.path.join(input_data_path, _type)
         list_of_files = list_files(root_path)
         parsed_data = parse_list_of_files(root_path, list_of_files)
+
+        for k, v in additional_fields[_type].items():
+            parsed_data[k] = v
+
         print(parsed_data)
         output_file_path = os.path.join(parsed_data_dir, f'{_type}.json')
         with open(output_file_path, 'w') as file:
             json.dump(parsed_data, file)
-
-
