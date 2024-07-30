@@ -78,7 +78,8 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
 
     ax1.set_title('Projected CO2 Emissions', fontsize=20)
 
-    plt.show()
+    # plt.show()
+    return fig
 
 ###################################################################################################
 ######################################### PARAMETERS ##############################################
@@ -96,7 +97,9 @@ system_b_projected_emissions = system_b.generate_accumm_projected_emissions(time
 
 abs_savings, relative_savings, ratio = generate_systems_comparison(system_a, system_b, time_horizon)
 
-create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio)
+fig = create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio)
+
+fig.savefig('./plots/brek_even_analysis.pdf', format='pdf' , bbox_inches="tight", transparent=True)
         
 
 
