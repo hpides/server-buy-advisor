@@ -1,7 +1,7 @@
 year, model, model_launch_year, frequency, processors, cores, threads, TDP/CPU (W),TDP-total (W)
 2001, Intel Pentium III, 1999, 700 MHz, 1, , ,18,18
 2001, Intel Pentium III, 1999, 1.266 GHz, 1, , ,30,30
-2001, IBM RS64-III, 1999, 500 MHz, 8, 8, 8,NA
+2001, IBM RS64-III, 1999, 500 MHz, 8, 8, 8,NA,NA
 2001, IBM RS64-IV, 2000, 600 MHz, 6, 12, ,15, 90
 2001, IBM RS64-IV, 2000, 600 MHz, 8, 16, ,15, 120
 2001, HP PA-RISC 8700, 2001, 750 MHz, 16 - 64, , ,42
