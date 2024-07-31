@@ -6,13 +6,13 @@ OLD_SYSTEM = "old_system"
 NEW_SYSTEM = "new_system"
 
 OPEX_PER_YEAR_SWEDEN_30_PERCENT = {
-    NEW_SYSTEM: 149 / 4,  # 158 kg C02e for 4 years of operation
+    NEW_SYSTEM: 149 / 4,  # 149 kg C02e for 4 years of operation
     OLD_SYSTEM: 158 / 4  # 158 kg C02e for 4 years of operation
 }
 
 OPEX_PER_YEAR_GERMANY_30_PERCENT = {
-    NEW_SYSTEM: 2154 / 4,  # 158 kg C02e for 4 years of operation
-    OLD_SYSTEM: 2312 / 4  # 158 kg C02e for 4 years of operation
+    NEW_SYSTEM: 2047 / 4,  # kg C02e for 4 years of operation
+    OLD_SYSTEM: 2312 / 4  # kg C02e for 4 years of operation
 }
 
 class System:
