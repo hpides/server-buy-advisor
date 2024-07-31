@@ -11,12 +11,33 @@ NEW_SYSTEM = "new_system"
 
 OPEX_PER_YEAR = {
     GERMANY: {
-        OLD_SYSTEM: 2312 / 4,  # kg C02e for 4 years of operation
-        NEW_SYSTEM: 2047 / 4,  # kg C02e for 4 years of operation
+        30: {  # utilization
+            OLD_SYSTEM: 2312 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 2047 / 4,  # kg C02e for 4 years of operation
+        },
+        60: {  # utilization
+            OLD_SYSTEM: 3276 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 3246 / 4,  # kg C02e for 4 years of operation
+        },
+        90: {  # utilization
+            OLD_SYSTEM: 4249 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 4459 / 4,  # kg C02e for 4 years of operation
+        }
+
     },
     SWEDEN: {
-        OLD_SYSTEM: 158 / 4,  # 158 kg C02e for 4 years of operation
-        NEW_SYSTEM: 149 / 4,  # 149 kg C02e for 4 years of operation
+        30: {  # utilization
+            OLD_SYSTEM: 158 / 4,  # 158 kg C02e for 4 years of operation
+            NEW_SYSTEM: 149 / 4,  # 149 kg C02e for 4 years of operation
+        },
+        60: {  # utilization
+            OLD_SYSTEM: 227 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 236 / 4,  # kg C02e for 4 years of operation
+        },
+        90: {  # utilization
+            OLD_SYSTEM: 296 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 324 / 4,  # kg C02e for 4 years of operation
+        }
     }
 }
 
@@ -64,19 +85,21 @@ class System:
 
         return capex_total
 
-    def generate_accumm_projected_opex_emissions(self, time_horizon: int, system_id: str, country: str):
-        opex_per_year = OPEX_PER_YEAR[country][system_id]
+    def generate_accumm_projected_opex_emissions(self, time_horizon: int, system_id: str, country: str,
+                                                 utilization: int):
+        opex_per_year = OPEX_PER_YEAR[country][utilization][system_id]
         projected_emissions = [i * opex_per_year for i in range(1, time_horizon + 1)]
 
         return np.array(projected_emissions)
 
 
-def generate_systems_comparison(new_system: System, old_system: System, time_horizon: int, country: str):
+def generate_systems_comparison(new_system: System, old_system: System, time_horizon: int, country: str,
+                                utilization: int):
     new_system_opex = new_system.generate_accumm_projected_opex_emissions(
-        time_horizon, system_id=NEW_SYSTEM, country=country)
+        time_horizon, system_id=NEW_SYSTEM, country=country, utilization=utilization)
     new_system_capex = new_system.calculate_capex_emissions()
     old_system_opex = old_system.generate_accumm_projected_opex_emissions(
-        time_horizon, system_id=NEW_SYSTEM, country=country)
+        time_horizon, system_id=OLD_SYSTEM, country=country, utilization=utilization)
 
     performance_factor = old_system.specint / new_system.specint  ##### --> Assumption: Better performance leads to lower utilization, hence less power draw.
 
@@ -186,12 +209,13 @@ old_system = System(
 ######################################### SYSTEMS OUTPUT ##########################################
 ###################################################################################################
 
-# assume data center in GERMANY
-new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = generate_systems_comparison(
-    new_system=new_system, old_system=old_system, time_horizon=time_horizon, country=GERMANY)
-create_projections_plot(new_system_opex, old_system_opex, ratio)
-
-# assume data center in SWEDEN
-new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = generate_systems_comparison(
-    new_system=new_system, old_system=old_system, time_horizon=time_horizon, country=SWEDEN)
-create_projections_plot(new_system_opex, old_system_opex, ratio)
+for country in [GERMANY, SWEDEN]:
+    for utilization in [30, 60, 90]:
+        new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = \
+            generate_systems_comparison(
+                new_system=new_system,
+                old_system=old_system,
+                time_horizon=time_horizon,
+                country=country,
+                utilization=utilization)
+        create_projections_plot(new_system_opex, old_system_opex, ratio)
