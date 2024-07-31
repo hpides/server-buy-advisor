@@ -2,18 +2,24 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+SWEDEN = "sweden"
+
+GERMANY = "germany"
+
 OLD_SYSTEM = "old_system"
 NEW_SYSTEM = "new_system"
 
-OPEX_PER_YEAR_SWEDEN_30_PERCENT = {
-    NEW_SYSTEM: 149 / 4,  # 149 kg C02e for 4 years of operation
-    OLD_SYSTEM: 158 / 4  # 158 kg C02e for 4 years of operation
+OPEX_PER_YEAR = {
+    GERMANY: {
+        OLD_SYSTEM: 2312 / 4,  # kg C02e for 4 years of operation
+        NEW_SYSTEM: 2047 / 4,  # kg C02e for 4 years of operation
+    },
+    SWEDEN: {
+        OLD_SYSTEM: 158 / 4,  # 158 kg C02e for 4 years of operation
+        NEW_SYSTEM: 149 / 4,  # 149 kg C02e for 4 years of operation
+    }
 }
 
-OPEX_PER_YEAR_GERMANY_30_PERCENT = {
-    NEW_SYSTEM: 2047 / 4,  # kg C02e for 4 years of operation
-    OLD_SYSTEM: 2312 / 4  # kg C02e for 4 years of operation
-}
 
 class System:
 
@@ -58,17 +64,19 @@ class System:
 
         return capex_total
 
-    def generate_accumm_projected_opex_emissions(self, time_horizon: int, system_id: str):
-        opex_per_year = OPEX_PER_YEAR_SWEDEN_30_PERCENT[system_id]
+    def generate_accumm_projected_opex_emissions(self, time_horizon: int, system_id: str, country: str):
+        opex_per_year = OPEX_PER_YEAR[country][system_id]
         projected_emissions = [i * opex_per_year for i in range(1, time_horizon + 1)]
 
         return np.array(projected_emissions)
 
 
-def generate_systems_comparison(new_system: System, old_system: System, time_horizon: int, utilization=1):
-    new_system_opex = new_system.generate_accumm_projected_opex_emissions(time_horizon, system_id=NEW_SYSTEM)
+def generate_systems_comparison(new_system: System, old_system: System, time_horizon: int, country: str):
+    new_system_opex = new_system.generate_accumm_projected_opex_emissions(
+        time_horizon, system_id=NEW_SYSTEM, country=country)
     new_system_capex = new_system.calculate_capex_emissions()
-    old_system_opex = old_system.generate_accumm_projected_opex_emissions(time_horizon, system_id=NEW_SYSTEM)
+    old_system_opex = old_system.generate_accumm_projected_opex_emissions(
+        time_horizon, system_id=NEW_SYSTEM, country=country)
 
     performance_factor = old_system.specint / new_system.specint  ##### --> Assumption: Better performance leads to lower utilization, hence less power draw.
 
@@ -178,12 +186,12 @@ old_system = System(
 ######################################### SYSTEMS OUTPUT ##########################################
 ###################################################################################################
 
-
+# assume data center in GERMANY
 new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = generate_systems_comparison(
-    new_system=new_system, old_system=old_system, time_horizon=time_horizon)
-
-# fig = create_projections_plot(new_system_opex, old_system_opex, ratio)
-
+    new_system=new_system, old_system=old_system, time_horizon=time_horizon, country=GERMANY)
 create_projections_plot(new_system_opex, old_system_opex, ratio)
 
-# fig.savefig('./plots/brek_even_analysis.pdf', format='pdf' , bbox_inches="tight", transparent=True)
+# assume data center in SWEDEN
+new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = generate_systems_comparison(
+    new_system=new_system, old_system=old_system, time_horizon=time_horizon, country=SWEDEN)
+create_projections_plot(new_system_opex, old_system_opex, ratio)
