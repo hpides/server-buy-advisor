@@ -3,6 +3,10 @@ import os.path
 import matplotlib.pyplot as plt
 import numpy as np
 
+SORTING = "sorting"
+
+SPECINT = "specint"
+
 SWEDEN = "sweden"
 GERMANY = "germany"
 OLD_SYSTEM = "old_system"
@@ -41,25 +45,32 @@ OPEX_PER_YEAR = {
     }
 }
 
+# Electricity maps
+GCI_CONSTANTS = {
+    SWEDEN: 25 / 1000,
+    GERMANY: 344 / 1000
+}
+
 
 class System:
 
-    def __init__(self, die_size: float, specint: float, lifetime: int, dram_capacity: int,
-                 ssd_capacity: int, hdd_capacity: int) -> None:
+    def __init__(self, die_size: float, performance_indicator: float, lifetime: int, dram_capacity: int,
+                 ssd_capacity: int, hdd_capacity: int, tdp: int) -> None:
         """
         :param die_size: in cm^2
-        :param specint:
+        :param performance_indicator:
         :param lifetime: in years
         :param dram_capacity: in GB
         :param ssd_capacity: in GB
         :param hdd_capacity: in GB
         """
         self.packaging_size = die_size
-        self.specint = specint
+        self.specint = performance_indicator
         self.lifetime = lifetime
         self.dram_capacity = dram_capacity
         self.ssd_capacity = ssd_capacity
         self.hdd_capacity = hdd_capacity
+        self.tdp = tdp
 
     def calculate_capex_emissions(self):
         ####### Source of the constants: https://ugupta.com/files/Gupta_ISCA2022_ACT.pdf
@@ -84,20 +95,40 @@ class System:
         return capex_total
 
     def generate_accumm_projected_opex_emissions(self, time_horizon: int, system_id: str, country: str,
-                                                 utilization: int):
-        opex_per_year = OPEX_PER_YEAR[country][utilization][system_id]
+                                                 utilization: float, lookup: bool):
+        if lookup:
+            opex_per_year = OPEX_PER_YEAR[country][utilization][system_id]
+        else:
+            opex_per_year = self.calculate_opex_emissions(utilization, country)
         projected_emissions = [i * opex_per_year for i in range(1, time_horizon + 1)]
 
         return np.array(projected_emissions)
 
+    def calculate_opex_emissions(self, utilization: float, country: str):
+        ######## Source of GCI: https://app.electricitymaps.com/zone/DE --> 2023 average for DE
+
+        energy_consumption_per_year = (self.tdp * 24 * 7 * 52) * (utilization/100) / 1000  #### kWh per year
+        GCI = GCI_CONSTANTS[country]
+
+        OPEX = energy_consumption_per_year * GCI  ###### Kg co2 per year
+
+        return OPEX
+
 
 def generate_systems_comparison(new_system: System, old_system: System, time_horizon: int, country: str,
-                                utilization: int):
+                                utilization: int, performance_measure: str):
+    if performance_measure == SPECINT:
+        lookup = True
+    elif performance_measure == SORTING:
+        lookup = False
+    else:
+        raise NotImplementedError
+
     new_system_opex = new_system.generate_accumm_projected_opex_emissions(
-        time_horizon, system_id=NEW_SYSTEM, country=country, utilization=utilization)
+        time_horizon, system_id=NEW_SYSTEM, country=country, utilization=utilization, lookup=lookup)
     new_system_capex = new_system.calculate_capex_emissions()
     old_system_opex = old_system.generate_accumm_projected_opex_emissions(
-        time_horizon, system_id=OLD_SYSTEM, country=country, utilization=utilization)
+        time_horizon, system_id=OLD_SYSTEM, country=country, utilization=utilization, lookup=lookup)
 
     performance_factor = old_system.specint / new_system.specint  ##### --> Assumption: Better performance leads to lower utilization, hence less power draw.
 
@@ -178,14 +209,26 @@ old_chip = 'Xeon Processor E5-2699 v3'
 ##### New Hardware
 # Die size from: https://www.techpowerup.com/cpu-specs/epyc-9334.c2922
 # 4 * 72 mm^2
+
+
+###################################################################################################
+######################################### SYSTEMS OUTPUT ##########################################
+###################################################################################################
+
+###################################################################################################
+#### SPECINT
+###################################################################################################
+
 new_die_size = 4 * 72 / 100  # cm^2
 new_system = System(
     die_size=new_die_size,
-    specint=470.4,  # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
+    performance_indicator=470.4,
+    # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
     lifetime=10,
     dram_capacity=8 * 64,
     ssd_capacity=2 * 1600,
-    hdd_capacity=0
+    hdd_capacity=0,
+    tdp=210
 )
 
 ##### Old Hardware
@@ -194,22 +237,19 @@ new_system = System(
 old_die_size = 74 / 100  # cm^2
 old_system = System(
     die_size=old_die_size,
-    specint=285.44,  # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
+    performance_indicator=285.44,
+    # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
     lifetime=10,
     dram_capacity=8 * 64,
     ssd_capacity=2 * 1600,
-    hdd_capacity=0
+    hdd_capacity=0,
+    tdp=180
 )
-
-###################################################################################################
-######################################### SYSTEMS OUTPUT ##########################################
-###################################################################################################
 
 for country in [GERMANY, SWEDEN]:
     for utilization in [30, 60, 90]:
-
         save_root_path = "./model_plots"
-        save_path = os.path.join(save_root_path, f"country-{country}-utilization-{utilization}")
+        save_path = os.path.join(save_root_path, f"country-{country}-utilization-{utilization}-workload-specint")
 
         new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = \
             generate_systems_comparison(
@@ -217,5 +257,49 @@ for country in [GERMANY, SWEDEN]:
                 old_system=old_system,
                 time_horizon=time_horizon,
                 country=country,
-                utilization=utilization)
+                utilization=utilization,
+                performance_measure=SPECINT)
+        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path)
+
+###################################################################################################
+#### SORTING
+###################################################################################################
+
+new_die_size = 660 / 100  # cm^2
+new_system = System(
+    die_size=new_die_size,
+    performance_indicator=2.5,
+    lifetime=10,
+    dram_capacity=8 * 64,
+    ssd_capacity=2 * 1600,
+    hdd_capacity=0,
+    tdp=205
+)
+
+##### Old Hardware
+old_die_size = 541 / 100  # cm^2
+old_system = System(
+    die_size=old_die_size,
+    performance_indicator=1,
+    # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
+    lifetime=10,
+    dram_capacity=8 * 64,
+    ssd_capacity=2 * 1600,
+    hdd_capacity=0,
+    tdp=130
+)
+
+for country in [GERMANY, SWEDEN]:
+    for utilization in [30, 60, 90]:
+        save_root_path = "./model_plots"
+        save_path = os.path.join(save_root_path, f"country-{country}-utilization-{utilization}-workload-sorting")
+
+        new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = \
+            generate_systems_comparison(
+                new_system=new_system,
+                old_system=old_system,
+                time_horizon=time_horizon,
+                country=country,
+                utilization=utilization,
+                performance_measure=SORTING)
         create_projections_plot(new_system_opex, old_system_opex, ratio, save_path)
