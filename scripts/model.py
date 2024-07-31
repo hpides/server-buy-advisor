@@ -1,3 +1,5 @@
+import os.path
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -115,7 +117,7 @@ def generate_systems_comparison(new_system: System, old_system: System, time_hor
 ######################################### PLOT ####################################################
 ###################################################################################################
 
-def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio):
+def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path):
     plt.rcParams.update({'text.usetex': True
                             , 'pgf.rcfonts': False
                             , 'text.latex.preamble': r"""\usepackage{iftex}
@@ -160,8 +162,10 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
 
     ax1.set_title('Projected CO2 Emissions', fontsize=20)
 
+    plt.savefig(f"{save_path}.png")
+    plt.savefig(f"{save_path}.svg")
+
     plt.show()
-    # return fig
 
 
 ###################################################################################################
@@ -203,6 +207,10 @@ old_system = System(
 
 for country in [GERMANY, SWEDEN]:
     for utilization in [30, 60, 90]:
+
+        save_root_path = "./model_plots"
+        save_path = os.path.join(save_root_path, f"country-{country}-utilization-{utilization}")
+
         new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = \
             generate_systems_comparison(
                 new_system=new_system,
@@ -210,4 +218,4 @@ for country in [GERMANY, SWEDEN]:
                 time_horizon=time_horizon,
                 country=country,
                 utilization=utilization)
-        create_projections_plot(new_system_opex, old_system_opex, ratio)
+        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path)
