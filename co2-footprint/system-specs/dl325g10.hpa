@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workload>
+  <strSizerName>HPE Power Advisor</strSizerName>
+  <strSizerVersion>15.4.1</strSizerVersion>
+  <InputVoltage>220</InputVoltage>
+  <VoltageType>VAC</VoltageType>
+  <Country>USA</Country>
+  <localUtilityRate>0.33</localUtilityRate>
+  <custdef>25</custdef>
+  <startDate>07/31/2024</startDate>
+  <Duration>4</Duration>
+  <pue>1.41</pue>
+  <Interview>
+    <Server Path="/LeftNav_Server_Images/ProLiant-DL325-Gen10-8SFF.gif" partnumber="P04654-B21" ID="rLfaFvS" TurboMode="False" FanRedundant="False" Selected="True" Type="Servers" Name="HPE ProLiant DL325 Gen10 8SFF" Height="1" Weight="15.6" refName="HPE ProLiant DL325 Gen10" LName="HPE ProLiant DL325 Gen10 8SFF">
+      <ModelDetails>
+        <Processor>
+          <Item>
+            <partnumber>P16639-L21</partnumber>
+            <processorname>AMD EPYC 7502P FIO Processor Kit for HPE ProLiant DL325 Gen10(P16639-L21)</processorname>
+            <processortype>Thirty Two Core</processortype>
+            <quantity>1</quantity>
+          </Item>
+        </Processor>
+        <Memory>
+          <Item>
+            <partnumber>P19045-B21</partnumber>
+            <memoryname>HPE 64GB (1x64GB) Dual Rank x4 DDR4-2933 CAS-21-21-21 Registered Smart Memory Kit(P19045-B21)</memoryname>
+            <memorytype>DDR-4</memorytype>
+            <quantity>8</quantity>
+            <dimmtype>R-DIMM</dimmtype>
+          </Item>
+        </Memory>
+        <HardDrive>
+          <Item>
+            <partnumber>P10222-B21</partnumber>
+            <harddrivename>HPE 1.6TB NVMe x4 MU SFF SCN DS SSD(P10222-B21)</harddrivename>
+            <harddrivetype>SSD</harddrivetype>
+            <quantity>2</quantity>
+            <HDType>SFF NVMe</HDType>
+          </Item>
+        </HardDrive>
+        <Expansion />
+        <MicroUPS />
+        <PowerSupply>
+          <Item>
+            <partnumber>865414-B21</partnumber>
+            <PowerSupplyname>HPE 800W FS Plat Ht Plg LH Pwr Sply Kit(865414-B21)</PowerSupplyname>
+            <PowerSupplytype>PowerSupply</PowerSupplytype>
+            <quantity>1</quantity>
+          </Item>
+        </PowerSupply>
+        <PowerRedundancy>None</PowerRedundancy>
+        <SliderUtilization>30</SliderUtilization>
+      </ModelDetails>
+      <PowerSummary>
+        <VARating>182.75</VARating>
+        <TotalBTUHR>615.94</TotalBTUHR>
+        <TotalSystemInput>0.83</TotalSystemInput>
+        <TotalWattage>180.63</TotalWattage>
+        <Idle>103.05</Idle>
+        <CircuitSizing>364.19</CircuitSizing>
+        <PSSelected>1</PSSelected>
+        <Turbo>364.19</Turbo>
+        <FanBlowOut>0</FanBlowOut>
+        <TotalDcPower>342.12</TotalDcPower>
+        <TotalDcTurbo>342.12</TotalDcTurbo>
+        <IdlePEM>91.43</IdlePEM>
+      </PowerSummary>
+    </Server>
+  </Interview>
+</workload>
