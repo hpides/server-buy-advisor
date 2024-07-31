@@ -1,14 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 SWEDEN = "sweden"
-
 GERMANY = "germany"
-
 OLD_SYSTEM = "old_system"
 NEW_SYSTEM = "new_system"
 
+# data from files in ./raw_data_no_image
 OPEX_PER_YEAR = {
     GERMANY: {
         30: {  # utilization
@@ -44,11 +42,10 @@ OPEX_PER_YEAR = {
 
 class System:
 
-    def __init__(self, die_size: float, TDP: float, specint: float, lifetime: int, dram_capacity: int,
+    def __init__(self, die_size: float, specint: float, lifetime: int, dram_capacity: int,
                  ssd_capacity: int, hdd_capacity: int) -> None:
         """
         :param die_size: in cm^2
-        :param TDP: in Watts
         :param specint:
         :param lifetime: in years
         :param dram_capacity: in GB
@@ -56,7 +53,6 @@ class System:
         :param hdd_capacity: in GB
         """
         self.packaging_size = die_size
-        self.TDP = TDP
         self.specint = specint
         self.lifetime = lifetime
         self.dram_capacity = dram_capacity
@@ -174,8 +170,6 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
 time_horizon = 10
 new_chip = 'Xeon Processor E5-2699 v4'
 old_chip = 'Xeon Processor E5-2699 v3'
-intel_cpus_df = pd.read_csv('../intel_cpus_filtered-extended.csv')
-subset = intel_cpus_df.loc[intel_cpus_df['name'].isin([new_chip, old_chip]), ['name', 'TDP', 'package-area-cm2']]
 
 ##### New Hardware
 # Die size from: https://www.techpowerup.com/cpu-specs/epyc-9334.c2922
@@ -183,7 +177,6 @@ subset = intel_cpus_df.loc[intel_cpus_df['name'].isin([new_chip, old_chip]), ['n
 new_die_size = 4 * 72 / 100  # cm^2
 new_system = System(
     die_size=new_die_size,
-    TDP=None,
     specint=470.4,  # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
     lifetime=10,
     dram_capacity=8 * 64,
@@ -197,7 +190,6 @@ new_system = System(
 old_die_size = 74 / 100  # cm^2
 old_system = System(
     die_size=old_die_size,
-    TDP=None,
     specint=285.44,  # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
     lifetime=10,
     dram_capacity=8 * 64,
