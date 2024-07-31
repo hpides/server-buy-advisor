@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workload>
+  <strSizerName>HPE Power Advisor</strSizerName>
+  <strSizerVersion>15.4.1</strSizerVersion>
+  <InputVoltage>220</InputVoltage>
+  <VoltageType>VAC</VoltageType>
+  <Country>USA</Country>
+  <localUtilityRate>0.33</localUtilityRate>
+  <custdef>344</custdef>
+  <startDate>07/31/2024</startDate>
+  <Duration>4</Duration>
+  <pue>1.41</pue>
+  <Interview>
+    <Server partnumber="P54199-B21" Path="/LeftNav_Server_Images/DL325-Gen11-8SFF.gif" ID="tIMgmUK" TurboMode="False" FanRedundant="False" Selected="True" Type="Servers" Name="HPE ProLiant DL325 Gen11 8SFF" Height="1" Weight="15.54" IncludeFanMax="False">
+      <ModelDetails>
+        <Processor>
+          <Item>
+            <partnumber>P53712-B21</partnumber>
+            <processorname>AMD EPYC 9334 2.7GHz 32-core 210W Processor for HPE(P53712-B21)</processorname>
+            <processortype>Thirty Two Core</processortype>
+            <quantity>1</quantity>
+          </Item>
+        </Processor>
+        <Memory>
+          <Item>
+            <partnumber>P50312-B21</partnumber>
+            <memoryname>HPE 64GB (1x64GB) Dual Rank x4 DDR5-5200 CAS-42-42-42 EC8 Registered Smart Memory Kit(P50312-B21)</memoryname>
+            <memorytype>DDR-5</memorytype>
+            <quantity>8</quantity>
+            <dimmtype>R-DIMM</dimmtype>
+          </Item>
+        </Memory>
+        <DriveCage>
+          <Item>
+            <partnumber>P54999-B21</partnumber>
+            <DriveCagename>HPE ProLiant DL325 Gen11 8SFF x1 Tri-Mode U.3 Backplane Kit(P54999-B21)</DriveCagename>
+            <DriveCagetype>8SFF x1 U.3 Front</DriveCagetype>
+            <quantity>1</quantity>
+            <maxsffbase>8</maxsffbase>
+            <maxlffbase>0</maxlffbase>
+            <maxsffNvMebase>8</maxsffNvMebase>
+            <maxsffNVMeEmbedded>8</maxsffNVMeEmbedded>
+            <maxedsffNvMebase />
+          </Item>
+        </DriveCage>
+        <HardDrive>
+          <Item>
+            <partnumber>P50227-B21</partnumber>
+            <harddrivename>HPE 1.6TB NVMe Gen4 High Performance Mixed Use SFF BC U.3 PM1735a SSD(P50227-B21)</harddrivename>
+            <harddrivetype>SSD</harddrivetype>
+            <quantity>2</quantity>
+            <HDType>SFF NVMe</HDType>
+          </Item>
+        </HardDrive>
+        <Expansion>
+          <Item>
+            <partnumber>P51181-B21</partnumber>
+            <expansionname>Broadcom BCM5719 Ethernet 1Gb 4-port BASE-T OCP3 Adapter for HPE(P51181-B21)</expansionname>
+            <cardtype>OCP</cardtype>
+            <expansiontype>OCP3</expansiontype>
+            <quantity>1</quantity>
+          </Item>
+        </Expansion>
+        <PowerSupply>
+          <Item>
+            <partnumber>P38995-B21</partnumber>
+            <PowerSupplyname>HPE 800W Flex Slot Platinum Hot Plug Low Halogen Power Supply Kit(P38995-B21)</PowerSupplyname>
+            <PowerSupplytype>PowerSupply</PowerSupplytype>
+            <quantity>1</quantity>
+          </Item>
+        </PowerSupply>
+        <PowerRedundancy>None</PowerRedundancy>
+        <SliderUtilization>30</SliderUtilization>
+      </ModelDetails>
+      <PowerSummary>
+        <VARating>171.84</VARating>
+        <TotalBTUHR>578.35</TotalBTUHR>
+        <TotalSystemInput>0.78</TotalSystemInput>
+        <TotalWattage>169.61</TotalWattage>
+        <Idle>70.34</Idle>
+        <CircuitSizing>403.07</CircuitSizing>
+        <PSSelected>1</PSSelected>
+        <Turbo>403.07</Turbo>
+        <FanBlowOut>0</FanBlowOut>
+        <TotalDcPower>378.93</TotalDcPower>
+        <TotalDcTurbo>378.93</TotalDcTurbo>
+        <IdlePEM>60.39</IdlePEM>
+      </PowerSummary>
+    </Server>
+  </Interview>
+</workload>
