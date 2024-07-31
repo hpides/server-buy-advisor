@@ -156,7 +156,7 @@ new_system = System(
     specint=2,
     lifetime=10,
     dram_capacity=8 * 64,
-    ssd_capacity=8 * 1600,
+    ssd_capacity=2 * 1600,
     hdd_capacity=0
 )
 
