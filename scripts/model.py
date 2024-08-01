@@ -174,9 +174,10 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
                          })
 
     bar_width = 0.25
+    font_size = 26
     fig, ax1 = plt.subplots(figsize=(10, 6))
     ax2 = ax1.twinx()
-    time_horizon_array = np.arange(system_a_projected_emissions.shape[0])
+    time_horizon_array = np.arange(1, system_a_projected_emissions.shape[0] + 1)
 
     ax1.bar(time_horizon_array - bar_width / 2, system_b_projected_emissions, color='#fdae61', label='Current HW',
             width=bar_width)
@@ -185,7 +186,7 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
             width=bar_width)
 
     ax2.plot(time_horizon_array, ratio, linestyle='-', color='#d01c8b', label='Ratio', marker='^')
-    ax2.set_ylabel('Ratio', color='#d01c8b', fontsize=20)
+    ax2.set_ylabel('Ratio', color='#d01c8b', fontsize=font_size)
     ax2.tick_params(axis='y', colors='#d01c8b')
 
     line = ax2.lines[0]
@@ -197,16 +198,19 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
     ax2.annotate('Break-even', (0.6, 1), xytext=(0, 5),
                  textcoords="offset points", ha='center', va='bottom', color='#d01c8b', fontsize=20)
 
-    ax1.legend(loc='upper center', ncols=2, fontsize=20, frameon=False)
-    ax1.set_ylabel('Accumulated CO2 Kg.', fontsize=20)
-    ax1.set_xlabel('Year', fontsize=20)
-    ax1.tick_params(axis='x', labelsize=20)
-    ax1.tick_params(axis='y', labelsize=20)
-    ax2.tick_params(axis='y', labelsize=20)
+    ax1.legend(loc='upper center', ncols=2, fontsize=font_size, frameon=False)
+    ax1.set_ylabel('Accumulated CO2 Kg.', fontsize=font_size)
+    ax1.set_xlabel('Year', fontsize=font_size)
+    ax1.set_xticks(time_horizon_array)
+    ax1.tick_params(axis='x', labelsize=font_size)
+    ax1.tick_params(axis='y', labelsize=font_size)
+    ax2.tick_params(axis='y', labelsize=font_size)
+    ax2.set_ylim(bottom=0)
     ax2.set_ylim(top=np.max(ratio) + np.std(ratio))
 
-    ax1.set_title('Projected CO2 Emissions', fontsize=20)
+    ax1.set_title('Projected CO2 Emissions', fontsize=font_size)
 
+    plt.tight_layout()
     plt.savefig(f"{save_path}.png")
     plt.savefig(f"{save_path}.svg")
 
