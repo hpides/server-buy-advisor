@@ -283,6 +283,7 @@ for country in [GERMANY, SWEDEN]:
 #### SORTING
 ###################################################################################################
 
+time_horizon = 16
 new_die_size = 660 / 100  # cm^2
 new_system = System(
     die_size=new_die_size,
