@@ -51,11 +51,14 @@ GCI_CONSTANTS = {
     GERMANY: 344 / 1000
 }
 
+# according to https://dl.acm.org/doi/fullHtml/10.1145/3466752.3480089#tab1
+DRAM_WATTS_PER_256GB = 25.9
+
 
 class System:
 
     def __init__(self, die_size: float, performance_indicator: float, lifetime: int, dram_capacity: int,
-                 ssd_capacity: int, hdd_capacity: int, tdp: int) -> None:
+                 ssd_capacity: int, hdd_capacity: int, cpu_tdp: int) -> None:
         """
         :param die_size: in cm^2
         :param performance_indicator:
@@ -63,6 +66,7 @@ class System:
         :param dram_capacity: in GB
         :param ssd_capacity: in GB
         :param hdd_capacity: in GB
+        :param cpu_tdp: in Watt
         """
         self.packaging_size = die_size
         self.specint = performance_indicator
@@ -70,7 +74,7 @@ class System:
         self.dram_capacity = dram_capacity
         self.ssd_capacity = ssd_capacity
         self.hdd_capacity = hdd_capacity
-        self.tdp = tdp
+        self.cpu_tdp = cpu_tdp
 
     def calculate_capex_emissions(self):
         ####### Source of the constants: https://ugupta.com/files/Gupta_ISCA2022_ACT.pdf
@@ -107,10 +111,18 @@ class System:
     def calculate_opex_emissions(self, utilization: float, country: str):
         ######## Source of GCI: https://app.electricitymaps.com/zone/DE --> 2023 average for DE
 
-        energy_consumption_per_year = (self.tdp * 24 * 7 * 52) * (utilization/100) / 1000  #### kWh per year
+        cpu_energy_consumption = (self.cpu_tdp * (utilization / 100)) / 1000  #### kW
+        dram_energy_consumption = (self.dram_capacity / 256 * DRAM_WATTS_PER_256GB) / 1000  #### kW
+
+        # Watts according to https://www.ssstc.com/knowledge-detail/ssd-vs-hdd-power-efficiency/#:~:text=On%20average%2C%20SSDs%20consume%20around,may%20consume%203%2D4%20watts.
+        ssd_energy_consumption = (3 if (self.ssd_capacity > 0) else 0) / 1000  ###kW
+        hdd_energy_consumption = (7 if (self.hdd_capacity > 0) else 0) / 1000  ###kW
+
+        total_watts = cpu_energy_consumption + dram_energy_consumption + ssd_energy_consumption + hdd_energy_consumption
+        total_watts_per_year = 24 * 7 * 52 * total_watts  ### kWh
         GCI = GCI_CONSTANTS[country]
 
-        OPEX = energy_consumption_per_year * GCI  ###### Kg co2 per year
+        OPEX = total_watts_per_year * GCI  ###### Kg co2 per year
 
         return OPEX
 
@@ -165,7 +177,6 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
     fig, ax1 = plt.subplots(figsize=(10, 6))
     ax2 = ax1.twinx()
     time_horizon_array = np.arange(system_a_projected_emissions.shape[0])
-
 
     ax1.bar(time_horizon_array - bar_width / 2, system_b_projected_emissions, color='#fdae61', label='Current HW',
             width=bar_width)
@@ -231,7 +242,7 @@ new_system = System(
     dram_capacity=8 * 64,
     ssd_capacity=2 * 1600,
     hdd_capacity=0,
-    tdp=210
+    cpu_tdp=210
 )
 
 ##### Old Hardware
@@ -246,7 +257,7 @@ old_system = System(
     dram_capacity=8 * 64,
     ssd_capacity=2 * 1600,
     hdd_capacity=0,
-    tdp=180
+    cpu_tdp=180
 )
 
 for country in [GERMANY, SWEDEN]:
@@ -276,7 +287,7 @@ new_system = System(
     dram_capacity=8 * 64,
     ssd_capacity=2 * 1600,
     hdd_capacity=0,
-    tdp=205
+    cpu_tdp=205
 )
 
 ##### Old Hardware
@@ -289,7 +300,7 @@ old_system = System(
     dram_capacity=8 * 64,
     ssd_capacity=2 * 1600,
     hdd_capacity=0,
-    tdp=130
+    cpu_tdp=130
 )
 
 for country in [GERMANY, SWEDEN]:
