@@ -166,10 +166,13 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
     ax2 = ax1.twinx()
     time_horizon_array = np.arange(system_a_projected_emissions.shape[0])
 
-    ax1.bar(time_horizon_array - bar_width / 2, system_a_projected_emissions, color='#abd9e9', label='Alternative HW',
+
+    ax1.bar(time_horizon_array - bar_width / 2, system_b_projected_emissions, color='#fdae61', label='Current HW',
             width=bar_width)
-    ax1.bar(time_horizon_array + bar_width / 2, system_b_projected_emissions, color='#fdae61', label='Current HW',
+
+    ax1.bar(time_horizon_array + bar_width / 2, system_a_projected_emissions, color='#abd9e9', label='New HW',
             width=bar_width)
+
     ax2.plot(time_horizon_array, ratio, linestyle='-', color='#d01c8b', label='Ratio', marker='^')
     ax2.set_ylabel('Ratio', color='#d01c8b', fontsize=20)
     ax2.tick_params(axis='y', colors='#d01c8b')
