@@ -14,13 +14,14 @@ df = df.replace({"Intel Xeon ": "", "Gold ": "", "Platinum ": ""}, regex=True)
 df["PLOT_KEY"] = df.LAUNCH_YEAR.astype(str) + " Q" + df.LAUNCH_QUARTER.astype(str) + " (" + df.CPU_IDENTIFIER + ")"
 df["K_SORTED_TUPLES_PER_S"] = df["SORTED_TUPLES_PER_S"] / 1_000
 df["M_SORTED_TUPLES_PER_S"] = df["SORTED_TUPLES_PER_S"] / 1_000_000
+df["ADAPTED_MT_SPECINT"] = df.SPECINT * df.CORE_COUNT
 
 # Melt the dataframe for easier plotting
 df_melted = pd.melt(df, id_vars=["PLOT_KEY"], value_vars=["SORTED_TUPLES_PER_S", "TPCH_RUNS_PER_H", "SPECINT_RATE"],
                     var_name="BENCHMARK")
 
-# Set seaborn plotting aesthetics as default
-sns.set()
+# Set whitegrid style which is quite similar to Marcel's and Ricardo's style.
+sns.set_style("whitegrid")
 
 # Update rcParams to affect the plots
 plt.rcParams.update({
@@ -39,7 +40,7 @@ plt.rcParams.update({
 fig, axes = plt.subplots(1, 3, figsize=(14, 3), sharey=True)
 
 # Plot each subplot
-for axis_id, column_name, axis_title, plot_title in [(0, "SPECINT_RATE", "Result score", "SPECrate 2017 Integer"),
+for axis_id, column_name, axis_title, plot_title in [(0, "ADAPTED_MT_SPECINT", "Result score", "SPECint 2017"),
                                                      (1, "TPCH_RUNS_PER_H", "Runs per hour", "TPC-H - High Load"),
                                                      (2, "K_SORTED_TUPLES_PER_S", "Thousand tuples sorted per second",
                                                       "Parallel std::sort")]:
@@ -49,7 +50,7 @@ for axis_id, column_name, axis_title, plot_title in [(0, "SPECINT_RATE", "Result
     axes[axis_id].set_ylabel(None)
     axes[axis_id].text(df[column_name].min() + (df[column_name].max() - df[column_name].min()) / 2, 0.075,
                        f"{df[column_name].max() / df[column_name].min():.2f}x", horizontalalignment="center",
-                       color="#404040", fontsize=font_size)
+                       color="#404040", fontsize=int(0.75 * float(font_size)))
     axes[axis_id].annotate('', xy=(df[column_name].min(), 0.2), xytext=(df[column_name].max(), 0.2),
                            arrowprops=dict(arrowstyle="<->", color="#404040"))
     axes[axis_id].tick_params(axis='x', labelsize=font_size)  # Set font size for x-tick labels
@@ -58,5 +59,5 @@ for axis_id, column_name, axis_title, plot_title in [(0, "SPECINT_RATE", "Result
 plt.tight_layout()
 
 # Save the figure
-fig.savefig("sorting_and_tpch2.pdf")
+fig.savefig("sorting_and_tpch3.pdf")
 plt.show()
