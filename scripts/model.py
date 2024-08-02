@@ -160,7 +160,7 @@ def generate_systems_comparison(new_system: System, old_system: System, time_hor
 ######################################### PLOT ####################################################
 ###################################################################################################
 
-def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path):
+def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1):
     plt.rcParams.update({'text.usetex': True
                             , 'pgf.rcfonts': False
                             , 'text.latex.preamble': r"""\usepackage{iftex}
@@ -173,11 +173,17 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
                                             \fi"""
                          })
 
-    bar_width = 0.25
+    bar_width = 0.25 * step_size
     font_size = 26
     fig, ax1 = plt.subplots(figsize=(10, 6))
     ax2 = ax1.twinx()
-    time_horizon_array = np.arange(1, system_a_projected_emissions.shape[0] + 1)
+
+    x_values = list(range(1, system_a_projected_emissions.shape[0] + 1, step_size))
+    system_a_projected_emissions = [system_a_projected_emissions[i - 1] for i in x_values]
+    system_b_projected_emissions = [system_b_projected_emissions[i - 1] for i in x_values]
+    ratio = [ratio[i - 1] for i in x_values]
+
+    time_horizon_array = np.array(x_values)
 
     ax1.bar(time_horizon_array - bar_width / 2, system_b_projected_emissions, color='#fdae61', label='Current HW',
             width=bar_width)
@@ -283,16 +289,16 @@ for country in [GERMANY, SWEDEN]:
 #### SORTING
 ###################################################################################################
 
-time_horizon = 16
-new_die_size = 660 / 100  # cm^2
+time_horizon = 20
+new_die_size = (4 * 477) / 100  # cm^2
 new_system = System(
     die_size=new_die_size,
-    performance_indicator=2.5,
-    lifetime=10,
+    performance_indicator=3.55,
+    lifetime=20,
     dram_capacity=8 * 64,
     ssd_capacity=2 * 1600,
     hdd_capacity=0,
-    cpu_tdp=205
+    cpu_tdp=350
 )
 
 ##### Old Hardware
@@ -301,7 +307,7 @@ old_system = System(
     die_size=old_die_size,
     performance_indicator=1,
     # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
-    lifetime=10,
+    lifetime=20,
     dram_capacity=8 * 64,
     ssd_capacity=2 * 1600,
     hdd_capacity=0,
@@ -321,4 +327,4 @@ for country in [GERMANY, SWEDEN]:
                 country=country,
                 utilization=utilization,
                 performance_measure=SORTING)
-        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path)
+        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, step_size=2)
