@@ -112,7 +112,7 @@ class System:
         ######## Source of GCI: https://app.electricitymaps.com/zone/DE --> 2023 average for DE
 
         cpu_energy_consumption = (self.cpu_tdp * (utilization / 100)) / 1000  #### kW
-        dram_energy_consumption = (self.dram_capacity / 256 * DRAM_WATTS_PER_256GB) / 1000  #### kW
+        dram_energy_consumption = ((self.dram_capacity / 256) * DRAM_WATTS_PER_256GB) / 1000  #### kW
 
         # Watts according to https://www.ssstc.com/knowledge-detail/ssd-vs-hdd-power-efficiency/#:~:text=On%20average%2C%20SSDs%20consume%20around,may%20consume%203%2D4%20watts.
         ssd_energy_consumption = (3 if (self.ssd_capacity > 0) else 0) / 1000  ###kW
@@ -160,7 +160,7 @@ def generate_systems_comparison(new_system: System, old_system: System, time_hor
 ######################################### PLOT ####################################################
 ###################################################################################################
 
-def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1):
+def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1, fig_size=(10, 6)):
     plt.rcParams.update({'text.usetex': True
                             , 'pgf.rcfonts': False
                             , 'text.latex.preamble': r"""\usepackage{iftex}
@@ -175,7 +175,7 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
 
     bar_width = 0.25 * step_size
     font_size = 26
-    fig, ax1 = plt.subplots(figsize=(10, 6))
+    fig, ax1 = plt.subplots(figsize=fig_size)
     ax2 = ax1.twinx()
 
     x_values = list(range(1, system_a_projected_emissions.shape[0] + 1, step_size))
@@ -205,7 +205,7 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
                  textcoords="offset points", ha='center', va='bottom', color='#d01c8b', fontsize=20)
 
     ax1.legend(loc='upper center', ncols=2, fontsize=font_size, frameon=False)
-    ax1.set_ylabel('Accumulated CO2 Kg.', fontsize=font_size)
+    ax1.set_ylabel('Accumulated CO$_2$ Kg.', fontsize=font_size)
     ax1.set_xlabel('Year', fontsize=font_size)
     ax1.set_xticks(time_horizon_array)
     ax1.tick_params(axis='x', labelsize=font_size)
@@ -214,7 +214,7 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
     ax2.set_ylim(bottom=0)
     ax2.set_ylim(top=np.max(ratio) + np.std(ratio))
 
-    ax1.set_title('Projected CO2 Emissions', fontsize=font_size)
+    ax1.set_title('Projected CO$_2$ Emissions', fontsize=font_size)
 
     plt.tight_layout()
     plt.savefig(f"{save_path}.png")
@@ -242,6 +242,8 @@ old_chip = 'Xeon Processor E5-2699 v3'
 ###################################################################################################
 #### SPECINT
 ###################################################################################################
+
+fig_size = (10, 5)
 
 new_die_size = 4 * 72 / 100  # cm^2
 new_system = System(
@@ -283,7 +285,7 @@ for country in [GERMANY, SWEDEN]:
                 country=country,
                 utilization=utilization,
                 performance_measure=SPECINT)
-        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path)
+        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, fig_size=fig_size)
 
 ###################################################################################################
 #### SORTING
@@ -327,4 +329,4 @@ for country in [GERMANY, SWEDEN]:
                 country=country,
                 utilization=utilization,
                 performance_measure=SORTING)
-        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, step_size=2)
+        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, step_size=2, fig_size=fig_size)
