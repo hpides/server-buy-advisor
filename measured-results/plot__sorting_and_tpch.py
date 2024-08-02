@@ -50,7 +50,7 @@ for axis_id, column_name, axis_title, plot_title in [(0, "ADAPTED_MT_SPECINT", "
     axes[axis_id].set_ylabel(None)
     axes[axis_id].text(df[column_name].min() + (df[column_name].max() - df[column_name].min()) / 2, 0.075,
                        f"{df[column_name].max() / df[column_name].min():.2f}x", horizontalalignment="center",
-                       color="#404040", fontsize=int(0.75 * float(font_size)))
+                       color="#404040", fontsize=int(0.9 * float(font_size)))
     axes[axis_id].annotate('', xy=(df[column_name].min(), 0.2), xytext=(df[column_name].max(), 0.2),
                            arrowprops=dict(arrowstyle="<->", color="#404040"))
     axes[axis_id].tick_params(axis='x', labelsize=font_size)  # Set font size for x-tick labels
