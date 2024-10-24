@@ -1,8 +1,14 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+# colors
+BAR2 = "#abd9e9"
+BAR1 = "#fdae61"
+LINE = "#d7191c"
 
-def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1, fig_size=(10, 6)):
+
+def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1,
+                            fig_size=(10, 6)):
     plt.rcParams.update({'text.usetex': True
                             , 'pgf.rcfonts': False
                             , 'text.latex.preamble': r"""\usepackage{iftex}
@@ -27,24 +33,24 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
 
     time_horizon_array = np.array(x_values)
 
-    ax1.bar(time_horizon_array - bar_width / 2, system_b_projected_emissions, color='#fdae61', label='Current HW',
+    ax1.bar(time_horizon_array - bar_width / 2, system_b_projected_emissions, color=BAR2, label='Current HW',
             width=bar_width)
 
-    ax1.bar(time_horizon_array + bar_width / 2, system_a_projected_emissions, color='#abd9e9', label='New HW',
+    ax1.bar(time_horizon_array + bar_width / 2, system_a_projected_emissions, color=BAR1, label='New HW',
             width=bar_width)
 
-    ax2.plot(time_horizon_array, ratio, linestyle='-', color='#d01c8b', label='Ratio', marker='^')
-    ax2.set_ylabel('Ratio', color='#d01c8b', fontsize=font_size)
-    ax2.tick_params(axis='y', colors='#d01c8b')
+    ax2.plot(time_horizon_array, ratio, linestyle='-', color=LINE, marker='^', linewidth=2, markersize=10)
+    ax2.set_ylabel('Ratio', color=LINE, fontsize=font_size, fontweight='bold')
+    ax2.tick_params(axis='y', colors=LINE)
 
     line = ax2.lines[0]
     for x_value, y_value in zip(line.get_xdata(), line.get_ydata()):
         label = "{:.2f}".format(y_value)
         ax2.annotate(label, (x_value, y_value), xytext=(0, 5),
-                     textcoords="offset points", ha='center', va='bottom', color='#d01c8b', fontsize=20)
-    ax2.axhline(1, color='#d01c8b', linestyle='dashed')
-    ax2.annotate('Break-even', (0.6, 1), xytext=(0, 5),
-                 textcoords="offset points", ha='center', va='bottom', color='#d01c8b', fontsize=20)
+                     textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=20)
+    ax2.axhline(1, color=LINE, linestyle='dashed', linewidth=2)
+    ax2.annotate('Break-even', (1.5, 1), xytext=(0, 5),
+                 textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=20, fontweight='bold')
 
     ax1.legend(loc='upper center', ncols=2, fontsize=font_size, frameon=False)
     ax1.set_ylabel('Accumulated CO$_2$ Kg.', fontsize=font_size)
