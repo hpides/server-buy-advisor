@@ -19,7 +19,7 @@ def generate_systems_comparison(new_system: System, old_system: System, time_hor
     old_system_opex = old_system.generate_accumm_projected_opex_emissions(
         time_horizon, system_id=OLD_SYSTEM, country=country, utilization=utilization, lookup=lookup)
 
-    performance_factor = old_system.specint / new_system.specint  ##### --> Assumption: Better performance leads to lower utilization, hence less power draw.
+    performance_factor = old_system.performance_indicator / new_system.performance_indicator  ##### --> Assumption: Better performance leads to lower utilization, hence less power draw.
 
     new_system_opex = new_system_opex * performance_factor
 

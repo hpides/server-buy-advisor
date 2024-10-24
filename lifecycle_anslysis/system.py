@@ -17,7 +17,7 @@ class System:
         :param cpu_tdp: in Watt
         """
         self.packaging_size = die_size
-        self.specint = performance_indicator
+        self.performance_indicator = performance_indicator
         self.lifetime = lifetime
         self.dram_capacity = dram_capacity
         self.ssd_capacity = ssd_capacity
