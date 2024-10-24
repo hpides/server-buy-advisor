@@ -1,59 +1,153 @@
-import pandas as pd
+import os.path
+
 import matplotlib.pyplot as plt
 import numpy as np
 
-class system:
+SORTING = "sorting"
 
-    def __init__(self, packaging_size:float, TDP:float, specint:float, lifetime:int) -> None:
-        self.packaging_size = packaging_size
-        self.TDP = TDP
-        self.specint = specint
+SPECINT = "specint"
+
+SWEDEN = "sweden"
+GERMANY = "germany"
+OLD_SYSTEM = "old_system"
+NEW_SYSTEM = "new_system"
+
+# data from files in ./raw_data_no_image
+OPEX_PER_YEAR = {
+    GERMANY: {
+        30: {  # utilization
+            OLD_SYSTEM: 2312 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 2047 / 4,  # kg C02e for 4 years of operation
+        },
+        60: {  # utilization
+            OLD_SYSTEM: 3276 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 3246 / 4,  # kg C02e for 4 years of operation
+        },
+        90: {  # utilization
+            OLD_SYSTEM: 4249 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 4459 / 4,  # kg C02e for 4 years of operation
+        }
+
+    },
+    SWEDEN: {
+        30: {  # utilization
+            OLD_SYSTEM: 158 / 4,  # 158 kg C02e for 4 years of operation
+            NEW_SYSTEM: 149 / 4,  # 149 kg C02e for 4 years of operation
+        },
+        60: {  # utilization
+            OLD_SYSTEM: 227 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 236 / 4,  # kg C02e for 4 years of operation
+        },
+        90: {  # utilization
+            OLD_SYSTEM: 296 / 4,  # kg C02e for 4 years of operation
+            NEW_SYSTEM: 324 / 4,  # kg C02e for 4 years of operation
+        }
+    }
+}
+
+# Electricity maps
+GCI_CONSTANTS = {
+    SWEDEN: 25 / 1000,
+    GERMANY: 344 / 1000
+}
+
+# according to https://dl.acm.org/doi/fullHtml/10.1145/3466752.3480089#tab1
+DRAM_WATTS_PER_256GB = 25.9
+
+
+class System:
+
+    def __init__(self, die_size: float, performance_indicator: float, lifetime: int, dram_capacity: int,
+                 ssd_capacity: int, hdd_capacity: int, cpu_tdp: int) -> None:
+        """
+        :param die_size: in cm^2
+        :param performance_indicator:
+        :param lifetime: in years
+        :param dram_capacity: in GB
+        :param ssd_capacity: in GB
+        :param hdd_capacity: in GB
+        :param cpu_tdp: in Watt
+        """
+        self.packaging_size = die_size
+        self.specint = performance_indicator
         self.lifetime = lifetime
-    
-    def calculate_capex_emissions(self):
+        self.dram_capacity = dram_capacity
+        self.ssd_capacity = ssd_capacity
+        self.hdd_capacity = hdd_capacity
+        self.cpu_tdp = cpu_tdp
 
+    def calculate_capex_emissions(self):
         ####### Source of the constants: https://ugupta.com/files/Gupta_ISCA2022_ACT.pdf
 
-        MPA = 0.5           ### Procure materials | kg co2 per cm2
-        EPA = 2.15          ### 0.8-3.5 | Fab Energy | kWh per cm2
-        CI_fab = 0.365      ### 30-700  | g co2 per kWh  --> converted to kg co2 per kWh
-        GPA = 0.3           ### 0.1-0.5 | Kg CO2 per cm2
-        _yield = 0.875      ### 0-1  | Fab yield
+        MPA = 0.5  ### Procure materials | kg co2 per cm2
+        EPA = 2.15  ### 0.8-3.5 | Fab Energy | kWh per cm2
+        CI_fab = 0.365  ### 30-700  | g co2 per kWh  --> converted to kg co2 per kWh
+        GPA = 0.3  ### 0.1-0.5 | Kg CO2 per cm2
+        _yield = 0.875  ### 0-1  | Fab yield
+        E_DRAM = 0.3  ### 0 - 0.6 | Kg CO2/GB
+        E_SDD = 0.015  ### 0 - 0.03 | Kg CO2/GB
+        E_HDD = 0.06  ### 0 - 0.12 | Kg CO2/GB
 
-        CAPEX = ((CI_fab * EPA + GPA + MPA) * self.packaging_size) / _yield #### Kg Co2
+        # Note assume package size == die size
+        capex_cpu = ((CI_fab * EPA + GPA + MPA) * self.packaging_size) / _yield  #### Kg Co2
+        capex_dram = self.dram_capacity * E_DRAM  #### Kg Co2
+        capex_ssd = self.ssd_capacity * E_SDD  #### Kg Co2
+        capex_hdd = self.hdd_capacity * E_HDD  #### Kg Co2
 
-        return CAPEX
-    
-    def calculate_opex_emissions(self, utilization = 1):
+        capex_total = capex_cpu + capex_dram + capex_ssd + capex_hdd  #### Kg Co2
 
-        ######## Source of GCI: https://app.electricitymaps.com/zone/DE --> 2023 average for DE
+        return capex_total
 
-        energy_consumption_per_year = (self.TDP * 24 * 7 * 52) * utilization    #### kWh per year
-        GCI = 0.4                                                               #### kg co2 eq per kWh
-
-        OPEX = energy_consumption_per_year * GCI ###### Kg co2 per year
-
-        return OPEX 
-
-
-    def generate_accumm_projected_opex_emissions(self, time_horizon:int, utilization=1):
-        
-        opex = self.calculate_opex_emissions(utilization)
-        projected_emissions = [i*opex for i in range(1, time_horizon + 1)]
+    def generate_accumm_projected_opex_emissions(self, time_horizon: int, system_id: str, country: str,
+                                                 utilization: float, lookup: bool):
+        if lookup:
+            opex_per_year = OPEX_PER_YEAR[country][utilization][system_id]
+        else:
+            opex_per_year = self.calculate_opex_emissions(utilization, country)
+        projected_emissions = [i * opex_per_year for i in range(1, time_horizon + 1)]
 
         return np.array(projected_emissions)
 
+    def calculate_opex_emissions(self, utilization: float, country: str):
+        ######## Source of GCI: https://app.electricitymaps.com/zone/DE --> 2023 average for DE
 
-def generate_systems_comparison(new_system:system, old_system:system, time_horizon:int, utilization=1):
+        cpu_energy_consumption = (self.cpu_tdp * (utilization / 100)) / 1000  #### kW
+        dram_energy_consumption = ((self.dram_capacity / 256) * DRAM_WATTS_PER_256GB) / 1000  #### kW
 
-    new_system_opex = new_system.generate_accumm_projected_opex_emissions(time_horizon, utilization)
+        # Watts according to https://www.ssstc.com/knowledge-detail/ssd-vs-hdd-power-efficiency/#:~:text=On%20average%2C%20SSDs%20consume%20around,may%20consume%203%2D4%20watts.
+        ssd_energy_consumption = (3 if (self.ssd_capacity > 0) else 0) / 1000  ###kW
+        hdd_energy_consumption = (7 if (self.hdd_capacity > 0) else 0) / 1000  ###kW
+
+        total_watts = cpu_energy_consumption + dram_energy_consumption + ssd_energy_consumption + hdd_energy_consumption
+        total_watts_per_year = 24 * 7 * 52 * total_watts  ### kWh
+        GCI = GCI_CONSTANTS[country]
+
+        OPEX = total_watts_per_year * GCI  ###### Kg co2 per year
+
+        return OPEX
+
+
+def generate_systems_comparison(new_system: System, old_system: System, time_horizon: int, country: str,
+                                utilization: int, performance_measure: str):
+    if performance_measure == SPECINT:
+        lookup = True
+    elif performance_measure == SORTING:
+        lookup = False
+    else:
+        raise NotImplementedError
+
+    new_system_opex = new_system.generate_accumm_projected_opex_emissions(
+        time_horizon, system_id=NEW_SYSTEM, country=country, utilization=utilization, lookup=lookup)
     new_system_capex = new_system.calculate_capex_emissions()
-    old_system_opex = old_system.generate_accumm_projected_opex_emissions(time_horizon, utilization)
+    old_system_opex = old_system.generate_accumm_projected_opex_emissions(
+        time_horizon, system_id=OLD_SYSTEM, country=country, utilization=utilization, lookup=lookup)
 
-    performance_factor = old_system.specint / new_system.specint ##### --> Assumption: Better performance leads to lower utilization, hence less power draw.
-    
+    performance_factor = old_system.specint / new_system.specint  ##### --> Assumption: Better performance leads to lower utilization, hence less power draw.
+
     new_system_opex = new_system_opex * performance_factor
-    new_system_opex[0] = new_system_opex[0] + new_system_capex  ###### --> Add the CAPEX at time 0
+
+    # new_system_opex[0] = new_system_opex[0] + new_system_capex  ###### --> Add the CAPEX at time 0
+    new_system_opex = np.array([opex + new_system_capex for opex in new_system_opex])
 
     abs_savings = new_system_opex - old_system_opex
     relative_savings = 1 - (old_system_opex / new_system_opex)
@@ -61,91 +155,178 @@ def generate_systems_comparison(new_system:system, old_system:system, time_horiz
 
     return new_system_opex, old_system_opex, abs_savings, relative_savings, ratio
 
+
 ###################################################################################################
 ######################################### PLOT ####################################################
 ###################################################################################################
 
-def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio):
-
-    plt.rcParams.update({'text.usetex' : True
-                    , 'pgf.rcfonts': False
-                    , 'text.latex.preamble':r"""\usepackage{iftex}
+def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1, fig_size=(10, 6)):
+    plt.rcParams.update({'text.usetex': True
+                            , 'pgf.rcfonts': False
+                            , 'text.latex.preamble': r"""\usepackage{iftex}
                                             \ifxetex
                                                 \usepackage[libertine]{newtxmath}
                                                 \usepackage[tt=false]{libertine}
                                                 \setmonofont[StylisticSet=3]{inconsolata}
                                             \else
                                                 \RequirePackage[tt=false, type1=true]{libertine}
-                                            \fi"""   
-                    })
+                                            \fi"""
+                         })
 
-    bar_width = 0.25
-    fig, ax1 = plt.subplots(figsize=(10, 6))
+    bar_width = 0.25 * step_size
+    font_size = 26
+    fig, ax1 = plt.subplots(figsize=fig_size)
     ax2 = ax1.twinx()
-    time_horizon_array = np.arange(system_a_projected_emissions.shape[0])
 
-    ax1.bar(time_horizon_array - bar_width/2, system_a_projected_emissions, color='#abd9e9', label='Alternative HW', width=bar_width)
-    ax1.bar(time_horizon_array + bar_width/2, system_b_projected_emissions,  color='#fdae61', label='Current HW', width=bar_width)
+    x_values = list(range(1, system_a_projected_emissions.shape[0] + 1, step_size))
+    system_a_projected_emissions = [system_a_projected_emissions[i - 1] for i in x_values]
+    system_b_projected_emissions = [system_b_projected_emissions[i - 1] for i in x_values]
+    ratio = [ratio[i - 1] for i in x_values]
+
+    time_horizon_array = np.array(x_values)
+
+    ax1.bar(time_horizon_array - bar_width / 2, system_b_projected_emissions, color='#fdae61', label='Current HW',
+            width=bar_width)
+
+    ax1.bar(time_horizon_array + bar_width / 2, system_a_projected_emissions, color='#abd9e9', label='New HW',
+            width=bar_width)
+
     ax2.plot(time_horizon_array, ratio, linestyle='-', color='#d01c8b', label='Ratio', marker='^')
-    ax2.set_ylabel('Ratio', color='#d01c8b', fontsize=20)
+    ax2.set_ylabel('Ratio', color='#d01c8b', fontsize=font_size)
     ax2.tick_params(axis='y', colors='#d01c8b')
 
     line = ax2.lines[0]
     for x_value, y_value in zip(line.get_xdata(), line.get_ydata()):
         label = "{:.2f}".format(y_value)
-        ax2.annotate(label,(x_value, y_value), xytext=(0, 5), 
-            textcoords="offset points", ha='center', va='bottom', color='#d01c8b', fontsize=20) 
+        ax2.annotate(label, (x_value, y_value), xytext=(0, 5),
+                     textcoords="offset points", ha='center', va='bottom', color='#d01c8b', fontsize=20)
     ax2.axhline(1, color='#d01c8b', linestyle='dashed')
-    ax2.annotate('Break-even',(0.6, 1), xytext=(0, 5), 
-            textcoords="offset points", ha='center', va='bottom', color='#d01c8b', fontsize=20) 
+    ax2.annotate('Break-even', (0.6, 1), xytext=(0, 5),
+                 textcoords="offset points", ha='center', va='bottom', color='#d01c8b', fontsize=20)
 
-    ax1.legend(loc='upper center', ncols=2, fontsize=20, frameon=False)
-    ax1.set_ylabel('Accumulated CO2 Kg.', fontsize=20)
-    ax1.set_xlabel('Year', fontsize=20)
-    ax1.tick_params(axis='x', labelsize=20)
-    ax1.tick_params(axis='y', labelsize=20)
-    ax2.tick_params(axis='y', labelsize=20)
+    ax1.legend(loc='upper center', ncols=2, fontsize=font_size, frameon=False)
+    ax1.set_ylabel('Accumulated CO$_2$ Kg.', fontsize=font_size)
+    ax1.set_xlabel('Year', fontsize=font_size)
+    ax1.set_xticks(time_horizon_array)
+    ax1.tick_params(axis='x', labelsize=font_size)
+    ax1.tick_params(axis='y', labelsize=font_size)
+    ax2.tick_params(axis='y', labelsize=font_size)
+    ax2.set_ylim(bottom=0)
     ax2.set_ylim(top=np.max(ratio) + np.std(ratio))
 
-    ax1.set_title('Projected CO2 Emissions', fontsize=20)
+    ax1.set_title('Projected CO$_2$ Emissions', fontsize=font_size)
+
+    plt.tight_layout()
+    plt.savefig(f"{save_path}.png")
+    plt.savefig(f"{save_path}.svg")
 
     plt.show()
-    # return fig
+
 
 ###################################################################################################
 ######################################### PARAMETERS ##############################################
 ###################################################################################################
-time_horizon = 6
+time_horizon = 10
 new_chip = 'Xeon Processor E5-2699 v4'
 old_chip = 'Xeon Processor E5-2699 v3'
-intel_cpus_df = pd.read_csv('./intel_cpus_filtered-extended.csv')
-subset = intel_cpus_df.loc[intel_cpus_df['name'].isin([new_chip, old_chip]), ['name', 'TDP', 'package-area-cm2']]
 
-###### New Chip
+##### New Hardware
+# Die size from: https://www.techpowerup.com/cpu-specs/epyc-9334.c2922
+# 4 * 72 mm^2
 
-new_packaging_size = subset.loc[intel_cpus_df['name'] == new_chip, 'package-area-cm2'].values[0]
-new_TDP = subset.loc[intel_cpus_df['name'] == new_chip, 'TDP'].values[0]
-###### Old Chip
-
-old_packaging_size = subset.loc[intel_cpus_df['name'] == old_chip, 'package-area-cm2'].values[0]
-old_TDP = subset.loc[intel_cpus_df['name'] == old_chip, 'TDP'].values[0]
-
-
-new_system = system(packaging_size=new_packaging_size, TDP=new_TDP, specint=100, lifetime=5) ##### New Hardware
-old_system = system(packaging_size=old_packaging_size, TDP=old_TDP, specint=50, lifetime=5) ##### Old Hardware
 
 ###################################################################################################
 ######################################### SYSTEMS OUTPUT ##########################################
 ###################################################################################################
 
+###################################################################################################
+#### SPECINT
+###################################################################################################
 
-new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = generate_systems_comparison(new_system=new_system, old_system=old_system, time_horizon=time_horizon)
+fig_size = (10, 5)
 
-# fig = create_projections_plot(new_system_opex, old_system_opex, ratio)
+new_die_size = 4 * 72 / 100  # cm^2
+new_system = System(
+    die_size=new_die_size,
+    performance_indicator=470.4,
+    # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
+    lifetime=10,
+    dram_capacity=8 * 64,
+    ssd_capacity=2 * 1600,
+    hdd_capacity=0,
+    cpu_tdp=210
+)
 
-create_projections_plot(new_system_opex, old_system_opex, ratio)
+##### Old Hardware
+# Die size from: https://www.techpowerup.com/cpu-specs/epyc-7502p.c2260
+# 74 mm^2
+old_die_size = 74 / 100  # cm^2
+old_system = System(
+    die_size=old_die_size,
+    performance_indicator=285.44,
+    # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
+    lifetime=10,
+    dram_capacity=8 * 64,
+    ssd_capacity=2 * 1600,
+    hdd_capacity=0,
+    cpu_tdp=180
+)
 
-# fig.savefig('./plots/brek_even_analysis.pdf', format='pdf' , bbox_inches="tight", transparent=True)
-        
+for country in [GERMANY, SWEDEN]:
+    for utilization in [30, 60, 90]:
+        save_root_path = "./model_plots"
+        save_path = os.path.join(save_root_path, f"country-{country}-utilization-{utilization}-workload-specint")
 
+        new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = \
+            generate_systems_comparison(
+                new_system=new_system,
+                old_system=old_system,
+                time_horizon=time_horizon,
+                country=country,
+                utilization=utilization,
+                performance_measure=SPECINT)
+        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, fig_size=fig_size)
 
+###################################################################################################
+#### SORTING
+###################################################################################################
+
+time_horizon = 20
+new_die_size = (4 * 477) / 100  # cm^2
+new_system = System(
+    die_size=new_die_size,
+    performance_indicator=3.55,
+    lifetime=20,
+    dram_capacity=8 * 64,
+    ssd_capacity=2 * 1600,
+    hdd_capacity=0,
+    cpu_tdp=350
+)
+
+##### Old Hardware
+old_die_size = 541 / 100  # cm^2
+old_system = System(
+    die_size=old_die_size,
+    performance_indicator=1,
+    # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
+    lifetime=20,
+    dram_capacity=8 * 64,
+    ssd_capacity=2 * 1600,
+    hdd_capacity=0,
+    cpu_tdp=130
+)
+
+for country in [GERMANY, SWEDEN]:
+    for utilization in [30, 60, 90]:
+        save_root_path = "./model_plots"
+        save_path = os.path.join(save_root_path, f"country-{country}-utilization-{utilization}-workload-sorting")
+
+        new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = \
+            generate_systems_comparison(
+                new_system=new_system,
+                old_system=old_system,
+                time_horizon=time_horizon,
+                country=country,
+                utilization=utilization,
+                performance_measure=SORTING)
+        create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, step_size=2, fig_size=fig_size)
