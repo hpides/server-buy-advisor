@@ -8,7 +8,7 @@ LINE = "#d7191c"
 
 
 def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1,
-                            fig_size=(10, 6)):
+                            fig_size=None):
     plt.rcParams.update({'text.usetex': True
                             , 'pgf.rcfonts': False
                             , 'text.latex.preamble': r"""\usepackage{iftex}
@@ -23,7 +23,7 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
 
     bar_width = 0.25 * step_size
     font_size = 26
-    fig, ax1 = plt.subplots(figsize=fig_size)
+    fig, ax1 = plt.subplots(figsize=(10,6))
     ax2 = ax1.twinx()
 
     x_values = list(range(1, system_a_projected_emissions.shape[0] + 1, step_size))
@@ -52,7 +52,6 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
     ax2.annotate('Break-even', (1.5, 1), xytext=(0, 5),
                  textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=20, fontweight='bold')
 
-    ax1.legend(loc='upper center', ncols=2, fontsize=font_size, frameon=False)
     ax1.set_ylabel('Accumulated CO$_2$ Kg.', fontsize=font_size)
     ax1.set_xlabel('Year', fontsize=font_size)
     ax1.set_xticks(time_horizon_array)
@@ -64,8 +63,12 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
 
     ax1.set_title('Projected CO$_2$ Emissions', fontsize=font_size)
 
+    # Move the legend above the plot
+    ax1.legend(loc='upper center', ncol=2, fontsize=font_size, frameon=False,
+               bbox_to_anchor=(0.5, 1.3))  # Adjust vertical position
+
     plt.tight_layout()
-    plt.savefig(f"{save_path}.png")
-    plt.savefig(f"{save_path}.svg")
+    plt.savefig(f"{save_path}.png", bbox_inches='tight')
+    plt.savefig(f"{save_path}.svg", bbox_inches='tight')
 
     plt.show()
