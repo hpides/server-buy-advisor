@@ -1,6 +1,7 @@
 import numpy as np
 
-from lifecycle_anslysis.constants import OPEX_PER_YEAR, DRAM_WATTS_PER_256GB, GCI_CONSTANTS
+from lifecycle_anslysis.constants import OPEX_PER_YEAR, DRAM_WATTS_PER_256GB, GCI_CONSTANTS, HPE_POWER_ADVISOR, \
+    GUPTA_MODEL
 
 
 class System:
@@ -47,11 +48,14 @@ class System:
         return capex_total
 
     def generate_accumm_projected_opex_emissions(self, time_horizon: int, system_id: str, country: str,
-                                                 utilization: float, lookup: bool):
-        if lookup:
+                                                 utilization: float, opex_calculation: str):
+        if opex_calculation == HPE_POWER_ADVISOR:
             opex_per_year = OPEX_PER_YEAR[country][utilization][system_id]
-        else:
+        elif opex_calculation == GUPTA_MODEL:
             opex_per_year = self.calculate_opex_emissions(utilization, country)
+        else:
+            raise NotImplementedError
+
         projected_emissions = [i * opex_per_year for i in range(1, time_horizon + 1)]
 
         return np.array(projected_emissions)

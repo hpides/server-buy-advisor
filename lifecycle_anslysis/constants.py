@@ -10,7 +10,12 @@ GERMANY = "germany"
 OLD_SYSTEM = "old_system"
 NEW_SYSTEM = "new_system"
 
+# OPEX model
+HPE_POWER_ADVISOR = "hpe_power_advisor"
+GUPTA_MODEL = "gupta_model"
+
 # data from files in ./raw_data_no_image
+# generated using the HPE power advisor
 OPEX_PER_YEAR = {
     GERMANY: {
         30: {  # utilization

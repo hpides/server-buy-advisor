@@ -1,7 +1,7 @@
 import os
 
 from lifecycle_anslysis.comparison import generate_systems_comparison
-from lifecycle_anslysis.constants import GERMANY, SWEDEN, SPECINT
+from lifecycle_anslysis.constants import GERMANY, SWEDEN, SPECINT, HPE_POWER_ADVISOR
 from lifecycle_anslysis.plotting import create_projections_plot
 from lifecycle_anslysis.system import System
 
@@ -20,9 +20,10 @@ hdd_capacity = 0
 
 # AMD EPYC 7502P, 2.5GHz
 old_system = System(
-    die_size=74 / 100,  # cm^2; # Die size from: https://www.techpowerup.com/cpu-specs/epyc-7502p.c2260,
-    performance_indicator=285.44,
+    # cm^2; # Die size from: https://www.techpowerup.com/cpu-specs/epyc-7502p.c2260
+    die_size=74 / 100,
     # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
+    performance_indicator=285.44,
     cpu_tdp=180,
     lifetime=lifetime,
     dram_capacity=dram_capacity,
@@ -33,8 +34,8 @@ old_system = System(
 # AMD 9334, 2.7 GHz
 new_system = System(
     die_size=4 * 72 / 100,  # cm^2,
-    performance_indicator=470.4,
     # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
+    performance_indicator=470.4,
     cpu_tdp=210,
     lifetime=lifetime,
     dram_capacity=dram_capacity,
@@ -55,7 +56,7 @@ if __name__ == '__main__':
                     time_horizon=time_horizon,
                     country=country,
                     utilization=utilization,
-                    performance_measure=SPECINT)
+                    opex_calculation=HPE_POWER_ADVISOR)
 
             fig_size = (10, 5)
             create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, fig_size=fig_size)
