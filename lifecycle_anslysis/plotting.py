@@ -8,7 +8,7 @@ LINE = "#d7191c"
 
 
 def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1,
-                            fig_size=None):
+                            fig_size=None, break_even_label_pos=0):
     plt.rcParams.update({'text.usetex': True
                             , 'pgf.rcfonts': False
                             , 'text.latex.preamble': r"""\usepackage{iftex}
@@ -49,7 +49,7 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
         ax2.annotate(label, (x_value, y_value), xytext=(0, 5),
                      textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=20)
     ax2.axhline(1, color=LINE, linestyle='dashed', linewidth=2)
-    ax2.annotate('Break-even', (1.5, 1), xytext=(0, 5),
+    ax2.annotate('Break-even', (1.5, 1), xytext=(break_even_label_pos, 5),
                  textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=20, fontweight='bold')
 
     ax1.set_ylabel('Accumulated CO$_2$ Kg.', fontsize=font_size)
