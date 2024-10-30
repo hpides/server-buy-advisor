@@ -1,12 +1,12 @@
 import os
 
 from lifecycle_anslysis.comparison import generate_systems_comparison
-from lifecycle_anslysis.constants import GERMANY, SWEDEN, SORTING, GUPTA_MODEL
+from lifecycle_anslysis.constants import GERMANY, SWEDEN, GUPTA_MODEL
 from lifecycle_anslysis.plotting import create_projections_plot
 from lifecycle_anslysis.system import System
 
 # assumptions
-time_horizon = 20
+time_horizon = 10
 
 ##############################
 # Systems
@@ -56,4 +56,5 @@ if __name__ == '__main__':
                     opex_calculation=GUPTA_MODEL)
 
             fig_size = (10, 5)
-            create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, step_size=2, fig_size=fig_size)
+            create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, step_size=1, fig_size=fig_size,
+                                    break_even_label_pos=420)
