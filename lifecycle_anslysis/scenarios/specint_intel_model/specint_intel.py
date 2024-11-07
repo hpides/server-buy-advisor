@@ -1,13 +1,9 @@
 import os
-from pathlib import Path 
-import sys
-project_folder = Path(__file__).resolve().parents[2]
-sys.path.append(str(project_folder))
 
-from comparison import generate_systems_comparison
-from constants import GERMANY, SWEDEN, GUPTA_MODEL
-from plotting import create_projections_plot
-from system import System
+from lifecycle_anslysis.comparison import generate_systems_comparison
+from lifecycle_anslysis.constants import GERMANY, SWEDEN, GUPTA_MODEL
+from lifecycle_anslysis.plotting import create_projections_plot
+from lifecycle_anslysis.system import System
 
 # assumptions
 time_horizon = 10

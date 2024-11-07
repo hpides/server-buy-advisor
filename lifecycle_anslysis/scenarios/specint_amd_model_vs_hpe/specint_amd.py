@@ -1,13 +1,9 @@
 import os
-from pathlib import Path 
-import sys
-project_folder = Path(__file__).resolve().parents[2]
-sys.path.append(str(project_folder))
 
-from comparison import generate_systems_comparison
-from constants import GERMANY, SWEDEN, SPECINT, HPE_POWER_ADVISOR, GUPTA_MODEL
-from plotting import create_projections_plot
-from system import System
+from lifecycle_anslysis.comparison import generate_systems_comparison
+from lifecycle_anslysis.constants import GERMANY, SWEDEN, HPE_POWER_ADVISOR, GUPTA_MODEL
+from lifecycle_anslysis.plotting import create_projections_plot
+from lifecycle_anslysis.system import System
 
 # assumptions
 time_horizon = 10
@@ -53,10 +49,10 @@ if __name__ == '__main__':
     os.makedirs(save_root_path, exist_ok=True)
     for country in [GERMANY, SWEDEN]:
         for utilization in [30, 60, 90]:
-
             fig_size = (10, 5)
 
-            save_path = os.path.join(save_root_path, f"HPE-country-{country}-utilization-{utilization}-workload-specint")
+            save_path = os.path.join(save_root_path,
+                                     f"HPE-country-{country}-utilization-{utilization}-workload-specint")
             hpe_new_system_opex, hpe_old_system_opex, hpe_abs_savings, hpe_relative_savings, hpe_ratio = \
                 generate_systems_comparison(
                     new_system=new_system,
@@ -76,4 +72,5 @@ if __name__ == '__main__':
                     country=country,
                     utilization=utilization,
                     opex_calculation=GUPTA_MODEL)
-            create_projections_plot(model_new_system_opex, model_old_system_opex, model_ratio, save_path, fig_size=fig_size)
+            create_projections_plot(model_new_system_opex, model_old_system_opex, model_ratio, save_path,
+                                    fig_size=fig_size)

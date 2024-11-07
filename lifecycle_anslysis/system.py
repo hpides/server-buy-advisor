@@ -1,6 +1,6 @@
 import numpy as np
 
-from constants import OPEX_PER_YEAR, DRAM_WATTS_PER_256GB, GCI_CONSTANTS, HPE_POWER_ADVISOR, \
+from lifecycle_anslysis.constants import OPEX_PER_YEAR, DRAM_WATTS_PER_256GB, GCI_CONSTANTS, HPE_POWER_ADVISOR, \
     GUPTA_MODEL
 
 
@@ -59,7 +59,7 @@ class System:
         projected_emissions = [i * opex_per_year for i in range(1, time_horizon + 1)]
 
         return np.array(projected_emissions)
-    
+
     def generate_normalized_power_usage(self, utilization: float):
 
         #### Source: https://ieeexplore.ieee.org/document/4404806/?arnumber=4404806&tag=1
