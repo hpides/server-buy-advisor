@@ -1,7 +1,7 @@
 import numpy as np
 
-from lifecycle_anslysis.constants import NEW_SYSTEM, OLD_SYSTEM
-from lifecycle_anslysis.system import System
+from constants import NEW_SYSTEM, OLD_SYSTEM
+from system import System
 
 
 def generate_systems_comparison(new_system: System, old_system: System, time_horizon: int, country: str,

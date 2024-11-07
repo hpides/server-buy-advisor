@@ -1,9 +1,13 @@
 import os
+from pathlib import Path 
+import sys
+project_folder = Path(__file__).resolve().parents[2]
+sys.path.append(str(project_folder))
 
-from lifecycle_anslysis.comparison import generate_systems_comparison
-from lifecycle_anslysis.constants import GERMANY, SWEDEN, GUPTA_MODEL
-from lifecycle_anslysis.plotting import create_projections_plot
-from lifecycle_anslysis.system import System
+from comparison import generate_systems_comparison
+from constants import GERMANY, SWEDEN, GUPTA_MODEL
+from plotting import create_projections_plot
+from system import System
 
 # assumptions
 time_horizon = 10
@@ -42,9 +46,11 @@ new_system = System(
 
 if __name__ == '__main__':
     # plot comparison plots
+    save_root_path = "./plots"
+    os.makedirs(save_root_path, exist_ok=True)
     for country in [GERMANY, SWEDEN]:
         for utilization in [30, 60, 90]:
-            save_path = os.path.join("./plots", f"country-{country}-utilization-{utilization}-workload-specint")
+            save_path = os.path.join(save_root_path, f"country-{country}-utilization-{utilization}-workload-specint")
 
             new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = \
                 generate_systems_comparison(
