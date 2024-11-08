@@ -42,9 +42,11 @@ new_system = System(
 
 if __name__ == '__main__':
     # plot comparison plots
+    save_root_path = "./plots"
+    os.makedirs(save_root_path, exist_ok=True)
     for country in [GERMANY, SWEDEN]:
         for utilization in [30, 60, 90]:
-            save_path = os.path.join("./plots", f"country-{country}-utilization-{utilization}-workload-specint")
+            save_path = os.path.join(save_root_path, f"country-{country}-utilization-{utilization}-workload-specint")
 
             new_system_opex, old_system_opex, abs_savings, relative_savings, ratio = \
                 generate_systems_comparison(

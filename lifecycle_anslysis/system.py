@@ -60,10 +60,20 @@ class System:
 
         return np.array(projected_emissions)
 
+    def generate_normalized_power_usage(self, utilization: float):
+
+        #### Source: https://ieeexplore.ieee.org/document/4404806/?arnumber=4404806&tag=1
+        ### See Fig 2
+        power_slope = (100 - 50) / (100 - 0)
+        intercept = 50
+
+        return (intercept + utilization * power_slope) / 100
+
     def calculate_opex_emissions(self, utilization: float, country: str):
         ######## Source of GCI: https://app.electricitymaps.com/zone/DE --> 2023 average for DE
 
-        cpu_energy_consumption = (self.cpu_tdp * (utilization / 100)) / 1000  #### kW
+        normalized_power_usage = self.generate_normalized_power_usage(utilization)
+        cpu_energy_consumption = (self.cpu_tdp * normalized_power_usage) / 1000  #### kW
         dram_energy_consumption = ((self.dram_capacity / 256) * DRAM_WATTS_PER_256GB) / 1000  #### kW
 
         # Watts according to https://www.ssstc.com/knowledge-detail/ssd-vs-hdd-power-efficiency/#:~:text=On%20average%2C%20SSDs%20consume%20around,may%20consume%203%2D4%20watts.
