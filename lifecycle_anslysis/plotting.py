@@ -20,13 +20,16 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
                                                 \RequirePackage[tt=false, type1=true]{libertine}
                                             \fi"""
                          })
+    
+    if system_a_projected_emissions.shape[0] > 10 and step_size==1:
+        step_size += 1
 
     bar_width = 0.25 * step_size
     font_size = 26
     fig, ax1 = plt.subplots(figsize=(10,6))
     ax2 = ax1.twinx()
 
-    x_values = list(range(1, system_a_projected_emissions.shape[0] + 1, step_size + 1))
+    x_values = list(range(1, system_a_projected_emissions.shape[0] + 1, step_size))
     system_a_projected_emissions = [system_a_projected_emissions[i - 1] / 1000 for i in x_values] ### Divinding by 1000 to get thousands of kgs to be consistent with the units in the model
     system_b_projected_emissions = [system_b_projected_emissions[i - 1] / 1000 for i in x_values] ### Divinding by 1000 to get thousands of kgs to be consistent with the units in the model
     ratio = [ratio[i - 1] for i in x_values]
@@ -47,7 +50,7 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
     for x_value, y_value in zip(line.get_xdata(), line.get_ydata()):
         label = "{:.1f}".format(y_value)
         ax2.annotate(label, (x_value, y_value), xytext=(15, 5),
-                     textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=font_size - 3)
+                     textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=font_size)
     ax2.axhline(1, color=LINE, linestyle='dashed', linewidth=2, label="Break-even")
     # ax2.annotate('Break-even', (1.5, 1), xytext=(break_even_label_pos, 5),
     #              textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=font_size, fontweight='bold')
