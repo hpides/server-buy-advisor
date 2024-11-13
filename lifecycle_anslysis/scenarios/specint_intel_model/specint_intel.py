@@ -6,7 +6,7 @@ from lifecycle_anslysis.plotting import create_projections_plot
 from lifecycle_anslysis.system import System
 
 # assumptions
-time_horizon = 10
+time_horizon = 9
 
 ##############################
 # Systems

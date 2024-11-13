@@ -42,18 +42,16 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
     ax1.bar(time_horizon_array + bar_width / 2, system_a_projected_emissions, color=BAR1, label='New HW',
             width=bar_width)
 
-    ax2.plot(time_horizon_array, ratio, linestyle='-', color=LINE, marker='.', linewidth=2, markersize=10)
+    ax2.plot(time_horizon_array, ratio, linestyle='-', color=LINE, marker='.', linewidth=2, markersize=20)
     ax2.set_ylabel('Ratio', color=LINE, fontsize=font_size, fontweight='bold')
     ax2.tick_params(axis='y', colors=LINE)
 
     line = ax2.lines[0]
     for x_value, y_value in zip(line.get_xdata(), line.get_ydata()):
-        label = "{:.1f}".format(y_value)
+        label = "{:.2f}".format(y_value)
         ax2.annotate(label, (x_value, y_value), xytext=(15, 5),
                      textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=font_size)
     ax2.axhline(1, color=LINE, linestyle='dashed', linewidth=2, label="Break-even")
-    # ax2.annotate('Break-even', (1.5, 1), xytext=(break_even_label_pos, 5),
-    #              textcoords="offset points", ha='center', va='bottom', color=LINE, fontsize=font_size, fontweight='bold')
 
     ax1.set_ylabel('Acc. CO$_2$ [Thousand Kg]', fontsize=font_size)
     ax1.set_xlabel('Duration [Years]', fontsize=font_size)
@@ -74,7 +72,7 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
 
     # Move the legend above the plot
     # Add a combined legend to the figure
-    fig.legend(handles, labels, loc="upper center", ncol=3, fontsize=font_size-5, bbox_to_anchor=(0.5, 1.1))
+    fig.legend(handles, labels, loc="upper center", ncol=3, fontsize=font_size, bbox_to_anchor=(0.5, 1.14))
     # ax1.legend(loc='upper center', ncol=3, fontsize=font_size,
     # bbox_to_anchor=(0.5, 1.2))  # Adjust vertical position
 
