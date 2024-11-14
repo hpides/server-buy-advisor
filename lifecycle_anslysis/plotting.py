@@ -1,3 +1,5 @@
+import os.path
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -8,7 +10,7 @@ LINE = "#d7191c"
 
 
 def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1,
-                            fig_size=None, break_even_label_pos=15):
+                            y_top_lim=None, fig_size=None, break_even_label_pos=15, legend=True):
     plt.rcParams.update({'text.usetex': True
                             , 'pgf.rcfonts': False
                             , 'text.latex.preamble': r"""\usepackage{iftex}
@@ -20,18 +22,20 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
                                                 \RequirePackage[tt=false, type1=true]{libertine}
                                             \fi"""
                          })
-    
-    if system_a_projected_emissions.shape[0] > 10 and step_size==1:
+
+    if system_a_projected_emissions.shape[0] > 10 and step_size == 1:
         step_size += 1
 
     bar_width = 0.25 * step_size
     font_size = 26
-    fig, ax1 = plt.subplots(figsize=(10,6))
+    fig, ax1 = plt.subplots(figsize=(10, 6))
     ax2 = ax1.twinx()
 
     x_values = list(range(1, system_a_projected_emissions.shape[0] + 1, step_size))
-    system_a_projected_emissions = [system_a_projected_emissions[i - 1] / 1000 for i in x_values] ### Divinding by 1000 to get thousands of kgs to be consistent with the units in the model
-    system_b_projected_emissions = [system_b_projected_emissions[i - 1] / 1000 for i in x_values] ### Divinding by 1000 to get thousands of kgs to be consistent with the units in the model
+    system_a_projected_emissions = [system_a_projected_emissions[i - 1] / 1000 for i in
+                                    x_values]  ### Divinding by 1000 to get thousands of kgs to be consistent with the units in the model
+    system_b_projected_emissions = [system_b_projected_emissions[i - 1] / 1000 for i in
+                                    x_values]  ### Divinding by 1000 to get thousands of kgs to be consistent with the units in the model
     ratio = [ratio[i - 1] for i in x_values]
 
     time_horizon_array = np.array(x_values)
@@ -58,6 +62,8 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
     ax1.set_xticks(time_horizon_array)
     ax1.tick_params(axis='x', labelsize=font_size)
     ax1.tick_params(axis='y', labelsize=font_size)
+    if y_top_lim is not None:
+        ax1.set_ylim(top=y_top_lim)
     ax2.tick_params(axis='y', labelsize=font_size)
     ax2.set_ylim(bottom=0)
     ax2.set_ylim(top=np.max(ratio) + np.std(ratio))
@@ -72,9 +78,18 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
 
     # Move the legend above the plot
     # Add a combined legend to the figure
-    fig.legend(handles, labels, loc="upper center", ncol=3, fontsize=font_size, bbox_to_anchor=(0.5, 1.14))
-    # ax1.legend(loc='upper center', ncol=3, fontsize=font_size,
-    # bbox_to_anchor=(0.5, 1.2))  # Adjust vertical position
+    if legend:
+        fig.legend(handles, labels, loc="upper center", ncol=3, fontsize=font_size, bbox_to_anchor=(0.5, 1.14))
+
+        # Separate legend figure
+        legend_fig = plt.figure(figsize=(8, 1))
+        legend_ax = legend_fig.add_subplot(111)
+        legend_ax.axis("off")
+        legend = legend_ax.legend(handles, labels, loc="center", ncol=3, fontsize=font_size, frameon=True)
+
+        # Save the separate legend figure
+        legend_fig.savefig(os.path.join(os.path.dirname(save_path),"legend.png"), bbox_inches="tight")
+        legend_fig.savefig(os.path.join(os.path.dirname(save_path),"legend.svg"), bbox_inches="tight")
 
     plt.tight_layout()
     plt.savefig(f"{save_path}.png", bbox_inches='tight')
