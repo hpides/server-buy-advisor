@@ -67,12 +67,12 @@ fig, axes = plt.subplots(2, 3, figsize=(14, 7), sharey=True)
 
 # Plot each subplot
 for row_id, plot_title, color, plot_meta in [
-        (0, "Generation", BAR1, [
+        (0, "Performance", BAR1, [
                                   # (0, "ADAPTED_MT_SPECINT", "Result score", "SPECint 2017", 0),
                                   (0, "SPECINT_RATE", "Result Score", "SPECrate Integer 2017", 0),
                                   (1, "TPCH_RUNS_PER_H", "Runs per Hour", "TPC-H - High Load", 0),
                                   (2, "K_SORTED_TUPLES_PER_S", "Million Tuples Sorted per Second", "Parallel std::sort", 0)]),
-        (1, "Generation", BAR2, [
+        (1, "Efficiency", BAR2, [
                                  # (0, "SPECINT_PER_TDP", "Result score per Watt", "SPECint 2017", 0),
                                  (0, "SPECINTrate_PER_TDP", "Result Score per Watt", "SPECrate Integer 2017", 0),
                                  (1, "TPCH_RUNS_PER_KJOULE", "Runs per kJoule", "TPC-H - High Load", 0),
@@ -89,9 +89,8 @@ for row_id, plot_title, color, plot_meta in [
         if not TWO_FIGURES:
             axes[col_id].set_ylabel(plot_title, labelpad=50.0, weight="bold")
         else:
-            # axes[col_id].set_ylabel(None)
-            # Test if it helps?
-            axes[col_id].set_ylabel(plot_title, labelpad=30.0, weight="bold")
+            axes[col_id].set_ylabel(None)
+            # axes[col_id].set_ylabel(plot_title, labelpad=30.0, weight="bold")
         axes[col_id].text(df[column_name].min() + (df[column_name].max() - df[column_name].min()) / 2,
                           arrow_offset + 0.075,
                           f"{df[column_name].max() / df[column_name].min():.2f}x", horizontalalignment="center",
@@ -103,8 +102,8 @@ for row_id, plot_title, color, plot_meta in [
 
     if TWO_FIGURES:
         plt.tight_layout()
-        fig.savefig(f"sorting_and_tpch__{str(color)}.pdf")
-        fig.savefig(f"sorting_and_tpch__{str(color)}.svg", bbox_inches='tight')
+        fig.savefig(f"sorting_and_tpch__{plot_title.lower()}.pdf", bbox_inches='tight')
+        fig.savefig(f"sorting_and_tpch__{plot_title.lower()}.svg", bbox_inches='tight')
         # plt.show()
 
 if not TWO_FIGURES:
