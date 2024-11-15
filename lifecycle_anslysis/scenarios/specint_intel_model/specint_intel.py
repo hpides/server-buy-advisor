@@ -21,7 +21,7 @@ hdd_capacity = 0
 # Intel 8352Y, release 2021
 old_system = System(
     die_size=660 / 100,  # cm^2,
-    performance_indicator=746.88,
+    performance_indicator=210,
     cpu_tdp=205,
     lifetime=lifetime,
     dram_capacity=dram_capacity,
@@ -32,7 +32,7 @@ old_system = System(
 # Intel Platinum 8480CL, release 2023
 new_system = System(
     die_size=(4 * 477) / 100,  # cm^2,
-    performance_indicator=1649.2,
+    performance_indicator=445,
     cpu_tdp=350,
     lifetime=lifetime,
     dram_capacity=dram_capacity,
