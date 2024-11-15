@@ -70,10 +70,10 @@ if __name__ == '__main__':
             if (country, utilization) in fixed_y_axis_lim:
                 create_projections_plot(hpe_new_system_opex, hpe_old_system_opex, hpe_ratio, save_path,
                                         fig_size=fig_size, y_top_lim=fixed_y_axis_lim[(country, utilization)],
-                                        legend=False)
+                                        separate_legend=True)
             else:
                 create_projections_plot(hpe_new_system_opex, hpe_old_system_opex, hpe_ratio, save_path,
-                                        fig_size=fig_size, legend=False)
+                                        fig_size=fig_size, separate_legend=True)
 
             save_path = os.path.join(save_root_path,
                                      f"MODEL-country-{country}-utilization-{utilization}-workload-specint")
@@ -89,7 +89,7 @@ if __name__ == '__main__':
             if (country, utilization) in fixed_y_axis_lim:
                 create_projections_plot(model_new_system_opex, model_old_system_opex, model_ratio, save_path,
                                         fig_size=fig_size, y_top_lim=fixed_y_axis_lim[(country, utilization)],
-                                        legend=False)
+                                        separate_legend=True)
             else:
                 create_projections_plot(model_new_system_opex, model_old_system_opex, model_ratio, save_path,
-                                        fig_size=fig_size, legend=False)
+                                        fig_size=fig_size, separate_legend=True)

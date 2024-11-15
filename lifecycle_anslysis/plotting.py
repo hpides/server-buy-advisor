@@ -10,7 +10,7 @@ LINE = "#d7191c"
 
 
 def create_projections_plot(system_a_projected_emissions, system_b_projected_emissions, ratio, save_path, step_size=1,
-                            y_top_lim=None, fig_size=None, break_even_label_pos=15, legend=True):
+                            y_top_lim=None, fig_size=None, break_even_label_pos=15, separate_legend=False):
     plt.rcParams.update({'text.usetex': True
                             , 'pgf.rcfonts': False
                             , 'text.latex.preamble': r"""\usepackage{iftex}
@@ -76,23 +76,26 @@ def create_projections_plot(system_a_projected_emissions, system_b_projected_emi
     handles = handles1 + handles2
     labels = labels1 + labels2
 
-    # Move the legend above the plot
-    # Add a combined legend to the figure
-    if legend:
+    if not separate_legend:
+        # Move the legend above the plot
+        # Add a combined legend to the figure
         fig.legend(handles, labels, loc="upper center", ncol=3, fontsize=font_size, bbox_to_anchor=(0.5, 1.14))
-
-        # Separate legend figure
-        legend_fig = plt.figure(figsize=(8, 1))
-        legend_ax = legend_fig.add_subplot(111)
-        legend_ax.axis("off")
-        legend = legend_ax.legend(handles, labels, loc="center", ncol=3, fontsize=font_size, frameon=True)
-
-        # Save the separate legend figure
-        legend_fig.savefig(os.path.join(os.path.dirname(save_path),"legend.png"), bbox_inches="tight")
-        legend_fig.savefig(os.path.join(os.path.dirname(save_path),"legend.svg"), bbox_inches="tight")
+        # ax1.legend(loc='upper center', ncol=3, fontsize=font_size,
+        # bbox_to_anchor=(0.5, 1.2))  # Adjust vertical position
 
     plt.tight_layout()
     plt.savefig(f"{save_path}.png", bbox_inches='tight')
     plt.savefig(f"{save_path}.svg", bbox_inches='tight')
+
+    if separate_legend:
+        # Separate legend figure
+        legend_fig = plt.figure(figsize=(8, 1))
+        legend_ax = legend_fig.add_subplot(111)
+        legend_ax.axis("off")
+        separate_legend = legend_ax.legend(handles, labels, loc="center", ncol=3, fontsize=font_size, frameon=True)
+
+        # Save the separate legend figure
+        legend_fig.savefig(os.path.join(os.path.dirname(save_path), "legend.png"), bbox_inches="tight")
+        legend_fig.savefig(os.path.join(os.path.dirname(save_path), "legend.svg"), bbox_inches="tight")
 
     # plt.show()
