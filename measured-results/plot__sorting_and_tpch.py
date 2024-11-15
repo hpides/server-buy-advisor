@@ -5,19 +5,32 @@ import pandas as pd
 import seaborn as sns
 import socket
 
+plt.rcParams.update({'text.usetex': True
+                            , 'pgf.rcfonts': False
+                            , 'text.latex.preamble': r"""\usepackage{iftex}
+                                            \ifxetex
+                                                \usepackage[libertine]{newtxmath}
+                                                \usepackage[tt=false]{libertine}
+                                                \setmonofont[StylisticSet=3]{inconsolata}
+                                            \else
+                                                \RequirePackage[tt=false, type1=true]{libertine}
+                                            \fi"""
+                         })
+
 
 TWO_FIGURES = True  # does not work, script now rather hard coded for two subfigures
 
 # colors
-BAR2 = "#abd9e9"
+BAR2 = "#2c7bb6"
 BAR1 = "#fdae61"
 LINE = "#d7191c"
+custom_palette = ['#ffffb2','#fed976','#feb24c','#fd8d3c','#f03b20','#bd0026']
 
 # Central variable for font size
-font_size = 16
+font_size = 18
 
 # Read the data
-df = pd.read_csv("sorting_and_tpch.csv", decimal=",")
+df = pd.read_csv("measured-results/sorting_and_tpch.csv", decimal=",")
 df = df.replace({"Intel Xeon ": "", "Gold ": "", "Platinum ": ""}, regex=True)
 
 df["PLOT_KEY"] = df.LAUNCH_YEAR.astype(str) + " Q" + df.LAUNCH_QUARTER.astype(str) + " (" + df.CPU_IDENTIFIER + ")"
@@ -37,9 +50,9 @@ sns.set_style("whitegrid")
 
 # Update rcParams to affect the plots
 plt.rcParams.update({
-    'text.usetex': "Peteretina" not in socket.gethostname(),
-    # 'pgf.rcfonts': "Peteretina" not in socket.gethostname(),
-    'pgf.rcfonts': True,
+    # 'text.usetex': "Peteretina" not in socket.gethostname(),
+    # # 'pgf.rcfonts': "Peteretina" not in socket.gethostname(),
+    # 'pgf.rcfonts': True,
     'font.size': font_size,             # Set general font size
     'axes.titlesize': font_size,        # Set font size for axes titles
     'axes.labelsize': font_size,        # Set font size for axes labels
@@ -54,22 +67,22 @@ fig, axes = plt.subplots(2, 3, figsize=(14, 7), sharey=True)
 
 # Plot each subplot
 for row_id, plot_title, color, plot_meta in [
-        (0, "Performance", BAR1, [
+        (0, "Generation", BAR1, [
                                   # (0, "ADAPTED_MT_SPECINT", "Result score", "SPECint 2017", 0),
                                   (0, "SPECINT_RATE", "Result Score", "SPECrate Integer 2017", 0),
                                   (1, "TPCH_RUNS_PER_H", "Runs per Hour", "TPC-H - High Load", 0),
                                   (2, "K_SORTED_TUPLES_PER_S", "Million Tuples Sorted per Second", "Parallel std::sort", 0)]),
-        (1, "Efficiency", BAR2, [
+        (1, "Generation", BAR2, [
                                  # (0, "SPECINT_PER_TDP", "Result score per Watt", "SPECint 2017", 0),
                                  (0, "SPECINTrate_PER_TDP", "Result Score per Watt", "SPECrate Integer 2017", 0),
                                  (1, "TPCH_RUNS_PER_KJOULE", "Runs per kJoule", "TPC-H - High Load", 0),
                                  (2, "M_SORTED_TUPLES_PER_JOULE", "Million Tuples Sorted per Joule", "Parallel std::sort", 2)])]:
     if TWO_FIGURES:
-        fig, axes = plt.subplots(1, 3, figsize=(14, 3), sharey=True)
+        fig, axes = plt.subplots(1, 3, figsize=(15, 3), sharey=True)
         row_id = 0
 
     for col_id, column_name, axis_title, subplot_title, arrow_offset in plot_meta:
-        sns.barplot(data=df, x=column_name, y="PLOT_KEY", ax=axes[col_id], color=color, orient="h")
+        sns.barplot(data=df, x=column_name, y="PLOT_KEY", ax=axes[col_id], palette=custom_palette, orient="h")
         if row_id == 0:
             axes[col_id].set_title(subplot_title, weight="bold") #, y=1.2, pad=14)
         axes[col_id].set_xlabel(axis_title)
@@ -82,14 +95,16 @@ for row_id, plot_title, color, plot_meta in [
         axes[col_id].text(df[column_name].min() + (df[column_name].max() - df[column_name].min()) / 2,
                           arrow_offset + 0.075,
                           f"{df[column_name].max() / df[column_name].min():.2f}x", horizontalalignment="center",
-                          color=LINE, fontsize=int(0.9 * float(font_size)))
+                          color=BAR2, fontsize=int(0.9 * float(font_size)))
         axes[col_id].annotate('', xy=(df[column_name].min(), arrow_offset + 0.2), xytext=(df[column_name].max(), arrow_offset + 0.2),
-                               arrowprops=dict(arrowstyle="<->", color=LINE))
+                               arrowprops=dict(arrowstyle="<->", color=BAR2))
         axes[col_id].tick_params(axis='x', labelsize=font_size)  # Set font size for x-tick labels
+        axes[col_id].grid(False)
 
     if TWO_FIGURES:
         plt.tight_layout()
-        fig.savefig(f"sorting_and_tpch__{plot_title.lower()}.pdf")
+        fig.savefig(f"sorting_and_tpch__{str(color)}.pdf")
+        fig.savefig(f"sorting_and_tpch__{str(color)}.svg", bbox_inches='tight')
         # plt.show()
 
 if not TWO_FIGURES:
@@ -98,4 +113,4 @@ if not TWO_FIGURES:
 
     # Save the figure
     fig.savefig("sorting_and_tpch3.pdf")
-    plt.show()
+    # plt.show()
