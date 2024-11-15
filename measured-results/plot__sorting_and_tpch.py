@@ -63,7 +63,7 @@ for row_id, plot_title, color, plot_meta in [
                                  # (0, "SPECINT_PER_TDP", "Result score per Watt", "SPECint 2017", 0),
                                  (0, "SPECINTrate_PER_TDP", "Result Score per Watt", "SPECrate Integer 2017", 0),
                                  (1, "TPCH_RUNS_PER_KJOULE", "Runs per kJoule", "TPC-H - High Load", 0),
-                                 (2, "M_SORTED_TUPLES_PER_JOULE", "Million Tuples per Joule", "Parallel std::sort", 2)])]:
+                                 (2, "M_SORTED_TUPLES_PER_JOULE", "Million Tuples Sorted per Joule", "Parallel std::sort", 2)])]:
     if TWO_FIGURES:
         fig, axes = plt.subplots(1, 3, figsize=(14, 3), sharey=True)
         row_id = 0
