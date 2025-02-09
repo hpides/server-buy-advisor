@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+@theme {
+	--color-hpi-orange: '#CE682A'
+}
