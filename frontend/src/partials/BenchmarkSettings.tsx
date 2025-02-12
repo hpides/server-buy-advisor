@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useBenchmarkContext } from "../utility/BenchmarkContext";
 
-const TEST_TYPES :Array<string> = ['SPECrate', 'SPECspeed', 'Sorting', 'TPC-H'];
-const COUNTRIES :Array<string> = ['Poland', 'Germany', 'Sweden'];
+export type TestType = 'SPECrate' | 'SPECspeed' | 'Sorting' | 'TPC-H';
+export type Country = 'Poland' | 'Germany' | 'Sweden';
+
+export const TEST_TYPES: TestType[] = ['SPECrate', 'SPECspeed', 'Sorting', 'TPC-H'];
+export const COUNTRIES: Country[] = ['Poland', 'Germany', 'Sweden'];
 
 function BenchmarkSettings() {
 
-  const [testType, setTestType] = useState(TEST_TYPES[0]);
-  const [utilization, setUtilization] = useState(40);
-  const [country, setCountry] = useState(COUNTRIES[0]);
+  const { testType, utilization, country, setTestType, setUtilization, setCountry } = useBenchmarkContext();
 
   return (
     <div className="flex flex-col gap-4 py-4 text-xl font-medium px-8">

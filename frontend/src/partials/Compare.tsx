@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import intel_xeon_logo from "../assets/intel_xeon_logo.png";
 import CPU_DATA, { CPUEntry } from "../assets/data.ts";
+import { useBenchmarkContext } from "../utility/BenchmarkContext.tsx";
 import UP_ARROW from "../assets/up_arrow.svg";
 import logo2013 from "../assets/intel_logo/2013.svg";
 import logo2015 from "../assets/intel_logo/2015.svg";
@@ -90,11 +91,10 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, compareTo
 };
 
 
-const CPU_LIST = Object.keys(CPU_DATA) as Array<string>;
+export const CPU_LIST = Object.keys(CPU_DATA) as Array<string>;
 
 function Compare() {
-  const [currentHardware, setCurrentHardware] = useState(CPU_LIST[0]);
-  const [newHardware, setNewHardware] = useState(CPU_LIST[0]);
+  const { newHardware, setNewHardware, currentHardware, setCurrentHardware} = useBenchmarkContext();
 
   return (
     <div className="flex px-8 py-4 gap-8">
