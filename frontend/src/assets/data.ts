@@ -11,7 +11,7 @@ export interface CPUEntry {
   SPECINT_RATE: number;
   SPECINT: number;
   CORE_COUNT: number;
-  SORTED_TUPLES_PER_JOULE: number;
+  SORTED_TUPLES_PER_JOULE: number | null;
   TPCH_RUNS_PER_KJOULE: number;
   SPECINT_PER_TDP: number;
   SPECINTrate_PER_TDP: number;

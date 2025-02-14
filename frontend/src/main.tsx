@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { BenchmarkProvider } from './utility/BenchmarkContext.tsx'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'

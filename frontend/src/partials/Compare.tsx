@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import intel_xeon_logo from "../assets/intel_xeon_logo.png";
-import CPU_DATA, { CPUEntry } from "../assets/data.ts";
+import CPU_DATA, { CPUEntry, CPUs} from "../assets/data.ts";
 import { useBenchmarkContext } from "../utility/BenchmarkContext.tsx";
 import UP_ARROW from "../assets/up_arrow.svg";
 import logo2013 from "../assets/intel_logo/2013.svg";
@@ -69,8 +69,8 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, compareTo
         <table className="text-xl grow border-collapse">
           <tbody>
             {Object.entries(DISPLAY).map(([key, prop]) => {
-              const selectedValue = specs_selected[prop];
-              const compareValue = specs_compareTo?.[prop] ?? selectedValue;
+              const selectedValue = specs_selected[prop] || 0;
+              const compareValue = (specs_compareTo?.[prop] ?? selectedValue) || 0;
               return (
                 <tr key={key}>
                   <td className="w-0 pr-4 align-top">{key}:</td>

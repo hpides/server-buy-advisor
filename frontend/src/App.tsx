@@ -48,17 +48,17 @@ function App() {
       </main>
       <footer className='w-full flex flex-col py-10 items-center gap-3 bg-[#CE682A] text-white mt-24 bottom-0'>
         <div className='w-full md:w-2/3 max-w-[2000px] text-xl flex flex-col gap-2'>
-          <p className='hover:underline'>
+          <p className='hover:underline w-fit'>
             <a href='https://hpi.de/'>
               Hasso Plattner Institute
             </a>
           </p>
-          <p className='hover:underline'>
+          <p className='hover:underline w-fit'>
             <a href='https://hpi.de/rabl/home.html'>
               Data Engineering Systems Group
             </a>
           </p>
-          <p className='hover:underline'>
+          <p className='hover:underline w-fit'>
             <a href='https://hpi.de/rabl/news/2024/paper-on-ecological-efficiency-of-database-servers-accepted-at-cidr-2025.html'>Read Paper</a>
           </p>
         </div>

@@ -1,10 +1,10 @@
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
 
 export type TestType = 'SPECrate' | 'SPECspeed' | 'Sorting' | 'TPC-H';
-export type Country = 'Poland' | 'Germany' | 'Sweden';
+export type Country = 'poland' | 'germany' | 'sweden';
 
 export const TEST_TYPES: TestType[] = ['SPECrate', 'SPECspeed', 'Sorting', 'TPC-H'];
-export const COUNTRIES: Country[] = ['Poland', 'Germany', 'Sweden'];
+export const COUNTRIES: Country[] = ['poland', 'germany', 'sweden'];
 
 function BenchmarkSettings() {
 
@@ -56,7 +56,7 @@ function BenchmarkSettings() {
             <button
               key={type}
               onMouseDown={() => setCountry(type)}
-              className={`px-3 py-0.5 cursor-pointer font-normal rounded-md ${country === type ? "duration-150 bg-orange-400 text-white" : "bg-transparent text-black"}`}
+              className={`px-3 py-0.5 cursor-pointer capitalize font-normal rounded-md ${country === type ? "duration-150 bg-orange-400 text-white" : "bg-transparent text-black"}`}
             >
               {type}
             </button>
