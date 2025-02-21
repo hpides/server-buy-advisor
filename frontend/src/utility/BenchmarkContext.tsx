@@ -4,7 +4,7 @@ import { CPU_LIST } from '../partials/Compare';
 import { System } from './lifecycle_analysis/system';
 import { generateSystemsComparison, ComparisonType } from './lifecycle_analysis/comparison';
 import { GUPTA_MODEL } from './lifecycle_analysis/constants';
-import CPU_DATA, { CPUEntry, CPUs } from '../assets/data';
+import CPU_DATA from '../assets/data';
 
 // Assumptions
 const timeHorizon = 20;
