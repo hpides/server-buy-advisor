@@ -11,12 +11,10 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import annotationPlugin, { AnnotationOptions } from 'chartjs-plugin-annotation';
 
 
 // Register Chart.js components
 Chart.register(
-  annotationPlugin,
   LineController,
   LineElement,
   PointElement,
@@ -33,16 +31,11 @@ type LineChartProps = {
   // Define any props if necessary, or leave as an empty object
 };
 
-declare module 'chart.js' {
-  interface PluginOptionsByType<TType extends string> {
-    annotation?: AnnotationOptions;
-  }
-}
-
 const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
 
   const { comparison } = useBenchmarkContext();
 
+  // @ts-ignore
   const [chart, setChart] = useState<Chart | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
 
@@ -105,17 +98,6 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
               },
               boxHeight: 5
             },
-            annotation: {
-              annotations: {
-                line1: {
-                  type: 'line',
-                  yMin: 600,
-                  yMax: 600,
-                  borderColor: 'rgb(255, 99, 132)',
-                  borderWidth: 10,
-                }
-              }
-            }
           }
         }
       }

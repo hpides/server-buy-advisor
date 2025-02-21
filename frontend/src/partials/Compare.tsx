@@ -1,6 +1,6 @@
 import React from "react";
 import intel_xeon_logo from "../assets/intel_xeon_logo.png";
-import CPU_DATA, { CPUEntry, CPUs} from "../assets/data.ts";
+import CPU_DATA, { CPUEntry } from "../assets/data.ts";
 import { useBenchmarkContext } from "../utility/BenchmarkContext.tsx";
 import UP_ARROW from "../assets/up_arrow.svg";
 import logo2013 from "../assets/intel_logo/2013.svg";
