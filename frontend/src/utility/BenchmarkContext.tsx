@@ -45,6 +45,8 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   const [utilization, setUtilization] = useState<number>(40);
   const [country, setCountry] = useState<Country>(COUNTRIES[0]);
 
+  console.log(currentHardware)
+
   // Old System: Intel Xeon E7-4880, released 2014
   const oldSystem = new System(
     541 / 100, // dieSize in cm^2

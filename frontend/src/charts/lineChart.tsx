@@ -42,8 +42,6 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
 
   const breakEven = Math.min(comparison.relativeSavings.findIndex((value) => value < 0) + 3, 20);
 
-  console.log(comparison);
-
   const datasets:any = [
     {
       type: "line",
@@ -73,8 +71,6 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
     labels: labels,
     datasets: datasets,
   };
-
-  console.log(data)
 
   useEffect(() => {
     if (!canvas.current) return;

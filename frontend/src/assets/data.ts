@@ -17,6 +17,25 @@ export interface CPUEntry {
   SPECINTrate_PER_TDP: number;
 }
 
+interface CPUMetric {
+  label: keyof CPUEntry;
+  unit: string | null;
+  tofixed: number;
+}
+
+export const CPU_METRICS: Record<string, CPUMetric> = {
+  "Launch Year": { label: "LAUNCH_YEAR", unit: null, tofixed: 0 },
+  "TDP": { label: "TDP", unit: "Watts", tofixed: 0 },
+  "TPCH runs /hr": { label: "TPCH_RUNS_PER_H", unit: "Runs/hr", tofixed: 2 },
+  "SPECint rate": { label: "SPECINT_RATE", unit: null, tofixed: 2 },
+  "SPECrate": { label: "SPECINT", unit: null, tofixed: 2 },
+  "Core Count": { label: "CORE_COUNT", unit: null, tofixed: 0 },
+  "Sorted Tuples": { label: "SORTED_TUPLES_PER_S", unit: "Tuples/sec", tofixed: 0 },
+  "Sorted Tuples ": { label: "SORTED_TUPLES_PER_JOULE", unit: "Tuples/J", tofixed: 0 },
+  "TPCH runs": { label: "TPCH_RUNS_PER_KJOULE", unit: "Runs/KJ", tofixed: 3 },
+  "SPECint": { label: "SPECINT_PER_TDP", unit: "Score/W", tofixed: 2 },
+  "SPECInt rate": { label: "SPECINTrate_PER_TDP", unit: "Rate/W", tofixed: 2 }
+};
 
 const CPU_DATA : CPUs= {
   "Intel Xeon E7-4880 v2": {
