@@ -11,6 +11,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
+import annotationPlugin from 'chartjs-plugin-annotation';
 
 
 // Register Chart.js components
@@ -23,7 +24,8 @@ Chart.register(
   Tooltip,
   Legend,
   CategoryScale,
-  Filler
+  Filler,
+  annotationPlugin
 );
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
 
@@ -46,7 +48,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
     {
       type: "line",
       label: "Current Hardware",
-      data: comparison.oldSystemOpex.slice(0, breakEven),
+      data: [0, ...comparison.oldSystemOpex.slice(0, breakEven)],
       borderColor: "#B4D8E7",
       fill: false,
       backgroundColor: "#B4D8E7",
@@ -63,7 +65,9 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
     },
   ];
 
+  console.log(comparison)
 
+  const annotationHeight = comparison.newSystemOpex[0];
 
   const labels = Array.from(Array(breakEven).keys())
 
@@ -87,6 +91,31 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
           duration: 0,
         },
         plugins: {
+          annotation: {
+            annotations: {
+              line1: {
+                type: 'line',
+                yMin: annotationHeight,
+                yMax: annotationHeight,
+                borderColor: 'rgb(255, 99, 132)',
+                borderWidth: 2,
+                borderDash: [6, 6],
+                label: {
+                  display: true,
+                  backgroundColor: 'hsla(0, 100%, 50%, 0)',
+                  font: {
+                    family: 'serif',
+                    size: 18,
+                    weight: 400
+                  },
+                  color: 'red',
+                  yAdjust: 15,
+                  content: 'New HW\'s embodied carbon',
+                  position: 'end'
+                },
+              }
+            }
+          },
           legend: {
             labels: {
               font: {

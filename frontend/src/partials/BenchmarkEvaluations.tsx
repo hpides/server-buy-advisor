@@ -15,8 +15,8 @@ interface ListItemProps {
 const ListItem: React.FC<ListItemProps> = ({ label, value }) => {
   return (
     <li className="border-2 border-[#D4722E] rounded-xl p-4 text-nowrap">
-      <p className="text-lg">{label}</p>
-      <p className="font-semibold text-2xl">{value ?? "--"}</p>
+      <p className="text-base">{label}</p>
+      <p className="font-semibold text-xl">{value ?? "--"}</p>
     </li>
   );
 };
@@ -41,7 +41,7 @@ function BenchmarkEvaluations() {
   const newData = CPU_DATA[newHardware];
 
   return (
-    <div className="flex flex-col px-8 py-4 gap-8">
+    <div className="flex flex-col px-8 py-4 gap-12">
       <div className="flex gap-4">
         <ul className="flex flex-col gap-4">
           <ListItem label="Break Even Time" value={`${addCommaToNumber(year)} years`} />
@@ -50,13 +50,13 @@ function BenchmarkEvaluations() {
         </ul>
         <div className="grow flex flex-col gap-4">
           <LineChart />
-          <p className="text-center text-lg w-4/5 mx-auto">
+          <p className="text-center text-sm w-4/5 mx-auto">
             Figure: Projected CO2 accumulated emissions of current and new hardware for sorting workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
           </p>
         </div>
       </div>
       <div>
-        <table className="text-center w-full border-collapse text-xl">
+        <table className="text-center w-full border-collapse text-lg">
           <thead>
             <tr>
               <TableHeader>Emissions</TableHeader>

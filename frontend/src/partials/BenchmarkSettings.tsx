@@ -11,7 +11,7 @@ function BenchmarkSettings() {
   const { testType, utilization, country, setTestType, setUtilization, setCountry } = useBenchmarkContext();
 
   return (
-    <div className="flex flex-col gap-4 py-4 text-xl font-medium px-8">
+    <div className="flex flex-col gap-4 py-4 text-lg font-medium px-8">
       <div className="flex gap-4 items-center">
         <p>Test:</p>
         {

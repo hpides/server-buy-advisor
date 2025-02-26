@@ -3,10 +3,10 @@ import intel_xeon_logo from "../assets/intel_xeon_logo.png";
 import CPU_DATA, { CPUEntry } from "../assets/data.ts";
 import { useBenchmarkContext } from "../utility/BenchmarkContext.tsx";
 import UP_ARROW from "../assets/up_arrow.svg";
-import logo2013 from "../assets/intel_logo/2013.svg";
-import logo2015 from "../assets/intel_logo/2015.svg";
-import logo2020 from "../assets/intel_logo/2020.svg";
-import logo2024 from "../assets/intel_logo/2024.webp";
+import logo2013 from "../assets/intel_logo/2013.webp";
+import logo2015 from "../assets/intel_logo/2015.jpg";
+import logo2020 from "../assets/intel_logo/2020.png";
+import logo2024 from "../assets/intel_logo/2024.jpg";
 
 const YEAR_LOGOS: Record<number, string> = {
   2013: logo2013,
@@ -47,10 +47,10 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, compareTo
 
   return (
     <div className="w-1/2 flex flex-col gap-4 font-light">
-      <p className="text-xl">{label}</p>
+      <p className="text-lg">{label}</p>
       <div className="relative">
         <select
-          className="block appearance-none text-lg w-full bg-gray-100 border-2 border-gray-400 py-2 px-3 pr-8 rounded focus:outline-none focus:bg-white focus:border-gray-500"
+          className="block appearance-none text-base w-full bg-gray-100 border-2 border-gray-400 py-2 px-3 pr-8 rounded focus:outline-none focus:bg-white focus:border-gray-500"
           value={selected}
           onChange={(e) => onChange(e.target.value)}
         >
@@ -65,8 +65,10 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, selected, compareTo
         </div>
       </div>
       <div className="flex gap-4">
-        <img className="h-32 min-w-40" src={cpuLogo} />
-        <table className="text-xl grow border-collapse">
+        <div className="min-w-40">
+          <img className="h-32 w-auto mx-auto" src={cpuLogo} />
+        </div>
+        <table className="text-lg grow border-collapse">
           <tbody>
             {Object.entries(DISPLAY).map(([key, prop]) => {
               const selectedValue = specs_selected[prop] || 0;

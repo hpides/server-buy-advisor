@@ -15,7 +15,7 @@ const Sections: React.FC<SectionsProps> = ({ title, markup }) => {
     <>
       <section>
         <div className='w-full flex items-center gap-4'>
-          <h2 className='text-2xl'>{title}</h2>
+          <h2 className='text-xl'>{title}</h2>
           <hr className='border-t-[#AF313A] grow border-t-2 border-r-full' />
         </div>
         {markup}
@@ -32,10 +32,10 @@ function App() {
         <img src={hpiLogo} className='h-full' />
         <img src={desLogo} className='h-full' />
       </header>
-      <main className='w-full md:w-2/3 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
+      <main className='w-full md:w-3/4 px-2 lg:w-3/5 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
         <section>
-          <h1 className='text-3xl text-center'>Ecological Efficiency in Database Server Lifecycles</h1>
-          <p className='text-cyan-700 underline underline-offset-2 text-xl text-center'>
+          <h1 className='text-2xl text-center'>Ecological Efficiency in Database Server Lifecycles</h1>
+          <p className='text-cyan-700 underline underline-offset-2 text-lg text-center'>
             <a
               href='https://hpi.de/rabl/news/2024/paper-on-ecological-efficiency-of-database-servers-accepted-at-cidr-2025.html'
               target='_blank'
@@ -47,7 +47,7 @@ function App() {
         <Sections title='Evaluated Benchmarks' markup={<BenchmarkEvaluations />} />
       </main>
       <footer className='w-full flex flex-col py-10 items-center gap-3 bg-[#CE682A] text-white mt-24 bottom-0'>
-        <div className='w-full md:w-2/3 max-w-[2000px] text-xl flex flex-col gap-2'>
+        <div className='w-full md:w-3/4 px-2 lg:w-3/5 max-w-[2000px] text-lg flex flex-col gap-2'>
           <p className='hover:underline w-fit'>
             <a href='https://hpi.de/'>
               Hasso Plattner Institute
