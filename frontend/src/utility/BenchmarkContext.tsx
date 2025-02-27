@@ -5,6 +5,7 @@ import { System } from './lifecycle_analysis/system';
 import { generateSystemsComparison, ComparisonType } from './lifecycle_analysis/comparison';
 import { GUPTA_MODEL } from './lifecycle_analysis/constants';
 import CPU_DATA from '../assets/data';
+import { lineIntersect } from '../charts/lineChart';
 
 // Assumptions
 const timeHorizon = 20;
@@ -24,6 +25,10 @@ interface BenchmarkContextType {
   currentHardware: string;
   newHardware: string;
   comparison: ComparisonType;
+  oldSystemOpex: number[];
+  newSystemOpex: number[];
+  breakEven: number;
+  intersect: { x:number, y:number } | false;
   setCurrentHardware: (value: string) => void;
   setNewHardware: (value: string) => void;
   setTestType: (value: TestType) => void;
@@ -81,8 +86,20 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
     GUPTA_MODEL // OPEX calculation model
   );
 
+  const breakEven = Math.min(comparison.relativeSavings.findIndex((value) => value < 0) + 3, 20);
+
+  const oldSystemOpex = comparison.oldSystemOpex.slice(0, breakEven);
+  const newSystemOpex = comparison.newSystemOpex.slice(0, breakEven);
+
+  const intersect = lineIntersect(
+    0, oldSystemOpex[0],
+    breakEven - 1, oldSystemOpex[breakEven - 1],
+    0, newSystemOpex[0],
+    breakEven - 1, newSystemOpex[breakEven - 1],
+  )
+
   return (
-    <BenchmarkContext.Provider value={{ comparison, testType, utilization, country, setTestType, setUtilization, setCountry, currentHardware, setCurrentHardware, newHardware,setNewHardware }}>
+    <BenchmarkContext.Provider value={{ comparison, oldSystemOpex, newSystemOpex, intersect, breakEven, testType, utilization, country, setTestType, setUtilization, setCountry, currentHardware, setCurrentHardware, newHardware,setNewHardware }}>
       {children}
     </BenchmarkContext.Provider>
   );

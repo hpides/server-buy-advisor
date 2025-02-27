@@ -2,9 +2,8 @@ import React from "react";
 import LineChart from "../charts/lineChart";
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
 import { GCI_CONSTANTS } from "../utility/lifecycle_analysis/constants";
-import { addCommaToNumber, sumArray } from "../utility/UtilityFunctions";
+import { addCommaToNumber, yearToYearAndMonth, BLANK_SPACE } from "../utility/UtilityFunctions";
 import CPU_DATA, { CPU_METRICS } from "../assets/data";
-const BLANK_SPACE = "\u00A0";
 
 // Reusable ListItem Component
 interface ListItemProps {
@@ -14,44 +13,43 @@ interface ListItemProps {
 
 const ListItem: React.FC<ListItemProps> = ({ label, value }) => {
   return (
-    <li className="border-2 border-[#D4722E] rounded-xl p-4 text-nowrap">
-      <p className="text-base">{label}</p>
+    <li className="border-2 border-[#D4722E] rounded-xl px-4 py-3 text-nowrap">
+      <p className="text-base flex flex-col">
+        {label.split("😀").map((line, index) => (
+          <span key={index} className="block">
+            {line}
+          </span>
+        ))}
+      </p>
       <p className="font-semibold text-xl">{value ?? "--"}</p>
     </li>
   );
 };
 
-// Reusable TableHeader Component
-interface TableHeaderProps {
-  children: React.ReactNode;
-}
-
-const TableHeader: React.FC<TableHeaderProps> = ({ children }) => {
-  return <th className="text-left w-1/4">{children}</th>;
-};
-
 function BenchmarkEvaluations() {
+  const { currentHardware, newHardware, comparison, country, utilization, intersect } = useBenchmarkContext();
 
-  const { currentHardware, newHardware, comparison, country, utilization } = useBenchmarkContext();
-
-  const year = comparison.relativeSavings.findIndex((value) => value < 0);
+  const year = intersect ? Number(intersect.x.toFixed(1)) : null;
   const intensity = GCI_CONSTANTS[country]
-  const total = Number((sumArray(comparison.newSystemOpex) + sumArray(comparison.newSystemOpex)).toFixed(0))
+  const total = intersect ? Number(intersect.y.toFixed(1)) : null;
   const currentData = CPU_DATA[currentHardware];
   const newData = CPU_DATA[newHardware];
+  const embodiedCarbon = Number(comparison.newSystemOpex[0].toFixed(1));
 
   return (
     <div className="flex flex-col px-8 py-4 gap-12">
       <div className="flex gap-4">
         <ul className="flex flex-col gap-4">
-          <ListItem label="Break Even Time" value={`${addCommaToNumber(year)} years`} />
+          <ListItem label="Break-Even Time" value={`${yearToYearAndMonth(year)}`} />
+          <ListItem label="New HW Embodied Carbon" value={`${addCommaToNumber(embodiedCarbon)} kgCO₂`} />
           <ListItem label="Grid Carbon Intensity" value={`${addCommaToNumber(intensity)} gCO₂/kWh`} />
-          <ListItem label="Total Carbon Footprint" value={`${addCommaToNumber(total)} kgCO₂`} />
+          <ListItem label="Total Carbon Footprint 😀 until Break-Even" value={`${addCommaToNumber(total)} kgCO₂`} />
         </ul>
-        <div className="grow flex flex-col gap-4">
+        <div className="grow flex flex-col gap-1">
           <LineChart />
-          <p className="text-center text-sm w-4/5 mx-auto">
-            Figure: Projected CO2 accumulated emissions of current and new hardware for sorting workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
+          <p className="text-center text-sm w-4/5 mx-auto font-serif text-slate-700">
+            Figure: Projected CO2 accumulated emissions of current and new hardware for sorting 
+            workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
           </p>
         </div>
       </div>
@@ -59,14 +57,14 @@ function BenchmarkEvaluations() {
         <table className="text-center w-full border-collapse text-lg">
           <thead>
             <tr>
-              <TableHeader>Emissions</TableHeader>
+              <th></th>
               <th className="border-b-4 border-[#B4D8E7]">
                 <p className="font-light">Current Hardware</p>
-                <p className="font-medium">Xeon W-3365 Processor</p>
+                <p className="font-medium">{currentHardware}</p>
               </th>
               <th className="border-b-4 border-[#F1B16E]">
                 <p className="font-light">New Hardware</p>
-                <p className="font-medium">Xeon W-3365 Processor</p>
+                <p className="font-medium">{newHardware}</p>
               </th>
             </tr>
           </thead>

@@ -29,13 +29,16 @@ export function generateSystemsComparison(
   const newSystemCapex = newSystem.calculateCapexEmissions();
 
   // Generate OPEX for the old system
-  const oldSystemOpex = oldSystem.generateAccumProjectedOpexEmissions(
+  let oldSystemOpex = oldSystem.generateAccumProjectedOpexEmissions(
     timeHorizon,
     OLD_SYSTEM,
     country,
     utilization,
     opexCalculation
   );
+
+  // needs to start at 0 on year 0
+  oldSystemOpex = [0, ...oldSystemOpex.slice(0, oldSystemOpex.length - 1)];
 
   // Calculate performance factor
   const performanceFactor =
