@@ -10,7 +10,6 @@ import {
   Tooltip,
   Legend,
   Filler,
-  Title,
 } from "chart.js";
 import annotationPlugin from 'chartjs-plugin-annotation';
 

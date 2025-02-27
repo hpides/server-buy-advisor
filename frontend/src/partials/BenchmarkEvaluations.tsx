@@ -48,7 +48,7 @@ function BenchmarkEvaluations() {
         <div className="grow flex flex-col gap-1">
           <LineChart />
           <p className="text-center text-sm w-4/5 mx-auto font-serif text-slate-700">
-            Figure: Projected CO2 accumulated emissions of current and new hardware for sorting 
+            Figure: Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for sorting 
             workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
           </p>
         </div>
