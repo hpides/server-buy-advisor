@@ -27,7 +27,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, value }) => {
 };
 
 function BenchmarkEvaluations() {
-  const { currentHardware, newHardware, comparison, country, utilization, intersect } = useBenchmarkContext();
+  const { currentHardware, newHardware, comparison, country, utilization, intersect, workload } = useBenchmarkContext();
 
   const year = intersect ? Number(intersect.x.toFixed(1)) : null;
   const intensity = GCI_CONSTANTS[country]
@@ -48,8 +48,7 @@ function BenchmarkEvaluations() {
         <div className="grow flex flex-col gap-1">
           <LineChart />
           <p className="text-center text-sm w-4/5 mx-auto font-serif text-slate-700">
-            Figure: Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for sorting 
-            workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
+            Figure: Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for a {workload} workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
           </p>
         </div>
       </div>

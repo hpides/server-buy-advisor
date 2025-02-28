@@ -42,7 +42,6 @@ export function lineIntersect(
   x3 :number, y3 :number, // second line first point
   x4 :number, y4 :number  // second line second point
 ) :{ x:number, y:number } | false {
-  console.log(x1, y1, x2, y2, x3, y3, x4, y4)
   // Check if none of the lines are of length 0
   if ((x1 === x2 && y1 === y2) || (x3 === x4 && y3 === y4)) {
     return false
@@ -144,7 +143,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
           y: {
             title: {
               display: true,
-              text: "Accumulated CO₂ [Thousand kg]",
+              text: "Accumulated CO₂ [ton]",
               color: 'black',
               font: {
                 family: "serif",

@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, ReactNode } from 'react';
-import { TestType, Country, TEST_TYPES, COUNTRIES } from '../partials/BenchmarkSettings';
+import { WorkloadType, Country, WORKLOAD_TYPES, COUNTRIES, WORKLOAD_MAPPING } from '../partials/BenchmarkSettings';
 import { CPU_LIST } from '../partials/Compare';
 import { System } from './lifecycle_analysis/system';
 import { generateSystemsComparison, ComparisonType } from './lifecycle_analysis/comparison';
@@ -16,10 +16,8 @@ const dramCapacity = 8 * 64; // in GB
 const ssdCapacity = 2 * 1600; // in GB
 const hddCapacity = 0; // in GB
 
-// Call the generateSystemsComparison function
-
 interface BenchmarkContextType {
-  testType: TestType;
+  workload: WorkloadType;
   utilization: number;
   country: Country;
   currentHardware: string;
@@ -31,12 +29,11 @@ interface BenchmarkContextType {
   intersect: { x:number, y:number } | false;
   setCurrentHardware: (value: string) => void;
   setNewHardware: (value: string) => void;
-  setTestType: (value: TestType) => void;
+  setWorkload: (value: WorkloadType) => void;
   setUtilization: (value: number) => void;
   setCountry: (value: Country) => void;
 }
 
-// Create the context with an undefined default value
 const BenchmarkContext = createContext<BenchmarkContextType | undefined>(undefined);
 
 interface BenchmarkProviderProps {
@@ -46,16 +43,17 @@ interface BenchmarkProviderProps {
 export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }) => {
   const [currentHardware, setCurrentHardware] = useState<string>(CPU_LIST[0]);
   const [newHardware, setNewHardware] = useState<string>(CPU_LIST[0]);
-  const [testType, setTestType] = useState<TestType>(TEST_TYPES[0]);
+  const [workload, setWorkload] = useState<WorkloadType>(WORKLOAD_TYPES[0]);
   const [utilization, setUtilization] = useState<number>(40);
   const [country, setCountry] = useState<Country>(COUNTRIES[0]);
 
-  console.log(currentHardware)
+  const oldPerformanceIndicator = CPU_DATA[currentHardware][WORKLOAD_MAPPING[workload]];
+  const newPerformanceIndicator = CPU_DATA[newHardware][WORKLOAD_MAPPING[workload]];
 
   // Old System: Intel Xeon E7-4880, released 2014
   const oldSystem = new System(
     541 / 100, // dieSize in cm^2
-    1, // performanceIndicator
+    oldPerformanceIndicator, // performanceIndicator
     lifetime, // lifetime in years
     dramCapacity, // dramCapacity in GB
     ssdCapacity, // ssdCapacity in GB
@@ -63,19 +61,16 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
     CPU_DATA[currentHardware].TDP // cpuTdp in Watts
   );
 
-  console.log(currentHardware)
-
   // New System: Intel Platinum 8480CL, released 2023
   const newSystem = new System(
     (4 * 477) / 100, // dieSize in cm^2
-    3.55, // performanceIndicator
+    newPerformanceIndicator, // performanceIndicator
     lifetime, // lifetime in years
     dramCapacity, // dramCapacity in GB
     ssdCapacity, // ssdCapacity in GB
     hddCapacity, // hddCapacity in GB
     CPU_DATA[newHardware].TDP // cpuTdp in Watts
   );
-
 
   const comparison :ComparisonType = generateSystemsComparison(
     newSystem, // new system object
@@ -99,7 +94,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   )
 
   return (
-    <BenchmarkContext.Provider value={{ comparison, oldSystemOpex, newSystemOpex, intersect, breakEven, testType, utilization, country, setTestType, setUtilization, setCountry, currentHardware, setCurrentHardware, newHardware,setNewHardware }}>
+    <BenchmarkContext.Provider value={{ comparison, oldSystemOpex, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentHardware, setCurrentHardware, newHardware,setNewHardware }}>
       {children}
     </BenchmarkContext.Provider>
   );
