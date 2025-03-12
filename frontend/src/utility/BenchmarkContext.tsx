@@ -8,7 +8,7 @@ import CPU_DATA from '../assets/data';
 import { lineIntersect } from '../charts/lineChart';
 
 // Assumptions
-const timeHorizon = 20;
+const timeHorizon = 1000;
 
 // Shared specs
 const lifetime = 20;
@@ -27,6 +27,7 @@ interface BenchmarkContextType {
   newSystemOpex: number[];
   breakEven: number;
   intersect: { x:number, y:number } | false;
+  singleComparison: boolean;
   setCurrentHardware: (value: string) => void;
   setNewHardware: (value: string) => void;
   setWorkload: (value: WorkloadType) => void;
@@ -49,6 +50,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
 
   const oldPerformanceIndicator = CPU_DATA[currentHardware][WORKLOAD_MAPPING[workload]];
   const newPerformanceIndicator = CPU_DATA[newHardware][WORKLOAD_MAPPING[workload]];
+  const singleComparison = currentHardware == newHardware;
 
   // Old System: Intel Xeon E7-4880, released 2014
   const oldSystem = new System(
@@ -81,20 +83,39 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
     GUPTA_MODEL // OPEX calculation model
   );
 
-  const breakEven = Math.min(comparison.relativeSavings.findIndex((value) => value < 0) + 3, 20);
+  const calculateIntersect = (singleComparison: boolean, oldSystemOpex: number[], newSystemOpex: number[]): { x:number, y:number } | false => {
+    const embodiedLine = newSystemOpex[0];
+    const l = oldSystemOpex.length;
+
+    let intersect: { x:number, y:number } | false  = false;
+    if (singleComparison) {
+      // calculate the intersect between oldSystemOpex line and embodied line
+      intersect = lineIntersect(
+        0, oldSystemOpex[0],
+        l - 1, oldSystemOpex[l - 1],
+        0, embodiedLine,
+        l - 1, embodiedLine
+      )
+    } else {
+      // calculate the intersect between oldSystemOpex line and newSystemOpex line
+      intersect = lineIntersect(
+        0, oldSystemOpex[0],
+        l - 1, oldSystemOpex[l - 1],
+        0, newSystemOpex[0],
+        l - 1, newSystemOpex[l - 1]
+      )
+    }
+    return intersect;
+  }
+
+  const intersect = calculateIntersect(singleComparison, comparison.oldSystemOpex, comparison.newSystemOpex)
+  const breakEven = Math.ceil(intersect ? intersect.x + 2 : 5);
 
   const oldSystemOpex = comparison.oldSystemOpex.slice(0, breakEven);
   const newSystemOpex = comparison.newSystemOpex.slice(0, breakEven);
 
-  const intersect = lineIntersect(
-    0, oldSystemOpex[0],
-    breakEven - 1, oldSystemOpex[breakEven - 1],
-    0, newSystemOpex[0],
-    breakEven - 1, newSystemOpex[breakEven - 1],
-  )
-
   return (
-    <BenchmarkContext.Provider value={{ comparison, oldSystemOpex, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentHardware, setCurrentHardware, newHardware,setNewHardware }}>
+    <BenchmarkContext.Provider value={{ comparison, oldSystemOpex, singleComparison, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentHardware, setCurrentHardware, newHardware,setNewHardware }}>
       {children}
     </BenchmarkContext.Provider>
   );

@@ -71,7 +71,7 @@ export function lineIntersect(
 
 const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
 
-  const { comparison, intersect, currentHardware, newHardware, oldSystemOpex, newSystemOpex, breakEven } = useBenchmarkContext();
+  const { comparison, intersect, currentHardware, newHardware, oldSystemOpex, newSystemOpex, breakEven, singleComparison } = useBenchmarkContext();
 
   // @ts-ignore
   const [chart, setChart] = useState<Chart | null>(null);
@@ -87,7 +87,11 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
       backgroundColor: "#B4D8E7",
       pointRadius: 0,
     },
-    {
+  ];
+
+  // compare 2 CPU's
+  if (!singleComparison) {
+    datasets.push({
       type: "line",
       label: newHardware,
       data: newSystemOpex,
@@ -95,8 +99,8 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
       fill: false,
       backgroundColor: "#F1B16E",
       pointRadius: 0,
-    },
-  ];
+    })
+  }
 
   const annotationHeight = comparison.newSystemOpex[0];
 
@@ -187,6 +191,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                 },
               },
               breakEvenCircle: {
+                display: !!intersect,
                 type: "point",
                 backgroundColor: "red",
                 pointStyle: "round",
@@ -195,6 +200,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                 yValue: intersect ? intersect.y : 0,
               },
               breakEvenLabel: {
+                display: !!intersect,
                 type: "label",
                 backgroundColor: "transparent",
                 content: intersect ? `${intersect.x.toFixed(1)} years` : "",

@@ -29,7 +29,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, value }) => {
 function BenchmarkEvaluations() {
   const { currentHardware, newHardware, comparison, country, utilization, intersect, workload } = useBenchmarkContext();
 
-  const year = intersect ? Number(intersect.x.toFixed(1)) : null;
+  const year = intersect ? yearToYearAndMonth(Number(intersect.x.toFixed(1))) : "No Break-Even";
   const intensity = GCI_CONSTANTS[country]
   const total = intersect ? Number(intersect.y.toFixed(1)) : null;
   const currentData = CPU_DATA[currentHardware];
@@ -40,7 +40,7 @@ function BenchmarkEvaluations() {
     <div className="flex flex-col px-8 py-4 gap-12">
       <div className="flex gap-4">
         <ul className="flex flex-col gap-4">
-          <ListItem label="Break-Even Time" value={`${yearToYearAndMonth(year)}`} />
+          <ListItem label="Break-Even Time" value={`${year}`} />
           <ListItem label="New HW Embodied Carbon" value={`${addCommaToNumber(embodiedCarbon)} kgCO₂`} />
           <ListItem label="Grid Carbon Intensity" value={`${addCommaToNumber(intensity)} gCO₂/kWh`} />
           <ListItem label="Total Carbon Footprint 😀 until Break-Even" value={`${addCommaToNumber(total)} kgCO₂`} />

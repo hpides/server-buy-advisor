@@ -64,7 +64,7 @@ function BenchmarkSettings() {
       <div className="flex gap-4 items-center">
         <label><p>Utilization %:</p></label>
         <input
-          className="w-96 accent-orange-400"
+          className="w-96 accent-red-500"
           type="range"
           value={utilization}
           min={0}
@@ -73,7 +73,7 @@ function BenchmarkSettings() {
         />
         <div className="flex">
         <input
-          className="border rounded-md text-center"
+          className="border rounded-md text-center bg-white"
           type="number"
           min={0}
           max={100}
