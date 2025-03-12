@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import intel_xeon_logo from "../assets/intel_xeon_logo.png";
 import CPU_DATA, { CPUEntry } from "../assets/data.ts";
 import { useBenchmarkContext } from "../utility/BenchmarkContext.tsx";
