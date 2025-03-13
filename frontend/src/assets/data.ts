@@ -21,20 +21,21 @@ interface CPUMetric {
   label: keyof CPUEntry;
   unit: string | null;
   tofixed: number;
+  delimeter: boolean;
 }
 
 export const CPU_METRICS: Record<string, CPUMetric> = {
-  "Launch Year": { label: "LAUNCH_YEAR", unit: null, tofixed: 0 },
-  "TDP": { label: "TDP", unit: "Watts", tofixed: 0 },
-  "TPCH runs /hr": { label: "TPCH_RUNS_PER_H", unit: "Runs/hr", tofixed: 2 },
-  "SPECint rate": { label: "SPECINT_RATE", unit: null, tofixed: 2 },
-  "SPECrate": { label: "SPECINT", unit: null, tofixed: 2 },
-  "Core Count": { label: "CORE_COUNT", unit: null, tofixed: 0 },
-  "Sorted Tuples": { label: "SORTED_TUPLES_PER_S", unit: "Tuples/sec", tofixed: 0 },
-  "Sorted Tuples ": { label: "SORTED_TUPLES_PER_JOULE", unit: "Tuples/J", tofixed: 0 },
-  "TPCH runs": { label: "TPCH_RUNS_PER_KJOULE", unit: "Runs/KJ", tofixed: 3 },
-  "SPECint": { label: "SPECINT_PER_TDP", unit: "Score/W", tofixed: 2 },
-  "SPECInt rate": { label: "SPECINTrate_PER_TDP", unit: "Rate/W", tofixed: 2 }
+  "Launch Year": { label: "LAUNCH_YEAR", unit: null, tofixed: 0, delimeter: false },
+  "TDP": { label: "TDP", unit: "Watts", tofixed: 0, delimeter: true },
+  "TPCH runs /hr": { label: "TPCH_RUNS_PER_H", unit: "Runs/hr", tofixed: 2, delimeter: true },
+  "SPECint rate": { label: "SPECINT_RATE", unit: null, tofixed: 2, delimeter: true },
+  "SPECrate": { label: "SPECINT", unit: null, tofixed: 2, delimeter: true },
+  "Core Count": { label: "CORE_COUNT", unit: null, tofixed: 0, delimeter: true },
+  "Sorted Tuples": { label: "SORTED_TUPLES_PER_S", unit: "Tuples/sec", tofixed: 0, delimeter: true },
+  "Sorted Tuples ": { label: "SORTED_TUPLES_PER_JOULE", unit: "Tuples/J", tofixed: 0, delimeter: true },
+  "TPCH runs": { label: "TPCH_RUNS_PER_KJOULE", unit: "Runs/KJ", tofixed: 3, delimeter: true },
+  "SPECint": { label: "SPECINT_PER_TDP", unit: "Score/W", tofixed: 2, delimeter: true },
+  "SPECInt rate": { label: "SPECINTrate_PER_TDP", unit: "Rate/W", tofixed: 2, delimeter: true }
 };
 
 const CPU_DATA : CPUs= {

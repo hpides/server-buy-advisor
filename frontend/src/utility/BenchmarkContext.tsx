@@ -109,7 +109,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   }
 
   const intersect = calculateIntersect(singleComparison, comparison.oldSystemOpex, comparison.newSystemOpex)
-  const breakEven = Math.ceil(intersect ? intersect.x + 2 : 5);
+  const breakEven = Math.ceil(intersect ? intersect.x + 2 : 1000);
 
   const oldSystemOpex = comparison.oldSystemOpex.slice(0, breakEven);
   const newSystemOpex = comparison.newSystemOpex.slice(0, breakEven);

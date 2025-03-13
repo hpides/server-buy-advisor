@@ -102,6 +102,9 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
     })
   }
 
+  const L = oldSystemOpex.length - 1;
+  const isOneDecimalPlace = oldSystemOpex[L] > 1000 && newSystemOpex[L] > 1000;
+
   const annotationHeight = comparison.newSystemOpex[0];
 
   const labels = Array.from(Array(breakEven).keys())
@@ -161,7 +164,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                 size: 14,
               },
               callback: function(value) {
-                return (Number(value) / 1000).toFixed(1);
+                return (Number(value) / 1000).toFixed(isOneDecimalPlace ? 1 : 2);
               }
             },
           },
@@ -186,7 +189,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                   },
                   color: "red",
                   yAdjust: 15,
-                  content: "New HW's embodied carbon",
+                  content: `${singleComparison ? "Current" : "New" } HW's embodied carbon`,
                   position: "end",
                 },
               },

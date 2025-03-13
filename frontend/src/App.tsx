@@ -28,7 +28,7 @@ function App() {
 
   return (
     <>
-      <header className='h-32 p-4 flex gap-12'>
+      <header className='h-32 pl-12 p-4 flex gap-10'>
         <img src={hpiLogo} className='h-full' />
         <img src={desLogo} className='h-full' />
       </header>

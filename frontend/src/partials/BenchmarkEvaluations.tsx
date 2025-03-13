@@ -27,7 +27,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, value }) => {
 };
 
 function BenchmarkEvaluations() {
-  const { currentHardware, newHardware, comparison, country, utilization, intersect, workload } = useBenchmarkContext();
+  const { currentHardware, newHardware, comparison, country, utilization, intersect, workload, singleComparison } = useBenchmarkContext();
 
   const year = intersect ? yearToYearAndMonth(Number(intersect.x.toFixed(1))) : "No Break-Even";
   const intensity = GCI_CONSTANTS[country]
@@ -61,25 +61,31 @@ function BenchmarkEvaluations() {
                 <p className="font-light">Current Hardware</p>
                 <p className="font-medium">{currentHardware}</p>
               </th>
-              <th className="border-b-4 border-[#F1B16E]">
+              <th className="border-b-4 border-[#F1B16E]" hidden={singleComparison}>
                 <p className="font-light">New Hardware</p>
                 <p className="font-medium">{newHardware}</p>
               </th>
             </tr>
           </thead>
           <tbody>
-            {Object.entries(CPU_METRICS).map(([key, { label, unit, tofixed }]) => {
-              const curVal = currentData[label]?.toFixed(tofixed);
-              const newVal = newData[label]?.toFixed(tofixed);
+            {Object.entries(CPU_METRICS).map(([key, { label, unit, tofixed, delimeter }]) => {
+              let curVal = currentData[label]?.toFixed(tofixed);
+              let newVal = newData[label]?.toFixed(tofixed);
+
+              if (delimeter) {
+                curVal = addCommaToNumber(Number(curVal));
+                newVal = addCommaToNumber(Number(newVal));
+              }
+
               const rowPadding = "py-2"
               return (
-                <tr key={key} className="text-left align-top">
+                <tr key={key} className={`${singleComparison ? 'text-center' : 'text-left'} align-top`}>
                   <th className={`font-medium flex flex-col py-2 ${rowPadding}`}>
                     <span>{key}</span>
                     <span className="text-sm text-slate-600">{unit || BLANK_SPACE}</span>
                   </th>
                   <td className={rowPadding + ' px-5'}>{curVal}</td> {/* Placeholder for Current Hardware Value */}
-                  <td className={rowPadding + ' px-5'}>{newVal}</td> {/* Placeholder for New Hardware Value */}
+                  <td className={rowPadding + ' px-5'} hidden={singleComparison}>{newVal}</td> {/* Placeholder for New Hardware Value */}
                 </tr>
               )})}
           </tbody>
