@@ -75,7 +75,7 @@ export class System {
     }
 
     return Array.from({ length: timeHorizon }, (_, i) =>
-      (i + 1) * opexPerYear
+      i * opexPerYear
     );
   }
 

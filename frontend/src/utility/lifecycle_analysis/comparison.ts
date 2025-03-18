@@ -37,9 +37,6 @@ export function generateSystemsComparison(
     opexCalculation
   );
 
-  // needs to start at 0 on year 0
-  oldSystemOpex = [0, ...oldSystemOpex.slice(0, oldSystemOpex.length - 1)];
-
   // Calculate performance factor
   const performanceFactor =
     oldSystem.performanceIndicator / newSystem.performanceIndicator;

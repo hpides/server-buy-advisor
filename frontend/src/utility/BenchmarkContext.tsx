@@ -28,6 +28,8 @@ interface BenchmarkContextType {
   breakEven: number;
   intersect: { x:number, y:number } | false;
   singleComparison: boolean;
+  oldPerformanceIndicator: number;
+  newPerformanceIndicator: number;
   setCurrentHardware: (value: string) => void;
   setNewHardware: (value: string) => void;
   setWorkload: (value: WorkloadType) => void;
@@ -115,7 +117,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   const newSystemOpex = comparison.newSystemOpex.slice(0, breakEven);
 
   return (
-    <BenchmarkContext.Provider value={{ comparison, oldSystemOpex, singleComparison, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentHardware, setCurrentHardware, newHardware,setNewHardware }}>
+    <BenchmarkContext.Provider value={{ oldPerformanceIndicator, newPerformanceIndicator, comparison, oldSystemOpex, singleComparison, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentHardware, setCurrentHardware, newHardware,setNewHardware }}>
       {children}
     </BenchmarkContext.Provider>
   );
