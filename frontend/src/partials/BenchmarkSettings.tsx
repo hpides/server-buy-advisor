@@ -109,7 +109,7 @@ function BenchmarkSettings() {
         </div>
       </div>
       <div className="flex flex-col border-2 border-[#D4722E] rounded-xl px-4 py-3 font-normal w-1/3">
-        <p className="font-normap w-full text-wrap">Workload Performance indicator</p>
+        <p className="font-normap font-medium w-full text-wrap">Workload Performance indicator</p>
         <table>
           <tr>
             <td>Current Hardware:</td>

@@ -54,7 +54,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   const newPerformanceIndicator = CPU_DATA[newHardware][WORKLOAD_MAPPING[workload]];
   const singleComparison = currentHardware == newHardware;
 
-  // Old System: Intel Xeon E7-4880, released 2014
+  // Old System
   const oldSystem = new System(
     541 / 100, // dieSize in cm^2
     oldPerformanceIndicator, // performanceIndicator
@@ -65,7 +65,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
     CPU_DATA[currentHardware].TDP // cpuTdp in Watts
   );
 
-  // New System: Intel Platinum 8480CL, released 2023
+  // New System
   const newSystem = new System(
     (4 * 477) / 100, // dieSize in cm^2
     newPerformanceIndicator, // performanceIndicator

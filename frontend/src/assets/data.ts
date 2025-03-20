@@ -17,7 +17,7 @@ export interface CPUEntry {
   SPECINTrate_PER_TDP: number;
 }
 
-interface CPUMetric {
+export interface CPUMetric {
   label: keyof CPUEntry;
   unit: string | null;
   tofixed: number;
