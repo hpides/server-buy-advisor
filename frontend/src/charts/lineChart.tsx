@@ -71,7 +71,7 @@ export function lineIntersect(
 
 const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
 
-  const { comparison, intersect, currentHardware, newHardware, oldSystemOpex, newSystemOpex, breakEven, singleComparison } = useBenchmarkContext();
+  const { comparison, intersect, currentCPU, newCPU, oldSystemOpex, newSystemOpex, breakEven, singleComparison } = useBenchmarkContext();
 
   // @ts-ignore
   const [chart, setChart] = useState<Chart | null>(null);
@@ -80,7 +80,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
   const datasets:any = [
     {
       type: "line",
-      label: currentHardware,
+      label: currentCPU,
       data: oldSystemOpex,
       borderColor: "#B4D8E7",
       fill: false,
@@ -93,7 +93,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
   if (!singleComparison) {
     datasets.push({
       type: "line",
-      label: newHardware,
+      label: newCPU,
       data: newSystemOpex,
       borderColor: "#F1B16E",
       fill: false,

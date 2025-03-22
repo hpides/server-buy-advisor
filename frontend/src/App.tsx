@@ -42,8 +42,8 @@ function App() {
             >Read Paper</a>
           </p>
         </section>
-        <Sections title='Compare' markup={<Compare />} />
-        <Sections title='Benchmark settings' markup={<BenchmarkSettings />} />
+        <Sections title='Compare Configurations' markup={<Compare />} />
+        <Sections title='Benchmark Settings' markup={<BenchmarkSettings />} />
         <Sections title='Evaluated Benchmarks' markup={<BenchmarkEvaluations />} />
       </main>
       <footer className='w-full flex flex-col py-10 items-center gap-3 bg-[#CE682A] text-white mt-24 bottom-0'>

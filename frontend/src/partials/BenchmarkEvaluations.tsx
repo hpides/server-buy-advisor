@@ -29,8 +29,8 @@ const ListItem: React.FC<ListItemProps> = ({ label, value }) => {
 interface TableRowProps {
   name: string;
   isSingleComparison: boolean;
-  currentHardware: string | undefined;
-  newHardware: string | undefined;
+  currentCPU: string | undefined;
+  newCPU: string | undefined;
   CPUMetric: CPUMetric;
 }
 
@@ -47,9 +47,9 @@ const PercentageBar: React.FC<PercentageBarProps> = ({ value }) => {
   )
 }
 
-const TableRow: React.FC<TableRowProps> = ({ name, isSingleComparison, currentHardware, newHardware, CPUMetric }) => {
-  let curVal: any = Number(currentHardware);
-  let newVal: any = Number(newHardware);
+const TableRow: React.FC<TableRowProps> = ({ name, isSingleComparison, currentCPU, newCPU, CPUMetric }) => {
+  let curVal: any = Number(currentCPU);
+  let newVal: any = Number(newCPU);
 
   let percentageChange = null;
   let higherValue = null;
@@ -58,7 +58,7 @@ const TableRow: React.FC<TableRowProps> = ({ name, isSingleComparison, currentHa
     const baseValue = Math.min(curVal, newVal);
     const increase = ((Math.max(curVal, newVal) - baseValue) / baseValue) * 100;
 
-    percentageChange = Number(increase.toFixed(1))
+    percentageChange = Number(increase.toFixed(1)) || null // if change = 0 then weird behaviour
     higherValue = curVal > newVal ? "curVal" : "newVal";
     // if infinite increase we break
     // if (Number.isFinite(increase)) {
@@ -97,13 +97,13 @@ const TableRow: React.FC<TableRowProps> = ({ name, isSingleComparison, currentHa
 };
 
 function BenchmarkEvaluations() {
-  const { currentHardware, newHardware, comparison, country, utilization, intersect, workload, singleComparison } = useBenchmarkContext();
+  const { currentCPU, newCPU, comparison, country, utilization, intersect, workload, singleComparison } = useBenchmarkContext();
 
   const year = intersect ? yearToYearAndMonth(Number(intersect.x.toFixed(1))) : "No Break-Even";
   const intensity = GCI_CONSTANTS[country]
-  const total = intersect ? Number(intersect.y.toFixed(1)) : null;
-  const currentData = CPU_DATA[currentHardware];
-  const newData = CPU_DATA[newHardware];
+  const total = intersect ? addCommaToNumber(Number(intersect.y.toFixed(1))) + "kgCO₂" : "No Break-even";
+  const currentData = CPU_DATA[currentCPU];
+  const newData = CPU_DATA[newCPU];
   const embodiedCarbon = Number(comparison.newSystemOpex[0].toFixed(1));
 
   return (
@@ -113,7 +113,7 @@ function BenchmarkEvaluations() {
           <ListItem label="Break-Even Time" value={`${year}`} />
           <ListItem label="New HW Embodied Carbon" value={`${addCommaToNumber(embodiedCarbon)} kgCO₂`} />
           <ListItem label="Grid Carbon Intensity" value={`${addCommaToNumber(intensity)} gCO₂/kWh`} />
-          <ListItem label="Total Carbon Footprint 😀 until Break-Even" value={`${addCommaToNumber(total)} kgCO₂`} />
+          <ListItem label="Total Carbon Footprint 😀 until Break-Even" value={`${total}`} />
         </ul>
         <div className="grow flex flex-col gap-1">
           <LineChart />
@@ -123,22 +123,23 @@ function BenchmarkEvaluations() {
         </div>
       </div>
       <div>
-        <table className="text-center w-4/5 mx-auto border-collapse text-lg">
+        <table className="text-center w-5/6 mx-auto border-collapse text-lg">
           <thead>
             <tr>
               <th className="w-1/5"></th>
               <th className="w-2/5 border-b-4 border-[#B4D8E7]">
                 <p className="font-light">Current Hardware</p>
-                <p className="font-medium">{currentHardware}</p>
+                <p className="font-medium">{currentCPU}</p>
               </th>
               <th className="border-b-4 border-[#F1B16E]" hidden={singleComparison}>
                 <p className="font-light">New Hardware</p>
-                <p className="font-medium">{newHardware}</p>
+                <p className="font-medium">{newCPU}</p>
               </th>
             </tr>
           </thead>
           <tbody>
             {Object.entries(CPU_METRICS).map(([key, CPUMetric]) => {
+              //TODO: Need to fix NaN displaying when data is null
               let curVal = currentData[CPUMetric.label]?.toFixed(CPUMetric.tofixed);
               let newVal = newData[CPUMetric.label]?.toFixed(CPUMetric.tofixed);
 
@@ -146,8 +147,8 @@ function BenchmarkEvaluations() {
                 <TableRow
                   name={key}
                   isSingleComparison={singleComparison}
-                  currentHardware={curVal}
-                  newHardware={newVal}
+                  currentCPU={curVal}
+                  newCPU={newVal}
                   CPUMetric={CPUMetric}
                 />
               )

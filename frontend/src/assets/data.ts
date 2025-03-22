@@ -1,24 +1,11 @@
+import { CPUEntry, INTEL, AMD } from "../partials/BenchmarkSettings";
+
 export interface CPUs {
   [key: string]: CPUEntry;
 }
 
-export interface CPUEntry {
-  LAUNCH_YEAR: number;
-  TDP: number;
-  LAUNCH_QUARTER: number;
-  SORTED_TUPLES_PER_S: number;
-  TPCH_RUNS_PER_H: number;
-  SPECINT_RATE: number;
-  SPECINT: number;
-  CORE_COUNT: number;
-  SORTED_TUPLES_PER_JOULE: number | null;
-  TPCH_RUNS_PER_KJOULE: number;
-  SPECINT_PER_TDP: number;
-  SPECINTrate_PER_TDP: number;
-}
-
 export interface CPUMetric {
-  label: keyof CPUEntry;
+  label: Exclude<keyof CPUEntry, "MAKE">;
   unit: string | null;
   tofixed: number;
   delimeter: boolean;
@@ -27,22 +14,22 @@ export interface CPUMetric {
 export const CPU_METRICS: Record<string, CPUMetric> = {
   "Launch Year": { label: "LAUNCH_YEAR", unit: null, tofixed: 0, delimeter: false },
   "TDP": { label: "TDP", unit: "Watts", tofixed: 0, delimeter: true },
-  "TPCH runs /hr": { label: "TPCH_RUNS_PER_H", unit: "Runs/hr", tofixed: 2, delimeter: true },
-  "SPECint rate": { label: "SPECINT_RATE", unit: null, tofixed: 2, delimeter: true },
-  "SPECrate": { label: "SPECINT", unit: null, tofixed: 2, delimeter: true },
+  "TPC-H runs /hr": { label: "TPCH_RUNS_PER_H", unit: "Runs/hour", tofixed: 2, delimeter: true },
+  "SPECrate": { label: "SPECINT_RATE", unit: null, tofixed: 2, delimeter: true },
+  "SPECspeed": { label: "SPECINT", unit: null, tofixed: 2, delimeter: true },
   "Core Count": { label: "CORE_COUNT", unit: null, tofixed: 0, delimeter: true },
-  "Sorted Tuples": { label: "SORTED_TUPLES_PER_S", unit: "Tuples/sec", tofixed: 0, delimeter: true },
-  "Sorted Tuples ": { label: "SORTED_TUPLES_PER_JOULE", unit: "Tuples/J", tofixed: 0, delimeter: true },
-  "TPCH runs": { label: "TPCH_RUNS_PER_KJOULE", unit: "Runs/KJ", tofixed: 3, delimeter: true },
-  "SPECint": { label: "SPECINT_PER_TDP", unit: "Score/W", tofixed: 2, delimeter: true },
-  "SPECInt rate": { label: "SPECINTrate_PER_TDP", unit: "Rate/W", tofixed: 2, delimeter: true }
+  "Sorted Tuples per second": { label: "SORTED_TUPLES_PER_S", unit: "Tuples/second", tofixed: 0, delimeter: true },
+  "Sorted Tuples per joule": { label: "SORTED_TUPLES_PER_JOULE", unit: "Tuples/Joule", tofixed: 0, delimeter: true },
+  "TPCH runs": { label: "TPCH_RUNS_PER_KJOULE", unit: "Runs/KiloJoule", tofixed: 3, delimeter: true },
+  "SPECspeed per TDP": { label: "SPECINT_PER_TDP", unit: "Score/Watt", tofixed: 2, delimeter: true },
+  "SPECrate per TDP": { label: "SPECINTrate_PER_TDP", unit: "Score/Watt", tofixed: 2, delimeter: true }
 };
 
 const CPU_DATA : CPUs= {
   "Intel Xeon E7-4880 v2": {
+    "MAKE": INTEL,
     "LAUNCH_YEAR": 2014,
     "TDP": 130,
-    "LAUNCH_QUARTER": 1,
     "SORTED_TUPLES_PER_S": 153846.153,
     "TPCH_RUNS_PER_H": 40.07,
     "SPECINT_RATE": 61.111111111111,
@@ -51,12 +38,13 @@ const CPU_DATA : CPUs= {
     "SORTED_TUPLES_PER_JOULE": 517082.8,
     "TPCH_RUNS_PER_KJOULE": 0.0603893453241102,
     "SPECINT_PER_TDP": 1.38974358974359,
-    "SPECINTrate_PER_TDP": 0.470085470085469
+    "SPECINTrate_PER_TDP": 0.470085470085469,
+    "DIE_SIZE": 541
   },
   "Intel Xeon E7-4850 v4": {
+    "MAKE": INTEL,
     "LAUNCH_YEAR": 2016,
     "TDP": 115,
-    "LAUNCH_QUARTER": 2,
     "SORTED_TUPLES_PER_S": 157455.642777,
     "TPCH_RUNS_PER_H": 40.1731641924089,
     "SPECINT_RATE": 109.25,
@@ -65,12 +53,13 @@ const CPU_DATA : CPUs= {
     "SORTED_TUPLES_PER_JOULE": 780063.146,
     "TPCH_RUNS_PER_KJOULE": 0.0642346000400901,
     "SPECINT_PER_TDP": 1.85507246376811,
-    "SPECINTrate_PER_TDP": 0.95
+    "SPECINTrate_PER_TDP": 0.95,
+    "DIE_SIZE": 456
   },
   "Intel Xeon Platinum 8180": {
+    "MAKE": INTEL,
     "LAUNCH_YEAR": 2017,
     "TDP": 205,
-    "LAUNCH_QUARTER": 3,
     "SORTED_TUPLES_PER_S": 255325.124631,
     "TPCH_RUNS_PER_H": 88.63,
     "SPECINT_RATE": 141,
@@ -79,12 +68,13 @@ const CPU_DATA : CPUs= {
     "SORTED_TUPLES_PER_JOULE": 447132.456,
     "TPCH_RUNS_PER_KJOULE": 0.133619191490173,
     "SPECINT_PER_TDP": 2.54704390243902,
-    "SPECINTrate_PER_TDP": 0.673170731707317
+    "SPECINTrate_PER_TDP": 0.673170731707317,
+    "DIE_SIZE": 628
   },
   "Intel Xeon Platinum 8259CL": {
+    "MAKE": INTEL,
     "LAUNCH_YEAR": 2019,
     "TDP": 165,
-    "LAUNCH_QUARTER": 2,
     "SORTED_TUPLES_PER_S": 328031.52382944,
     "TPCH_RUNS_PER_H": 89.4327282049957,
     "SPECINT_RATE": 140,
@@ -93,12 +83,13 @@ const CPU_DATA : CPUs= {
     "SORTED_TUPLES_PER_JOULE": 901134.302803654,
     "TPCH_RUNS_PER_KJOULE": 0.101716459471903,
     "SPECINT_PER_TDP": 2.99636363636364,
-    "SPECINTrate_PER_TDP": 0.848484848484848
+    "SPECINTrate_PER_TDP": 0.848484848484848,
+    "DIE_SIZE": 754
   },
   "Intel Xeon Gold 6240L": {
+    "MAKE": INTEL,
     "LAUNCH_YEAR": 2019,
     "TDP": 150,
-    "LAUNCH_QUARTER": 2,
     "SORTED_TUPLES_PER_S": 227705.108223,
     "TPCH_RUNS_PER_H": 68.7827948245532,
     "SPECINT_RATE": 222,
@@ -107,12 +98,13 @@ const CPU_DATA : CPUs= {
     "SORTED_TUPLES_PER_JOULE": null,
     "TPCH_RUNS_PER_KJOULE": 0.184657181749119,
     "SPECINT_PER_TDP": 2.424,
-    "SPECINTrate_PER_TDP": 0
+    "SPECINTrate_PER_TDP": 0,
+    "DIE_SIZE": 471
   },
   "Intel Xeon Platinum 8352Y": {
+    "MAKE": INTEL,
     "LAUNCH_YEAR": 2021,
     "TDP": 205,
-    "LAUNCH_QUARTER": 2,
     "SORTED_TUPLES_PER_S": 373634.831734,
     "TPCH_RUNS_PER_H": 117.173425457684,
     "SPECINT_RATE": 215,
@@ -121,12 +113,13 @@ const CPU_DATA : CPUs= {
     "SORTED_TUPLES_PER_JOULE": 988856.82,
     "TPCH_RUNS_PER_KJOULE": 0.212240584737477,
     "SPECINT_PER_TDP": 3.64572097560976,
-    "SPECINTrate_PER_TDP": 1.04878048780488
+    "SPECINTrate_PER_TDP": 1.04878048780488,
+    "DIE_SIZE": 660
   },
   "Intel Xeon Platinum 8480CL": {
+    "MAKE": INTEL,
     "LAUNCH_YEAR": 2023,
     "TDP": 350,
-    "LAUNCH_QUARTER": 1,
     "SORTED_TUPLES_PER_S": 466539.876,
     "TPCH_RUNS_PER_H": 177.949663971718,
     "SPECINT_RATE": 443.5,
@@ -135,7 +128,98 @@ const CPU_DATA : CPUs= {
     "SORTED_TUPLES_PER_JOULE": 934343.670288806,
     "TPCH_RUNS_PER_KJOULE": 0.671868755779442,
     "SPECINT_PER_TDP": 2.0256,
-    "SPECINTrate_PER_TDP": 1.26714285714286
+    "SPECINTrate_PER_TDP": 1.26714285714286,
+    "DIE_SIZE": (4*477)
+  },
+  "AMD EPYC 7601": {
+    "MAKE": AMD,
+    "LAUNCH_YEAR": 2017,
+    "TDP": 180,
+    "SORTED_TUPLES_PER_S": null,
+    "TPCH_RUNS_PER_H": null,
+    "SPECINT_RATE": 151,
+    "SPECINT": 7.16,
+    "CORE_COUNT": 64,
+    "SORTED_TUPLES_PER_JOULE": null,
+    "TPCH_RUNS_PER_KJOULE": null,
+    "SPECINT_PER_TDP": 0.03977777777,
+    "SPECINTrate_PER_TDP": 0.83888888888,
+    "DIE_SIZE": 213
+  },
+  "AMD EPYC 7402P": {
+    "MAKE": AMD,
+    "LAUNCH_YEAR": 2019,
+    "TDP": 180,
+    "SORTED_TUPLES_PER_S": null,
+    "TPCH_RUNS_PER_H": null,
+    "SPECINT_RATE": 170,
+    "SPECINT": 8.65,
+    "CORE_COUNT": 48,
+    "SORTED_TUPLES_PER_JOULE": null,
+    "TPCH_RUNS_PER_KJOULE": null,
+    "SPECINT_PER_TDP": 0.04805555555,
+    "SPECINTrate_PER_TDP": 0.94444444444,
+    "DIE_SIZE": 74
+  },
+  "AMD EPYC 7302P": {
+    "MAKE": AMD,
+    "LAUNCH_YEAR": 2019,
+    "TDP": 155,
+    "SORTED_TUPLES_PER_S": null,
+    "TPCH_RUNS_PER_H": null,
+    "SPECINT_RATE": 118,
+    "SPECINT": 8.55,
+    "CORE_COUNT": 32,
+    "SORTED_TUPLES_PER_JOULE": null,
+    "TPCH_RUNS_PER_KJOULE": null,
+    "SPECINT_PER_TDP": 0.05516129032,
+    "SPECINTrate_PER_TDP": 0.76129032258,
+    "DIE_SIZE": 74
+  },
+  "AMD EPYC 7513": {
+    "MAKE": AMD,
+    "LAUNCH_YEAR": 2021,
+    "TDP": 200,
+    "SORTED_TUPLES_PER_S": null,
+    "TPCH_RUNS_PER_H": null,
+    "SPECINT_RATE": 252,
+    "SPECINT": 12.3,
+    "CORE_COUNT": 64,
+    "SORTED_TUPLES_PER_JOULE": null,
+    "TPCH_RUNS_PER_KJOULE": null,
+    "SPECINT_PER_TDP": 0.0615,
+    "SPECINTrate_PER_TDP": 1.26,
+    "DIE_SIZE": (8*81)
+  },
+  "AMD EPYC 7773X": {
+    "MAKE": AMD,
+    "LAUNCH_YEAR": 2021,
+    "TDP": 280,
+    "SORTED_TUPLES_PER_S": null,
+    "TPCH_RUNS_PER_H": null,
+    "SPECINT_RATE": 406,
+    "SPECINT": 12.3,
+    "CORE_COUNT": 128,
+    "SORTED_TUPLES_PER_JOULE": null,
+    "TPCH_RUNS_PER_KJOULE": null,
+    "SPECINT_PER_TDP": 0.04392857142,
+    "SPECINTrate_PER_TDP": 1.45,
+    "DIE_SIZE": (8*81)
+  },
+  "AMD EPYC 9554": {
+    "MAKE": AMD,
+    "LAUNCH_YEAR": 2022,
+    "TDP": 360,
+    "SORTED_TUPLES_PER_S": null,
+    "TPCH_RUNS_PER_H": null,
+    "SPECINT_RATE": 655,
+    "SPECINT": 14.9,
+    "CORE_COUNT": 128,
+    "SORTED_TUPLES_PER_JOULE": null,
+    "TPCH_RUNS_PER_KJOULE": null,
+    "SPECINT_PER_TDP": 0.04138888888,
+    "SPECINTrate_PER_TDP": 1.81944444444,
+    "DIE_SIZE": (8*72)
   }
 }
 

@@ -1,4 +1,5 @@
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
+import ToggleSelection from "../utility/ToggleSelection";
 import { addCommaToNumber } from "../utility/UtilityFunctions";
 
 export type WorkloadType = 'SPECrate' | 'SPECspeed' | 'Sorting' | 'TPC-H';
@@ -7,21 +8,27 @@ export type Country = 'poland' | 'germany' | 'sweden';
 export const WORKLOAD_TYPES: WorkloadType[] = ['SPECrate', 'SPECspeed', 'Sorting', 'TPC-H'];
 export const COUNTRIES: Country[] = ['poland', 'germany', 'sweden'];
 
-export type PerformanceType = number;
+export type PerformanceType = number | null;
+
+export const INTEL = "Intel";
+export const AMD = "AMD";
+
+export type CPUMake = typeof INTEL | typeof AMD;
 
 export interface CPUEntry {
+  MAKE: CPUMake;
   LAUNCH_YEAR: number;
   TDP: number;
-  LAUNCH_QUARTER: number;
   SORTED_TUPLES_PER_S: PerformanceType;
   TPCH_RUNS_PER_H: PerformanceType;
   SPECINT_RATE: PerformanceType;
   SPECINT: PerformanceType;
   CORE_COUNT: number;
   SORTED_TUPLES_PER_JOULE: number | null;
-  TPCH_RUNS_PER_KJOULE: number;
+  TPCH_RUNS_PER_KJOULE: number | null;
   SPECINT_PER_TDP: number;
   SPECINTrate_PER_TDP: number;
+  DIE_SIZE: number;
 }
 
 type PerformanceKeys = {
@@ -56,20 +63,12 @@ function BenchmarkSettings() {
   return (
     <div className="flex text-lg font-medium py-4 px-8 gap-12 flex-wrap">
       <div className="w-3/5 flex flex-col gap-4">
-        <div className="flex gap-4 items-center flex-wrap">
-          <p>Workload:</p>
-          {
-            WORKLOAD_TYPES.map((type) => (
-              <button
-                key={type}
-                onMouseDown={() => setWorkload(type)}
-                className={`px-3 py-0.5 cursor-pointer font-normal rounded-md ${workload === type ? "duration-150 bg-orange-400 text-white" : "bg-transparent text-black"}`}
-              >
-                {type}
-              </button>
-            ))
-          }
-        </div>
+        <ToggleSelection<WorkloadType>
+          label="Workload:"
+          options={WORKLOAD_TYPES}
+          currentState={workload}
+          setState={setWorkload}
+        />
         <div className="flex gap-4 items-center">
           <label><p>Utilization %:</p></label>
           <input
@@ -93,20 +92,13 @@ function BenchmarkSettings() {
           </div>
 
         </div>
-        <div className="flex gap-4 items-center">
-          <p>Location:</p>
-          {
-            COUNTRIES.map((type) => (
-              <button
-                key={type}
-                onMouseDown={() => setCountry(type)}
-                className={`px-3 py-0.5 cursor-pointer capitalize font-normal rounded-md ${country === type ? "duration-150 bg-orange-400 text-white" : "bg-transparent text-black"}`}
-              >
-                {type}
-              </button>
-            ))
-          }
-        </div>
+        <ToggleSelection<Country>
+          label="Location:"
+          options={COUNTRIES}
+          currentState={country}
+          setState={setCountry}
+          capitalize={true}
+        />
       </div>
       <div className="flex flex-col border-2 border-[#D4722E] rounded-xl px-4 py-3 font-normal w-1/3">
         <p className="font-normap font-medium w-full text-wrap">Workload Performance indicator</p>

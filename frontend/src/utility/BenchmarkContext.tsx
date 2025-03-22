@@ -1,27 +1,34 @@
 import { createContext, useState, useContext, ReactNode } from 'react';
 import { WorkloadType, Country, WORKLOAD_TYPES, COUNTRIES, WORKLOAD_MAPPING } from '../partials/BenchmarkSettings';
-import { CPU_LIST } from '../partials/Compare';
+import { CPU_LIST, HDD_CAPACITIES } from '../partials/Compare';
 import { System } from './lifecycle_analysis/system';
 import { generateSystemsComparison, ComparisonType } from './lifecycle_analysis/comparison';
 import { GUPTA_MODEL } from './lifecycle_analysis/constants';
 import CPU_DATA from '../assets/data';
 import { lineIntersect } from '../charts/lineChart';
+import { RAM_CAPACITIES, SSD_CAPACITIES } from '../partials/Compare';
 
 // Assumptions
 const timeHorizon = 1000;
 
 // Shared specs
 const lifetime = 20;
-const dramCapacity = 8 * 64; // in GB
-const ssdCapacity = 2 * 1600; // in GB
-const hddCapacity = 0; // in GB
+// const dramCapacity = 8 * 64; // in GB
+// const ssdCapacity = 2 * 1600; // in GB
+// const hddCapacity = 0; // in GB
 
 interface BenchmarkContextType {
+  currentCPU: string;
+  currentRAM: number;
+  currentSSD: number;
+  currentHDD: number;
+  newCPU: string;
+  newRAM: number;
+  newSSD: number;
+  newHDD: number;
   workload: WorkloadType;
   utilization: number;
   country: Country;
-  currentHardware: string;
-  newHardware: string;
   comparison: ComparisonType;
   oldSystemOpex: number[];
   newSystemOpex: number[];
@@ -30,8 +37,14 @@ interface BenchmarkContextType {
   singleComparison: boolean;
   oldPerformanceIndicator: number;
   newPerformanceIndicator: number;
-  setCurrentHardware: (value: string) => void;
-  setNewHardware: (value: string) => void;
+  setCurrentCPU: (value: string) => void;
+  setCurrentRAM: (value: number) => void;
+  setCurrentSSD: (value: number) => void;
+  setCurrentHDD: (value: number) => void;
+  setNewCPU: (value: string) => void;
+  setNewRAM: (value: number) => void;
+  setNewSSD: (value: number) => void;
+  setNewHDD: (value: number) => void;
   setWorkload: (value: WorkloadType) => void;
   setUtilization: (value: number) => void;
   setCountry: (value: Country) => void;
@@ -44,36 +57,47 @@ interface BenchmarkProviderProps {
 }
 
 export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }) => {
-  const [currentHardware, setCurrentHardware] = useState<string>(CPU_LIST[0]);
-  const [newHardware, setNewHardware] = useState<string>(CPU_LIST[0]);
+  // Compare section
+  const [currentCPU, setCurrentCPU] = useState<string>(CPU_LIST[0]);
+  const [currentRAM, setCurrentRAM] = useState<number>(RAM_CAPACITIES[0]);
+  const [currentSSD, setCurrentSSD] = useState<number>(SSD_CAPACITIES[0]);
+  const [currentHDD, setCurrentHDD] = useState<number>(HDD_CAPACITIES[0]);
+  const [newCPU, setNewCPU] = useState<string>(CPU_LIST[0]);
+  const [newRAM, setNewRAM] = useState<number>(RAM_CAPACITIES[0]);
+  const [newSSD, setNewSSD] = useState<number>(SSD_CAPACITIES[0]);
+  const [newHDD, setNewHDD] = useState<number>(HDD_CAPACITIES[0]);
+
+  // Settings section
   const [workload, setWorkload] = useState<WorkloadType>(WORKLOAD_TYPES[0]);
   const [utilization, setUtilization] = useState<number>(40);
   const [country, setCountry] = useState<Country>(COUNTRIES[0]);
 
-  const oldPerformanceIndicator = CPU_DATA[currentHardware][WORKLOAD_MAPPING[workload]];
-  const newPerformanceIndicator = CPU_DATA[newHardware][WORKLOAD_MAPPING[workload]];
-  const singleComparison = currentHardware == newHardware;
+  const oldPerformanceIndicator = CPU_DATA[currentCPU][WORKLOAD_MAPPING[workload]] || 0;
+  const newPerformanceIndicator = CPU_DATA[newCPU][WORKLOAD_MAPPING[workload]] || 0;
+  const oldDieSize = CPU_DATA[currentCPU].DIE_SIZE;
+  const newDieSize = CPU_DATA[newCPU].DIE_SIZE;
+  const singleComparison = currentCPU == newCPU;
 
   // Old System
   const oldSystem = new System(
-    541 / 100, // dieSize in cm^2
+    oldDieSize / 100, // dieSize in cm^2
     oldPerformanceIndicator, // performanceIndicator
     lifetime, // lifetime in years
-    dramCapacity, // dramCapacity in GB
-    ssdCapacity, // ssdCapacity in GB
-    hddCapacity, // hddCapacity in GB
-    CPU_DATA[currentHardware].TDP // cpuTdp in Watts
+    currentRAM, // dramCapacity in GB
+    currentSSD, // ssdCapacity in GB
+    currentHDD, // hddCapacity in GB
+    CPU_DATA[currentCPU].TDP // cpuTdp in Watts
   );
 
   // New System
   const newSystem = new System(
-    (4 * 477) / 100, // dieSize in cm^2
+    newDieSize / 100, // dieSize in cm^2
     newPerformanceIndicator, // performanceIndicator
     lifetime, // lifetime in years
-    dramCapacity, // dramCapacity in GB
-    ssdCapacity, // ssdCapacity in GB
-    hddCapacity, // hddCapacity in GB
-    CPU_DATA[newHardware].TDP // cpuTdp in Watts
+    newRAM, // dramCapacity in GB
+    newSSD, // ssdCapacity in GB
+    newHDD, // hddCapacity in GB
+    CPU_DATA[newCPU].TDP// cpuTdp in Watts
   );
 
   const comparison :ComparisonType = generateSystemsComparison(
@@ -111,13 +135,13 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   }
 
   const intersect = calculateIntersect(singleComparison, comparison.oldSystemOpex, comparison.newSystemOpex)
-  const breakEven = Math.ceil(intersect ? intersect.x + 2 : 1000);
+  const breakEven = Math.ceil(intersect ? intersect.x + 2 : 3);
 
   const oldSystemOpex = comparison.oldSystemOpex.slice(0, breakEven);
   const newSystemOpex = comparison.newSystemOpex.slice(0, breakEven);
 
   return (
-    <BenchmarkContext.Provider value={{ oldPerformanceIndicator, newPerformanceIndicator, comparison, oldSystemOpex, singleComparison, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentHardware, setCurrentHardware, newHardware,setNewHardware }}>
+    <BenchmarkContext.Provider value={{ oldPerformanceIndicator, newPerformanceIndicator, comparison, oldSystemOpex, singleComparison, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentCPU, setCurrentCPU, newCPU, setNewCPU, currentRAM, currentSSD, newRAM, newSSD, setNewRAM, setNewSSD, setCurrentRAM, setCurrentSSD, currentHDD, setCurrentHDD, newHDD, setNewHDD }}>
       {children}
     </BenchmarkContext.Provider>
   );
