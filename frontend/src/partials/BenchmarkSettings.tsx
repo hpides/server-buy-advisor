@@ -1,3 +1,4 @@
+import CPU_DATA from "../assets/data";
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
 import ToggleSelection from "../utility/ToggleSelection";
 import { addCommaToNumber } from "../utility/UtilityFunctions";
@@ -51,11 +52,25 @@ export const WORKLOAD_MAPPING: WorkloadMappingType = {
 
 function BenchmarkSettings() {
 
-  const { workload, utilization, country, oldPerformanceIndicator, newPerformanceIndicator, singleComparison, setWorkload, setUtilization, setCountry } = useBenchmarkContext();
+  const { currentCPU, newCPU, workload, utilization, country, oldPerformanceIndicator, newPerformanceIndicator, singleComparison, setWorkload, setUtilization, setCountry } = useBenchmarkContext();
 
   const ratio = (newPerformanceIndicator / oldPerformanceIndicator).toFixed(3).replace(/\.000$/, '')
   let oldFormatted = oldPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
   let newFormatted = newPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
+
+  let disabledWorkload: WorkloadType[] = [];
+
+  WORKLOAD_TYPES.forEach(workload => {
+    let push = false
+    if (CPU_DATA[currentCPU][WORKLOAD_MAPPING[workload]] === null) push = true;
+    if (CPU_DATA[newCPU][WORKLOAD_MAPPING[workload]] === null) push = true;
+
+    // push only if it is not alreal in disableWorkload
+    if (push && !disabledWorkload.includes(workload)) disabledWorkload.push(workload)
+  })
+
+  // need to reset workload if restriced cpu is selected after workload is set
+  if (disabledWorkload.includes(workload)) setWorkload(WORKLOAD_TYPES[0])
 
   oldFormatted = addCommaToNumber(Number(oldFormatted));
   newFormatted = addCommaToNumber(Number(newFormatted));
@@ -68,6 +83,7 @@ function BenchmarkSettings() {
           options={WORKLOAD_TYPES}
           currentState={workload}
           setState={setWorkload}
+          disabled={disabledWorkload}
         />
         <div className="flex gap-4 items-center">
           <label><p>Utilization %:</p></label>

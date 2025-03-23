@@ -48,6 +48,7 @@ interface BenchmarkContextType {
   setWorkload: (value: WorkloadType) => void;
   setUtilization: (value: number) => void;
   setCountry: (value: Country) => void;
+  setSingleComparison: (value: boolean) => void;
 }
 
 const BenchmarkContext = createContext<BenchmarkContextType | undefined>(undefined);
@@ -57,6 +58,8 @@ interface BenchmarkProviderProps {
 }
 
 export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }) => {
+  // need to add a usestate for single comparison cant
+
   // Compare section
   const [currentCPU, setCurrentCPU] = useState<string>(CPU_LIST[0]);
   const [currentRAM, setCurrentRAM] = useState<number>(RAM_CAPACITIES[0]);
@@ -72,11 +75,12 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   const [utilization, setUtilization] = useState<number>(40);
   const [country, setCountry] = useState<Country>(COUNTRIES[0]);
 
+  const [singleComparison, setSingleComparison] = useState<boolean>(true);
+
   const oldPerformanceIndicator = CPU_DATA[currentCPU][WORKLOAD_MAPPING[workload]] || 0;
   const newPerformanceIndicator = CPU_DATA[newCPU][WORKLOAD_MAPPING[workload]] || 0;
   const oldDieSize = CPU_DATA[currentCPU].DIE_SIZE;
   const newDieSize = CPU_DATA[newCPU].DIE_SIZE;
-  const singleComparison = currentCPU == newCPU;
 
   // Old System
   const oldSystem = new System(
@@ -101,7 +105,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   );
 
   const comparison :ComparisonType = generateSystemsComparison(
-    newSystem, // new system object
+    (singleComparison ? oldSystem : newSystem), // new system object
     oldSystem, // old system object
     timeHorizon, // time horizon
     country, // country string
@@ -141,7 +145,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   const newSystemOpex = comparison.newSystemOpex.slice(0, breakEven);
 
   return (
-    <BenchmarkContext.Provider value={{ oldPerformanceIndicator, newPerformanceIndicator, comparison, oldSystemOpex, singleComparison, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentCPU, setCurrentCPU, newCPU, setNewCPU, currentRAM, currentSSD, newRAM, newSSD, setNewRAM, setNewSSD, setCurrentRAM, setCurrentSSD, currentHDD, setCurrentHDD, newHDD, setNewHDD }}>
+    <BenchmarkContext.Provider value={{ setSingleComparison, oldPerformanceIndicator, newPerformanceIndicator, comparison, oldSystemOpex, singleComparison, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentCPU, setCurrentCPU, newCPU, setNewCPU, currentRAM, currentSSD, newRAM, newSSD, setNewRAM, setNewSSD, setCurrentRAM, setCurrentSSD, currentHDD, setCurrentHDD, newHDD, setNewHDD }}>
       {children}
     </BenchmarkContext.Provider>
   );

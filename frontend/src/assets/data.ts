@@ -1,8 +1,11 @@
-import { CPUEntry, INTEL, AMD } from "../partials/BenchmarkSettings";
+import { CPUEntry } from "../partials/BenchmarkSettings";
 
 export interface CPUs {
   [key: string]: CPUEntry;
 }
+
+export const INTEL = "Intel";
+export const AMD = "AMD";
 
 export interface CPUMetric {
   label: Exclude<keyof CPUEntry, "MAKE">;

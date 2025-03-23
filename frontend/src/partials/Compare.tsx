@@ -62,6 +62,9 @@ interface DropdownProps {
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) => {
+
+  const { singleComparison, setSingleComparison} = useBenchmarkContext();
+
   const specs_selected :CPUEntry = CPU_DATA[thisConfig.cpu];
   const specs_compareTo :CPUEntry = CPU_DATA[otherConfig.cpu];
   const canToggle = label == NEW_LABEL;
@@ -70,11 +73,14 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
 
   // This is when new hardware is hidden, we set it equal to current hardware
   if (canToggle && !showDropdown) {
-    thisConfig.setCPU(otherConfig.cpu)
+    // thisConfig.setCPU(otherConfig.cpu)
+    // thisConfig.setRAM(otherConfig.ram)
+    // thisConfig.setHDD(otherConfig.hdd)
   }
 
   const toggleShow = () => {
     if (!canToggle) return;
+    setSingleComparison(!singleComparison);
     setShowDropdown(!showDropdown);
   }
 
@@ -119,11 +125,12 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
       </div>
       <div className="flex flex-col gap-4 pb-4 px-2">
         <ToggleSelection<number>
-          label="DRAM (GB):"
+          label="RAM (GB):"
           options={RAM_CAPACITIES}
           currentState={thisConfig.ram}
           setState={thisConfig.setRAM}
           extraInput={true}
+          flexJustify="justify-between"
         />
         <ToggleSelection<number>
           label="SSD (GB):"
@@ -131,6 +138,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           currentState={thisConfig.ssd}
           setState={thisConfig.setSSD}
           extraInput={true}
+          flexJustify="justify-between"
         />
         <ToggleSelection<number>
           label="HDD (GB):"
@@ -138,6 +146,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           currentState={thisConfig.hdd}
           setState={thisConfig.setHDD}
           extraInput={true}
+          flexJustify="justify-between"
         />
       </div>
       <div className="flex gap-4">
