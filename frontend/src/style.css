@@ -5,6 +5,12 @@ input[type=number]::-webkit-outer-spin-button {
   opacity: 1;
 }
 
-@theme {
-	--color-hpi-orange: '#CE682A'
+path.leaflet-interactive:focus {
+    outline: none;
 }
+
+/* Remove bottom right leaflet attribution */
+.leaflet-control-attribution {
+  display: none;
+}
+

@@ -15,7 +15,7 @@ import ToggleSelection from "../utility/ToggleSelection.tsx";
 const NEW_LABEL = "New Hardware";
 const OLD_LABEL = "Current Hardware";
 
-export const RAM_CAPACITIES :number[] = [256, 512, 1028];
+export const RAM_CAPACITIES :number[] = [256, 512, 1024];
 export const SSD_CAPACITIES :number[] = [2400, 3200, 4800];
 export const HDD_CAPACITIES :number[] = [0, 3200, 4800,];
 
@@ -130,7 +130,6 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           currentState={thisConfig.ram}
           setState={thisConfig.setRAM}
           extraInput={true}
-          flexJustify="justify-between"
         />
         <ToggleSelection<number>
           label="SSD (GB):"
@@ -138,7 +137,6 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           currentState={thisConfig.ssd}
           setState={thisConfig.setSSD}
           extraInput={true}
-          flexJustify="justify-between"
         />
         <ToggleSelection<number>
           label="HDD (GB):"
@@ -146,7 +144,6 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           currentState={thisConfig.hdd}
           setState={thisConfig.setHDD}
           extraInput={true}
-          flexJustify="justify-between"
         />
       </div>
       <div className="flex gap-4">

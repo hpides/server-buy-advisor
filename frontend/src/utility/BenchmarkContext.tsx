@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, ReactNode } from 'react';
-import { WorkloadType, Country, WORKLOAD_TYPES, COUNTRIES, WORKLOAD_MAPPING } from '../partials/BenchmarkSettings';
+import { WorkloadType, WORKLOAD_TYPES, WORKLOAD_MAPPING } from '../partials/BenchmarkSettings';
+import { Country } from '../assets/grid_intensities';
 import { CPU_LIST, HDD_CAPACITIES } from '../partials/Compare';
 import { System } from './lifecycle_analysis/system';
 import { generateSystemsComparison, ComparisonType } from './lifecycle_analysis/comparison';
@@ -7,6 +8,8 @@ import { GUPTA_MODEL } from './lifecycle_analysis/constants';
 import CPU_DATA from '../assets/data';
 import { lineIntersect } from '../charts/lineChart';
 import { RAM_CAPACITIES, SSD_CAPACITIES } from '../partials/Compare';
+
+export const FIRST_COUNTRY: Country = "Germany"
 
 // Assumptions
 const timeHorizon = 1000;
@@ -58,8 +61,6 @@ interface BenchmarkProviderProps {
 }
 
 export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }) => {
-  // need to add a usestate for single comparison cant
-
   // Compare section
   const [currentCPU, setCurrentCPU] = useState<string>(CPU_LIST[0]);
   const [currentRAM, setCurrentRAM] = useState<number>(RAM_CAPACITIES[0]);
@@ -73,7 +74,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   // Settings section
   const [workload, setWorkload] = useState<WorkloadType>(WORKLOAD_TYPES[0]);
   const [utilization, setUtilization] = useState<number>(40);
-  const [country, setCountry] = useState<Country>(COUNTRIES[0]);
+  const [country, setCountry] = useState<Country>(FIRST_COUNTRY);
 
   const [singleComparison, setSingleComparison] = useState<boolean>(true);
 

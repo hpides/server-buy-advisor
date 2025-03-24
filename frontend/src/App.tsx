@@ -25,6 +25,7 @@ const Sections: React.FC<SectionsProps> = ({ title, markup }) => {
 };
 
 function App() {
+  console.log("%cWelcome to %cHPI%c's Interactive Demo on Ecological Efficiency in Database Server Lifecycles", '', 'color: #ff8904; font-weight: bolder; font-size: 0.8rem', '');
 
   return (
     <>

@@ -1,9 +1,9 @@
 import React from "react";
 import LineChart from "../charts/lineChart";
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
-import { GCI_CONSTANTS } from "../utility/lifecycle_analysis/constants";
 import { addCommaToNumber, yearToYearAndMonth } from "../utility/UtilityFunctions";
 import CPU_DATA, { CPU_METRICS, CPUMetric } from "../assets/data";
+import { GRID_INTENSITY } from "../assets/grid_intensities";
 
 // Reusable ListItem Component
 interface ListItemProps {
@@ -100,7 +100,7 @@ function BenchmarkEvaluations() {
   const { currentCPU, newCPU, comparison, country, utilization, intersect, workload, singleComparison } = useBenchmarkContext();
 
   const year = intersect ? yearToYearAndMonth(Number(intersect.x.toFixed(1))) : "No Break-Even";
-  const intensity = GCI_CONSTANTS[country]
+  const intensity = GRID_INTENSITY[country]
   const total = intersect ? addCommaToNumber(Number(intersect.y.toFixed(1))) + "kgCO₂" : "No Break-even";
   const currentData = CPU_DATA[currentCPU];
   const newData = CPU_DATA[newCPU];
@@ -115,7 +115,7 @@ function BenchmarkEvaluations() {
           <ListItem label="Grid Carbon Intensity" value={`${addCommaToNumber(intensity)} gCO₂/kWh`} />
           <ListItem label="Total Carbon Footprint 😀 until Break-Even" value={`${total}`} />
         </ul>
-        <div className="grow flex flex-col gap-1">
+        <div className="grow flex flex-col gap-1 w-full">
           <LineChart />
           <p className="text-center text-sm w-4/5 mx-auto font-serif text-slate-700">
             Figure: Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for a {workload} workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.

@@ -1,4 +1,6 @@
 import * as constants from './constants.ts';
+import { GRID_INTENSITY } from '../../assets/grid_intensities.ts';
+import { Country } from '../../assets/grid_intensities.ts';
 
 export class System {
   packagingSize: number;
@@ -60,7 +62,7 @@ export class System {
   generateAccumProjectedOpexEmissions(
     timeHorizon: number,
     systemId: string,
-    country: string,
+    country: Country,
     utilization: number,
     opexCalculation: string
   ): number[] {
@@ -87,7 +89,7 @@ export class System {
     return (intercept + utilization * powerSlope) / 100;
   }
 
-  calculateOpexEmissions(utilization: number, country: string): number {
+  calculateOpexEmissions(utilization: number, country: Country): number {
     const normalizedPowerUsage = this.generateNormalizedPowerUsage(utilization);
 
     // Energy consumption calculations
@@ -105,7 +107,7 @@ export class System {
       ssdEnergyConsumption +
       hddEnergyConsumption;
     const totalWattsPerYear = 24 * 7 * 52 * totalWatts; // kWh
-    const GCI = constants.GCI_CONSTANTS[country];
+    const GCI = (GRID_INTENSITY[country] || 0) / 1000;
 
     return totalWattsPerYear * GCI; // kg CO2 per year
   }

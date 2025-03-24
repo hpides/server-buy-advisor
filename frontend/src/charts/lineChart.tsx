@@ -125,6 +125,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
       data: data,
       options: {
         maintainAspectRatio: false,
+        responsive: true,
         animation: {
           duration: 0,
         },

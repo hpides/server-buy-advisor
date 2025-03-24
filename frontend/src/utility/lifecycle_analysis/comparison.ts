@@ -1,5 +1,6 @@
 import { System } from "./system";
 import { NEW_SYSTEM, OLD_SYSTEM } from "./constants";
+import { Country } from "../../assets/grid_intensities";
 
 export interface ComparisonType {
   newSystemOpex: number[];
@@ -14,7 +15,7 @@ export function generateSystemsComparison(
   newSystem: System,
   oldSystem: System,
   timeHorizon: number,
-  country: string,
+  country: Country,
   utilization: number,
   opexCalculation: string
 ): ComparisonType {

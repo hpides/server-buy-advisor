@@ -2,12 +2,12 @@ import CPU_DATA from "../assets/data";
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
 import ToggleSelection from "../utility/ToggleSelection";
 import { addCommaToNumber } from "../utility/UtilityFunctions";
+// @tsignore
+import GeoMap from "../partials/GeoMap";
 
 export type WorkloadType = 'SPECrate' | 'SPECspeed' | 'Sorting' | 'TPC-H';
-export type Country = 'poland' | 'germany' | 'sweden';
 
 export const WORKLOAD_TYPES: WorkloadType[] = ['SPECrate', 'SPECspeed', 'Sorting', 'TPC-H'];
-export const COUNTRIES: Country[] = ['poland', 'germany', 'sweden'];
 
 export type PerformanceType = number | null;
 
@@ -52,7 +52,7 @@ export const WORKLOAD_MAPPING: WorkloadMappingType = {
 
 function BenchmarkSettings() {
 
-  const { currentCPU, newCPU, workload, utilization, country, oldPerformanceIndicator, newPerformanceIndicator, singleComparison, setWorkload, setUtilization, setCountry } = useBenchmarkContext();
+  const { country, currentCPU, newCPU, workload, utilization, oldPerformanceIndicator, newPerformanceIndicator, singleComparison, setCountry, setWorkload, setUtilization } = useBenchmarkContext();
 
   const ratio = (newPerformanceIndicator / oldPerformanceIndicator).toFixed(3).replace(/\.000$/, '')
   let oldFormatted = oldPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
@@ -108,13 +108,6 @@ function BenchmarkSettings() {
           </div>
 
         </div>
-        <ToggleSelection<Country>
-          label="Location:"
-          options={COUNTRIES}
-          currentState={country}
-          setState={setCountry}
-          capitalize={true}
-        />
       </div>
       <div className="flex flex-col border-2 border-[#D4722E] rounded-xl px-4 py-3 font-normal w-1/3">
         <p className="font-normap font-medium w-full text-wrap">Workload Performance indicator</p>
@@ -138,6 +131,9 @@ function BenchmarkSettings() {
           }
         </table>
       </div>
+        <div className="w-full h-fit relative">
+          <GeoMap country={country} setCountry={setCountry} />
+        </div>
     </div>
   )
 }

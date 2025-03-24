@@ -1,0 +1,182 @@
+** Information gathered from https://app.electricitymaps.com/map/12mo/monthly **
+Electricity Maps (2025). All Feb 2024 - Feb 2025 Carbon Intensity Data (Version January 27, 2025). Electricity Maps. https://www.electricitymaps.com
+
+Zimbabwe: 241
+Zambia: 108
+South Africa: 694
+Yemen: 511
+Vanuatu: 650
+Vietnam: 353
+Venezuela: 128
+Uzbekistan: 476
+United States of America: 415
+Uruguay: 111
+Ukraine: null
+Uganda: 74
+United Republic of Tanzania: 306
+Taiwan: 486
+Turkey: 458
+Tunisia: 477
+Trinidad and Tobago: 491
+*East Timor: 649
+Turkmenistan: 490
+Tajikistan: 74
+Thailand: 492
+Togo: 421
+Chad: 619
+Syria: 572
+*Swaziland: 102
+Sweden: 22
+Slovenia: 319
+Slovakia: 334
+Suriname: 378
+*Republic of Serbia: 558
+Somalia: 632
+Somaliland: null
+El Salvador: 244
+Sierra Leone: 57
+Solomon Islands: 700
+Senegal: 558
+South Sudan: 619
+Sudan: 164
+Saudi Arabia: 562
+Western Sahara
+Rwanda: 242
+Russia: null
+Romania: 399
+Qatar: 485
+Paraguay: 25
+Portugal: 102
+North Korea: 320
+Puerto Rico: 354
+Poland: 787
+Papua New Guinea: 562
+Philippines: 606
+Peru: 149
+Panama: 158
+Pakistan: 363
+Oman: 481
+New Zealand: 136
+Nepal: 24
+Norway: 29
+Netherlands: 355
+Nicaragua: 155
+Nigeria: 374
+Niger: 665
+New Caledonia: 611
+Namibia: 38
+Malaysia: 555
+Malawi: 53
+Mauritania
+Mozambique: 93
+Mongolia: 772
+Montenegro: 426
+Myanmar: 322
+Malta: 465
+Mali: 420
+*Macedonia: 540
+Mexico: 390
+Madagascar: 379
+Moldova 415
+Morocco: 630
+Latvia: 322
+Luxembourg: 356
+Lithuania: 213
+Lesotho: 24
+Sri Lanka: 447
+Libya: 530
+Liberia: 391
+Lebanon: 313
+Laos: 189
+Kuwait: 549
+Kosovo: 610
+South Korea: 392
+Cambodia: 277
+Kyrgyzstan: 155
+Kenya: 113
+Kazakhstan: 618
+Japan: 470
+Jordan: 389
+Jamaica: 500
+Italy: 449
+Israel: 509
+Iceland: 28
+Iraq: 572
+Iran: 497
+Ireland: 285
+India: 694
+Indonesia: 648
+Hungary: 305
+Haiti: 520
+Croatia: 252
+Honduras: 296
+Guyana: 686
+French Guiana: 468
+Guatemala: 344
+Greenland: 155
+Greece: 412
+Equatorial Guinea: 414
+Guinea Bissau: 700
+Gambia: 700
+Guinea: 306
+Ghana: 350
+Georgia: 294
+United Kingdom: 192
+Gabon: 336
+France: 49
+Falkland Islands: 364
+Fiji: 273
+Finland: 89
+Ethiopia: 24
+Estonia: 498
+Spain: 135
+Eritrea: 639
+Egypt: 453
+Ecuador: 212
+Algeria: 488
+Dominican Republic: 572
+Denmark: 150
+Djibouti: 700
+Germany: 451
+Czech Republic
+Cyprus: 724
+Northern Cyprus: null
+Cuba: 608
+Costa Rica: 26
+Colombia: 81
+Republic of the Congo: 24
+Democratic Republic of the Congo: 24
+Cameroon: 177
+Ivory Coast: 406
+China: 519
+Chile: 250
+Switzerland: 71
+Canada: 132
+Central African Republic: 24
+Botswana: 814
+Bhutan: 163
+Brunei: 577
+Brazil: 60
+Bolivia: 332
+Bermuda: null
+Belize: 289
+Belarus: 366
+Bosnia and Herzegovina: 506
+The Bahamas: 700
+Bulgaria: 528
+Bangladesh: 627
+Burkina Faso: 587
+Benin: 501
+Belgium: 225
+Burundi: 191
+Azerbaijan: 497
+Austria: 283
+Australia: 462
+French Southern and Antarctic Lands: null
+Antarctica: null
+Armenia: 248
+Argentina: 434
+United Arab Emirates: 378
+Albania: 98
+Angola: 156
+Afghanistan: 171
