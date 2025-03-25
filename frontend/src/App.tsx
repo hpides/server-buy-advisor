@@ -29,13 +29,18 @@ function App() {
 
   return (
     <>
-      <header className='h-32 pl-12 p-4 flex gap-10'>
-        <img src={hpiLogo} className='h-full' />
-        <img src={desLogo} className='h-full' />
+      <header className='h-32 pl-12 p-4 flex gap-10 absolute z-10'>
+        <a href='https://hpi.de/'>
+          <img src={hpiLogo} className='h-full hover:scale-105 duration-200' />
+        </a>
+
+        <a href='https://hpi.de/en/research/research-groups/data-engineering-systems/'>
+        <img src={desLogo} className='h-full hover:scale-105 duration-200' />
+        </a>
       </header>
       <main className='w-full px-10 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
-        <section>
-          <h1 className='text-2xl text-center'>Ecological Efficiency in Database Server Lifecycles</h1>
+        <section className='h-32 flex flex-col justify-end'>
+          <h1 className='text-3xl text-center'>Ecological Efficiency in Database Server Lifecycles</h1>
           <p className='text-cyan-700 underline underline-offset-2 text-lg text-center'>
             <a
               href='https://hpi.de/rabl/news/2024/paper-on-ecological-efficiency-of-database-servers-accepted-at-cidr-2025.html'

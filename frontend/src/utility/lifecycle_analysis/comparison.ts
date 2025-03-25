@@ -1,4 +1,4 @@
-import { System } from "./system";
+import { System, CapexType, OpexType } from "./system";
 import { NEW_SYSTEM, OLD_SYSTEM } from "./constants";
 import { Country } from "../../assets/grid_intensities";
 
@@ -8,6 +8,8 @@ export interface ComparisonType {
   absSavings: number[];
   relativeSavings: number[];
   ratio: number[];
+  capexBreakdown: CapexType;
+  opexBreakdown: OpexType;
 }
 
 // Function to generate a systems comparison
@@ -20,14 +22,19 @@ export function generateSystemsComparison(
   opexCalculation: string
 ): ComparisonType {
   // Generate OPEX and CAPEX for the new system
-  let newSystemOpex = newSystem.generateAccumProjectedOpexEmissions(
-    timeHorizon,
+
+  // we want to extract the opex breakdown from the new system, so need to add 
+  // extra step for newSystemOpex compared to oldSysemOpex
+  const newSystemEmissions = newSystem.generateAccumProjectedOpexEmissions( timeHorizon,
     NEW_SYSTEM,
     country,
     utilization,
     opexCalculation
   );
-  const newSystemCapex = newSystem.calculateCapexEmissions();
+  let newSystemOpex = newSystemEmissions.projected
+
+  const newSystemCapexBreakdown = newSystem.calculateCapexEmissions();
+  const newSystemCapex = newSystemCapexBreakdown.TOTAL;
 
   // Generate OPEX for the old system
   let oldSystemOpex = oldSystem.generateAccumProjectedOpexEmissions(
@@ -36,7 +43,7 @@ export function generateSystemsComparison(
     country,
     utilization,
     opexCalculation
-  );
+  ).projected;
 
   // Calculate performance factor
   const performanceFactor =
@@ -69,5 +76,7 @@ export function generateSystemsComparison(
     absSavings,
     relativeSavings,
     ratio,
+    capexBreakdown: newSystemCapexBreakdown,
+    opexBreakdown: newSystemEmissions.opexBreakdown
   };
 }

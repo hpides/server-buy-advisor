@@ -2,6 +2,27 @@ import * as constants from './constants.ts';
 import { GRID_INTENSITY } from '../../assets/grid_intensities.ts';
 import { Country } from '../../assets/grid_intensities.ts';
 
+export const CPU = 'CPU';
+export const RAM = 'RAM';
+export const SSD = 'SSD';
+export const HDD = 'HDD';
+
+export type Components = typeof CPU | typeof RAM | typeof SSD | typeof HDD;
+
+export interface CapexType extends Record<Components, number> {
+  TOTAL: number;
+}
+
+export interface OpexType extends Record<Components, number> {
+  TOTAL: number;
+  opexPerYear: number;
+}
+
+export interface ProjectedOpexEmissionsType {
+  projected: number[];
+  opexBreakdown: OpexType;
+}
+
 export class System {
   packagingSize: number;
   performanceIndicator: number;
@@ -38,7 +59,7 @@ export class System {
     this.cpuTdp = cpuTdp;
   }
 
-  calculateCapexEmissions(): number {
+  calculateCapexEmissions(): CapexType {
     // Constants
     const MPA = 0.5; // Procure materials | kg CO2 per cm^2
     const EPA = 2.15; // Fab Energy | kWh per cm^2
@@ -56,7 +77,13 @@ export class System {
     const capexSsd = this.ssdCapacity * E_SSD;
     const capexHdd = this.hddCapacity * E_HDD;
 
-    return capexCpu + capexDram + capexSsd + capexHdd;
+    return {
+      CPU: capexCpu,
+      RAM: capexDram,
+      SSD: capexSsd,
+      HDD: capexHdd,
+      TOTAL: capexCpu + capexDram + capexSsd + capexHdd
+    }
   }
 
   generateAccumProjectedOpexEmissions(
@@ -65,20 +92,28 @@ export class System {
     country: Country,
     utilization: number,
     opexCalculation: string
-  ): number[] {
+  ): ProjectedOpexEmissionsType {
     let opexPerYear: number;
 
+    let opexBreakdown: OpexType;
+
+    // never reaching this if statement, want to delete but too much refactoring
+    // TODO: later
     if (opexCalculation === constants.HPE_POWER_ADVISOR) {
       opexPerYear = constants.OPEX_PER_YEAR[country][utilization][systemId];
-    } else if (opexCalculation === constants.GUPTA_MODEL) {
-      opexPerYear = this.calculateOpexEmissions(utilization, country);
-    } else {
-      throw new Error('NotImplementedError');
-    }
+    };
 
-    return Array.from({ length: timeHorizon }, (_, i) =>
+    opexBreakdown = this.calculateOpexEmissions(utilization, country);
+    opexPerYear = opexBreakdown.opexPerYear;
+
+    const projected =  Array.from({ length: timeHorizon }, (_, i) =>
       i * opexPerYear
     );
+
+    return {
+      projected,
+      opexBreakdown
+    }
   }
 
   generateNormalizedPowerUsage(utilization: number): number {
@@ -89,7 +124,7 @@ export class System {
     return (intercept + utilization * powerSlope) / 100;
   }
 
-  calculateOpexEmissions(utilization: number, country: Country): number {
+  calculateOpexEmissions(utilization: number, country: Country): OpexType {
     const normalizedPowerUsage = this.generateNormalizedPowerUsage(utilization);
 
     // Energy consumption calculations
@@ -109,6 +144,13 @@ export class System {
     const totalWattsPerYear = 24 * 7 * 52 * totalWatts; // kWh
     const GCI = (GRID_INTENSITY[country] || 0) / 1000;
 
-    return totalWattsPerYear * GCI; // kg CO2 per year
-  }
+    return {
+      CPU: cpuEnergyConsumption,
+      RAM: dramEnergyConsumption,
+      SSD: ssdEnergyConsumption,
+      HDD: hddEnergyConsumption,
+      TOTAL: totalWatts,
+      opexPerYear: totalWattsPerYear * GCI
+    }
+}
 }
