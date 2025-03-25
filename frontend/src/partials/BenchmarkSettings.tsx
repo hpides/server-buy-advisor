@@ -1,7 +1,6 @@
 import CPU_DATA from "../assets/data";
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
 import ToggleSelection from "../utility/ToggleSelection";
-import { addCommaToNumber } from "../utility/UtilityFunctions";
 // @tsignore
 import GeoMap from "../partials/GeoMap";
 
@@ -52,7 +51,7 @@ export const WORKLOAD_MAPPING: WorkloadMappingType = {
 
 function BenchmarkSettings() {
 
-  const { country, currentCPU, newCPU, workload, utilization, oldPerformanceIndicator, newPerformanceIndicator, singleComparison, setCountry, setWorkload, setUtilization } = useBenchmarkContext();
+  const { country, currentCPU, newCPU, workload, utilization, setCountry, setWorkload, setUtilization } = useBenchmarkContext();
 
   let disabledWorkload: WorkloadType[] = [];
 
