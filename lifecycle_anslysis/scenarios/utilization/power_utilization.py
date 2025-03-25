@@ -30,7 +30,7 @@ def create_utilization_plots(intercept:float, ax:Axes, color):
     npc = generate_normalized_power_usage(intercept)
     utilization_range = list(range(0, 110, 25))
 
-    ax.plot(utilization_range, npc, color=color, label=f'$P_0$: {intercept}', linewidth=3)
+    ax.plot(utilization_range, npc, color=color, label=f'$\\textsf{{P}}_0$: {intercept}', linewidth=3)
 
 # Define the capped exponential growth function
 def capped_exponential(x, L, a, k):
@@ -49,14 +49,12 @@ save_root_path = "lifecycle_anslysis/scenarios/utilization/plots/"
 os.makedirs(save_root_path, exist_ok=True)
 # save_path = os.path.join(save_root_path, f"utilization_power_usage")
 
-ax[0].set_title('A) Linear Model', fontsize = 20)
-ax[0].set_xlabel('Utilization [\%]', fontsize = 20)
-ax[0].set_ylabel('Normalized Power Usage [\%]', fontsize = 20)
-ax[0].legend(fontsize = 18)
+ax[0].set_title('A) Linear Model', fontsize = 25)
+ax[0].set_xlabel('Utilization [\%]', fontsize = 25)
+ax[0].set_ylabel('Normalized Power Usage [\%]', fontsize = 25)
+ax[0].legend(fontsize = 19)
 # fig.savefig(os.path.join(os.path.dirname(save_root_path), "utilization_power.png"), bbox_inches="tight")
 # fig.savefig(os.path.join(os.path.dirname(save_root_path), "utilization_power.svg"), bbox_inches="tight")
-
-
 
 # Set parameters
 L = 100      # Cap (upper bound)
@@ -71,22 +69,22 @@ x = np.linspace(0, 110, 25)
 # plt.figure(figsize=(10, 6))
 for idk, k in enumerate(k_values):
     y = capped_exponential(x, L, a, k)
-    ax[1].plot(x, y, label=f'$k =$ {round(k, 2)}', color=colors[idk], linewidth=3)
+    ax[1].plot(x, y, label=f'$\\textsf{{k}}= {round(k, 2)}$', color=colors[idk], linewidth=3)
 
 # Customize the plot
-ax[1].set_title('B) Exponential Growth Model', fontsize = 20)
-ax[1].set_xlabel('Utilization [\%]', fontsize = 20)
-ax[1].set_ylabel('Normalized Power Usage [\%]', fontsize = 20)
-ax[1].legend(fontsize = 18)
+ax[1].set_title('B) Exponential Growth Model', fontsize = 25)
+ax[1].set_xlabel('Utilization [\%]', fontsize = 25)
+# ax[1].set_ylabel('Normalized Power Usage [\%]', fontsize = 20)
+ax[1].legend(fontsize = 19)
 ax[0].set_xlim(-1,105)
 ax[1].set_xlim(-1,105)
 ax[0].set_ylim(-1,105)
 ax[1].set_ylim(-1,105)
-ax[0].tick_params(axis='x', labelsize=20)  # Set x-axis tick label size
-ax[0].tick_params(axis='y', labelsize=20)  # Set y-axis tick label size
-ax[1].tick_params(axis='x', labelsize=20)  # Set x-axis tick label size
-ax[1].tick_params(axis='y', labelsize=20)  # Set y-axis tick label size
-
+ax[0].tick_params(axis='x', labelsize=25)  # Set x-axis tick label size
+ax[0].tick_params(axis='y', labelsize=25)  # Set y-axis tick label size
+ax[1].tick_params(axis='x', labelsize=25)  # Set x-axis tick label size
+ax[1].tick_params(axis='y', labelsize=25)  # Set y-axis tick label size
+plt.tight_layout()
 # plt.grid(True)
 plt.savefig(os.path.join(os.path.dirname(save_root_path), "power_models.png"), bbox_inches="tight")
 plt.savefig(os.path.join(os.path.dirname(save_root_path), "power_models.svg"), bbox_inches="tight")
