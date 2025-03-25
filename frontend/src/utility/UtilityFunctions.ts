@@ -23,5 +23,5 @@ export function yearToYearAndMonth(years: number | null): string {
 
   if (wholeYears === 0) return `${months} ${monthLabel}`;
   if (months === 0) return `${wholeYears} ${yearLabel}`;
-  return `${wholeYears} ${yearLabel} and ${months} ${monthLabel}`;
+  return `${wholeYears} ${yearLabel}, ${months} ${monthLabel}`;
 }

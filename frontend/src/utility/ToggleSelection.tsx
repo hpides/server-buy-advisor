@@ -7,7 +7,7 @@ interface ToggleSelectionProps<T> {
   currentState: T;
   capitalize?: boolean;
   extraInput?: boolean;
-  flexJustify?: string;
+  flexGrow?: boolean;
   disabled?: Array<T>;
   setState: (value: T) => void;
 }
@@ -19,7 +19,7 @@ const ToggleSelection = <T,>({
   currentState,
   capitalize = false,
   extraInput = false,
-  flexJustify = "justify-start",
+  flexGrow = false,
   disabled = []
 }: ToggleSelectionProps<T>) => {
 
@@ -44,14 +44,15 @@ const ToggleSelection = <T,>({
   };
 
   return (
-    <div className={`flex gap-4 items-center flex-wrap w-full ${flexJustify}`}>
+    <div className="flex items-center flex-wrap w-full gap-2">
       <p className="border-b-4 border-transparent">{label}</p>
       {options.map((option) => (
         <button
           key={String(option)}
           onFocus={() => setState(option)}
           disabled={disabled.includes(option)}
-          className={`px-2 min-w-16 border-b-4 duration-150 
+          className={`border-b-4 duration-150 
+${flexGrow ? 'flex-1' : 'px-4'}
 ${currentState === option ? "border-orange-400 font-bold" : "border-b-transparent font-normal hover:border-b-orange-400/30"} 
 ${capitalize ? " capitalize" : ""} 
 ${disabled.includes(option) ? "cursor-not-allowed text-gray-300 hover:border-b-transparent" : "cursor-pointer"}

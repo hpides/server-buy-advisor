@@ -38,15 +38,11 @@ const GeoMap: React.FC<GeomapProps> = ({ country, setCountry }) => {
 
 
   const getOpacity = (featureCountry: any) => {
-    if (featureCountry=== country){
-      return 0.5;
-    }
-    else if (featureCountry === hoveredCountry){
-      return 0.7;
-    }
-    else{
-      return 1;
-    }
+    if (GRID_INTENSITY[featureCountry] === null) return 0;
+    if (featureCountry === country) return 0.5;
+    if (featureCountry === hoveredCountry) return 0.7;
+
+    return 0.9;
   }
 
   const style = ((feature: any) :PathOptions => {
@@ -153,10 +149,11 @@ const GeoMap: React.FC<GeomapProps> = ({ country, setCountry }) => {
   }
 
   return (
-    <div className="w-full h-[30rem] flex flex-col overflow-hidden rounded-lg">
+    <div className="w-full h-96 flex flex-col overflow-hidden rounded-lg border border-slate-500 my-4">
       <MapContainer
         center={[30, 0]}
         zoom={2}
+        worldCopyJump={true}
         style={{ height: "100%", width: "100%" }}
         scrollWheelZoom={true}
         minZoom={2}

@@ -9,11 +9,12 @@ import { GRID_INTENSITY } from "../assets/grid_intensities";
 interface ListItemProps {
   label: string;
   value?: string | number;
+  borderColor: string;
 }
 
-const ListItem: React.FC<ListItemProps> = ({ label, value }) => {
+const ListItem: React.FC<ListItemProps> = ({ label, value, borderColor }) => {
   return (
-    <li className="border-2 border-[#D4722E] rounded-xl px-4 py-3 text-nowrap">
+    <li className={`border-2 ${borderColor} rounded-xl flex flex-col items-start justify-start px-3 py-2`}>
       <p className="text-base flex flex-col">
         {label.split("😀").map((line, index) => (
           <span key={index} className="block">
@@ -21,7 +22,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, value }) => {
           </span>
         ))}
       </p>
-      <p className="font-semibold text-xl">{value ?? "--"}</p>
+      <p className="font-semibold text-lg">{value ?? "--"}</p>
     </li>
   );
 };
@@ -97,7 +98,7 @@ const TableRow: React.FC<TableRowProps> = ({ name, isSingleComparison, currentCP
 };
 
 function BenchmarkEvaluations() {
-  const { currentCPU, newCPU, comparison, country, utilization, intersect, workload, singleComparison } = useBenchmarkContext();
+  const { currentCPU, newCPU, comparison, country, utilization, intersect, workload, singleComparison, oldPerformanceIndicator, newPerformanceIndicator } = useBenchmarkContext();
 
   const year = intersect ? yearToYearAndMonth(Number(intersect.x.toFixed(1))) : "No Break-Even";
   const intensity = GRID_INTENSITY[country]
@@ -106,24 +107,54 @@ function BenchmarkEvaluations() {
   const newData = CPU_DATA[newCPU];
   const embodiedCarbon = Number(comparison.newSystemOpex[0].toFixed(1));
 
+
+  const ratio = (newPerformanceIndicator / oldPerformanceIndicator).toFixed(3).replace(/\.000$/, '')
+  let oldFormatted = oldPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
+  let newFormatted = newPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
+  newFormatted = addCommaToNumber(Number(newFormatted));
+  oldFormatted = addCommaToNumber(Number(oldFormatted));
+
   return (
-    <div className="flex flex-col px-8 py-4 gap-12">
+    <div className="flex flex-col px-8 py-4 gap-10">
+      <div className="flex flex-col gap-1 w-full">
+        <LineChart />
+        <p className="text-center text-sm w-full mx-auto font-serif text-slate-700">
+          Figure: Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for a {workload} workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
+        </p>
+      </div>
       <div className="flex gap-4">
-        <ul className="flex flex-col gap-4">
-          <ListItem label="Break-Even Time" value={`${year}`} />
-          <ListItem label="New HW Embodied Carbon" value={`${addCommaToNumber(embodiedCarbon)} kgCO₂`} />
-          <ListItem label="Grid Carbon Intensity" value={`${addCommaToNumber(intensity)} gCO₂/kWh`} />
-          <ListItem label="Total Carbon Footprint 😀 until Break-Even" value={`${total}`} />
+        {/* Left Side - 2x2 Grid */}
+        <ul className="grid grid-cols-2 gap-4">
+          <ListItem label="Break-Even Time" value={`${year}`} borderColor="border-[#A1223D]" />
+          <ListItem label="Grid Carbon Intensity" value={`${addCommaToNumber(intensity)} gCO₂/kWh`} borderColor="border-[#A1223D]" />
+          <ListItem label="New HW Embodied Carbon" value={`${addCommaToNumber(embodiedCarbon)} kgCO₂`} borderColor="border-[#CE682A]" />
+          <ListItem label="Total Carbon Footprint 😀 until Break-Even" value={`${total}`} borderColor="border-[#CE682A]" />
         </ul>
-        <div className="grow flex flex-col gap-1 w-full">
-          <LineChart />
-          <p className="text-center text-sm w-4/5 mx-auto font-serif text-slate-700">
-            Figure: Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for a {workload} workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
-          </p>
+        <div className="flex flex-col border-2 border-[#D4722E] rounded-xl gap-2 px-3 py-2 font-normal w-2/5">
+            <p>Workload Performance indicator ({workload})</p>
+          <table className="text-medium font-bold">
+            <tr>
+              <td>Current Hardware:</td>
+              <td>{oldFormatted}</td>
+            </tr>
+            {
+              !singleComparison &&
+                <>
+                  <tr>
+                    <td>New Hardware:</td>
+                    <td>{newFormatted}</td>
+                  </tr>
+                  <tr>
+                    <td>Ratio:</td>
+                    <td>{ratio}</td>
+                  </tr>
+                </>
+            }
+          </table>
         </div>
       </div>
       <div>
-        <table className="text-center w-5/6 mx-auto border-collapse text-lg">
+        <table className="text-center w-7/8 mx-auto border-collapse text-base">
           <thead>
             <tr>
               <th className="w-1/5"></th>

@@ -54,10 +54,6 @@ function BenchmarkSettings() {
 
   const { country, currentCPU, newCPU, workload, utilization, oldPerformanceIndicator, newPerformanceIndicator, singleComparison, setCountry, setWorkload, setUtilization } = useBenchmarkContext();
 
-  const ratio = (newPerformanceIndicator / oldPerformanceIndicator).toFixed(3).replace(/\.000$/, '')
-  let oldFormatted = oldPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
-  let newFormatted = newPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
-
   let disabledWorkload: WorkloadType[] = [];
 
   WORKLOAD_TYPES.forEach(workload => {
@@ -72,18 +68,16 @@ function BenchmarkSettings() {
   // need to reset workload if restriced cpu is selected after workload is set
   if (disabledWorkload.includes(workload)) setWorkload(WORKLOAD_TYPES[0])
 
-  oldFormatted = addCommaToNumber(Number(oldFormatted));
-  newFormatted = addCommaToNumber(Number(newFormatted));
 
   return (
-    <div className="flex text-lg font-medium py-4 px-8 gap-12 flex-wrap">
-      <div className="w-3/5 flex flex-col gap-4">
+    <div className="flex flex-col text-medium font-medium flex-wrap px-4 py-2 gap-2">
         <ToggleSelection<WorkloadType>
           label="Workload:"
           options={WORKLOAD_TYPES}
           currentState={workload}
           setState={setWorkload}
           disabled={disabledWorkload}
+          flexGrow={false}
         />
         <div className="flex gap-4 items-center">
           <label><p>Utilization %:</p></label>
@@ -107,33 +101,8 @@ function BenchmarkSettings() {
             <p>%</p>
           </div>
 
-        </div>
       </div>
-      <div className="flex flex-col border-2 border-[#D4722E] rounded-xl px-4 py-3 font-normal w-1/3">
-        <p className="font-normap font-medium w-full text-wrap">Workload Performance indicator</p>
-        <table>
-          <tr>
-            <td>Current Hardware:</td>
-            <td>{oldFormatted}</td>
-          </tr>
-          {
-            !singleComparison &&
-              <>
-                <tr>
-                  <td>New Hardware:</td>
-                  <td>{newFormatted}</td>
-                </tr>
-                <tr>
-                  <td>Ratio:</td>
-                  <td>{ratio}</td>
-                </tr>
-              </>
-          }
-        </table>
-      </div>
-        <div className="w-full h-fit relative">
-          <GeoMap country={country} setCountry={setCountry} />
-        </div>
+      <GeoMap country={country} setCountry={setCountry} />
     </div>
   )
 }

@@ -11,7 +11,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import annotationPlugin from 'chartjs-plugin-annotation';
+import annotationPlugin, { LabelPosition } from 'chartjs-plugin-annotation';
 
 
 // Register Chart.js components
@@ -105,9 +105,19 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
   const L = oldSystemOpex.length - 1;
   const isOneDecimalPlace = oldSystemOpex[L] > 1000 && newSystemOpex[L] > 1000;
 
-  const annotationHeight = comparison.newSystemOpex[0];
+  const embodiedCarbonLineHeight = comparison.newSystemOpex[0];
 
   const labels = Array.from(Array(breakEven).keys())
+
+  let xbreakEvenLabel: LabelPosition = 'end';
+  let ybreakEvenLabel: LabelPosition = 'end';
+  const yEmbodied  = -15;
+
+  const xBreakEven = intersect ? intersect.x : 0;
+  const yBreakEven = intersect ? intersect.y : 0;
+
+  if ((xBreakEven / L) < 0.3) xbreakEvenLabel = 'start';
+  if ((yBreakEven / oldSystemOpex[L]) > 0.5) ybreakEvenLabel = 'start';
 
   const data = {
     labels: labels,
@@ -175,8 +185,8 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
             annotations: {
               embodiedCarbonLine: {
                 type: "line",
-                yMin: annotationHeight,
-                yMax: annotationHeight,
+                yMin: embodiedCarbonLineHeight,
+                yMax: embodiedCarbonLineHeight,
                 borderColor: "rgb(255, 99, 132)",
                 borderWidth: 2,
                 borderDash: [6, 6],
@@ -189,9 +199,9 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                     weight: 400,
                   },
                   color: "red",
-                  yAdjust: 15,
+                  yAdjust: yEmbodied,
                   content: `${singleComparison ? "Current" : "New" } HW's embodied carbon`,
-                  position: "end",
+                  position: 'end'
                 },
               },
               breakEvenCircle: {
@@ -221,8 +231,8 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                   bottom: 12,
                 },
                 position: {
-                  x: "end",
-                  y: "end",
+                  x: xbreakEvenLabel,
+                  y: ybreakEvenLabel,
                 },
                 xValue: intersect ? intersect.x : 0,
                 yValue: intersect ? intersect.y : 0,
@@ -236,8 +246,9 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                 family: "serif",
                 size: 16,
               },
+              boxWidth: 8,
               boxHeight: 5,
-              padding: 20,
+              padding: 0,
             },
           },
         },
@@ -252,7 +263,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
   }, [comparison]);
 
   return (
-    <figure className="grow">
+    <figure className="h-96">
       <canvas ref={canvas} width={400} height={400}></canvas>
     </figure>
   );

@@ -15,7 +15,7 @@ const Sections: React.FC<SectionsProps> = ({ title, markup }) => {
     <>
       <section>
         <div className='w-full flex items-center gap-4'>
-          <h2 className='text-xl'>{title}</h2>
+          <h2 className='text-lg'>{title}</h2>
           <hr className='border-t-[#AF313A] grow border-t-2 border-r-full' />
         </div>
         {markup}
@@ -33,7 +33,7 @@ function App() {
         <img src={hpiLogo} className='h-full' />
         <img src={desLogo} className='h-full' />
       </header>
-      <main className='w-full md:w-3/4 px-2 lg:w-3/5 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
+      <main className='w-full px-10 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
         <section>
           <h1 className='text-2xl text-center'>Ecological Efficiency in Database Server Lifecycles</h1>
           <p className='text-cyan-700 underline underline-offset-2 text-lg text-center'>
@@ -43,9 +43,15 @@ function App() {
             >Read Paper</a>
           </p>
         </section>
-        <Sections title='Compare Configurations' markup={<Compare />} />
-        <Sections title='Benchmark Settings' markup={<BenchmarkSettings />} />
-        <Sections title='Evaluated Benchmarks' markup={<BenchmarkEvaluations />} />
+        <section className='flex gap-10'>
+          <div className='flex-1 flex flex-col gap-8'>
+            <Sections title='Compare Configurations' markup={<Compare />} />
+            <Sections title='Benchmark Settings' markup={<BenchmarkSettings />} />
+          </div>
+          <div className='flex-1'>
+            <Sections title='Evaluated Benchmarks' markup={<BenchmarkEvaluations />} />
+          </div>
+        </section>
       </main>
       <footer className='w-full flex flex-col py-10 items-center gap-3 bg-[#CE682A] text-white mt-24 bottom-0'>
         <div className='w-full md:w-3/4 px-2 lg:w-3/5 max-w-[2000px] text-lg flex flex-col gap-2'>
