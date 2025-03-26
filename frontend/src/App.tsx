@@ -40,7 +40,8 @@ function App() {
       </header>
       <main className='w-full px-10 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
         <section className='h-32 flex flex-col justify-end'>
-          <h1 className='text-3xl text-center'>True Cost of Ownership and CO2</h1>
+          <h1 className='text-3xl text-center'>TCO2: Analyzing the Carbon Footprint of Database Server
+Replacements</h1>
           <p className='text-cyan-700 underline underline-offset-2 text-lg text-center'>
             <a
               href='https://hpi.de/rabl/news/2024/paper-on-ecological-efficiency-of-database-servers-accepted-at-cidr-2025.html'
