@@ -16,4 +16,9 @@ path.leaflet-interactive:focus {
 
 @theme {
   --text-medium: 1.063rem; /* 17px */
+  --color-hpi-current: #B4D8E7;
+  --color-hpi-new: #F1B16E;
+  --color-hpi-red: #A1223D;
+  --color-hpi-orange: #CE682A;
+  --color-hpi-yellow: #F1B16E;
 }

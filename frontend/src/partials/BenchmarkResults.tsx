@@ -15,7 +15,7 @@ interface ListItemProps {
 
 const ListItem: React.FC<ListItemProps> = ({ label, value, borderColor }) => {
   return (
-    <li className={`border-[3px] ${borderColor} rounded-lg flex flex-col items-start justify-start px-3 py-2`}>
+    <li className={`border-[3px] ${borderColor} rounded-lg flex flex-col items-start justify-start px-3 py-2 duration-200 ease-in-out`}>
       <p className="text-base font-semibold flex flex-col text-wrap">
         {label}
       </p>
@@ -94,35 +94,28 @@ const TableRow: React.FC<TableRowProps> = ({ name, isSingleComparison, currentCP
   );
 };
 
-
-const BreakdownCard = ({
-  title,
-  breakdown,
-  borderColor,
-  showBar = false,
-}: {
+interface BreakdownCardProp {
     title: string;
     breakdown: CapexType | OpexType;
     borderColor: string;
-    showBar?: boolean;
-  }) => {
+}
+
+const BreakdownCard: React.FC<BreakdownCardProp> = ({ title, breakdown, borderColor }) => {
   const calculatePercentage = (value: number, breakdown: CapexType | OpexType) => {
-    return ((value / breakdown.TOTAL) * 100).toFixed(1) + "%";
+    return ((value / breakdown.TOTAL) * 100).toFixed(0) + "%";
   };
   return (
-    <div className={`flex flex-col border-[3px] rounded-lg gap-2 px-3 py-2`} style={{ borderColor }}>
+    <div className={`flex flex-col border-[3px] rounded-lg gap-2 px-3 py-2 duration-200 ease-in-out ${borderColor}`}>
       <p className="font-semibold">{title}</p>
       <div className="text-lg flex flex-col gap-1">
         {[CPU, RAM, SSD, HDD].map(value => (
           <div key={value} className="grid grid-cols-10 w-full relative">
             <p className="col-span-2">{value}:</p>
             <p className="col-span-2">{calculatePercentage(breakdown[value as Components], breakdown)}</p>
-            {showBar && (
-              <span
-                className="col-span-6 h-1 bg-green-600 my-auto"
-                style={{ width: `${(breakdown[value as Components] / breakdown.TOTAL) * 100}%` }}
-              />
-            )}
+            <span
+              className="col-span-6 h-1 bg-green-600 my-auto duration-500"
+              style={{ width: `${(breakdown[value as Components] / breakdown.TOTAL) * 100}%` }}
+            />
           </div>
         ))}
       </div>
@@ -130,12 +123,12 @@ const BreakdownCard = ({
   );
 };
 
-function BenchmarkEvaluations() {
+function BenchmarkResults() {
   const { currentCPU, newCPU, comparison, country, utilization, intersect, workload, singleComparison, oldPerformanceIndicator, newPerformanceIndicator, capexBreakdown, opexBreakdown } = useBenchmarkContext();
 
   const year = intersect ? yearToYearAndMonth(Number(intersect.x.toFixed(1))) : "No Break-Even";
   const intensity = GRID_INTENSITY[country]
-  const total = intersect ? addCommaToNumber(Number(intersect.y.toFixed(1))) + "kgCO₂" : "No Break-even";
+  const total = intersect ? addCommaToNumber(Number(intersect.y.toFixed(1))) + " kgCO₂" : "No Break-even";
   const currentData = CPU_DATA[currentCPU];
   const newData = CPU_DATA[newCPU];
   const embodiedCarbon = Number(comparison.newSystemOpex[0].toFixed(1));
@@ -150,7 +143,7 @@ function BenchmarkEvaluations() {
 
   return (
     <div className="flex flex-col px-8 py-4 gap-10">
-      <div className="flex flex-col gap-1 w-full">
+      <div className="flex flex-col gap-2 w-full">
         <LineChart />
         <p className="text-center text-sm w-full mx-auto font-serif text-slate-700">
           Figure: Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for a {workload} workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
@@ -160,12 +153,28 @@ function BenchmarkEvaluations() {
         <div className="grid grid-cols-10 gap-4">
           {/* Left Side - 2x2 Grid */}
           <ul className="grid grid-cols-2 col-span-6 gap-4 grow">
-            <ListItem label="Break-Even Time" value={`${year}`} borderColor="border-[#A1223D]" />
-            <ListItem label="Grid Carbon Intensity" value={`${addCommaToNumber(intensity)} gCO₂/kWh`} borderColor="border-[#CE682A]" />
-            <ListItem label={`${titleText} HW Embodied Carbon`} value={`${addCommaToNumber(embodiedCarbon)} kgCO₂`} borderColor="border-[#A1223D]" />
-            <ListItem label="Total Carbon Footprint until Break-Even" value={`${total}`} borderColor="border-[#CE682A]" />
+            <ListItem
+              label="Break-Even Time"
+              value={`${year}`}
+              borderColor="border-hpi-red"
+            />
+            <ListItem
+              label="Grid Carbon Intensity"
+              value={`${addCommaToNumber(intensity)} gCO₂/kWh`}
+              borderColor="border-hpi-red"
+            />
+            <ListItem
+              label={`${titleText} HW Embodied Carbon`}
+              value={`${addCommaToNumber(embodiedCarbon)} kgCO₂`}
+              borderColor={singleComparison ? "border-hpi-current" : "border-hpi-new"}
+            />
+            <ListItem
+              label="Total Carbon Footprint until Break-Even"
+              value={`${total}`}
+              borderColor="border-hpi-orange"
+            />
           </ul>
-          <div className="flex flex-col border-[3px] border-[#ECAB3B] rounded-lg gap-2 px-3 py-2 col-span-4">
+          <div className="flex flex-col border-[3px] border-hpi-orange rounded-lg gap-2 px-3 py-2 col-span-4">
             <p className="font-semibold">Workload Performance indicator ({workload})</p>
             <table className="text-lg">
               <tr>
@@ -190,16 +199,14 @@ function BenchmarkEvaluations() {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <BreakdownCard
-            title={`${titleText} HW Embodied Carbon Breakdown:`}
+            title={`${titleText} HW Embodied Carbon Breakdown`}
             breakdown={capexBreakdown}
-            borderColor="#A1223D"
-            showBar
+            borderColor={singleComparison ? "border-hpi-current" : "border-hpi-new"}
           />
           <BreakdownCard
-            title={`${titleText} HW Operational Carbon Breakdown:`}
+            title={`${titleText} HW Operational Carbon Breakdown`}
             breakdown={opexBreakdown}
-            borderColor="#ECAB3B"
-            showBar
+            borderColor={singleComparison ? "border-hpi-current" : "border-hpi-new"}
           />
         </div>
       </div>
@@ -258,4 +265,4 @@ function BenchmarkEvaluations() {
   );
 }
 
-export default BenchmarkEvaluations;
+export default BenchmarkResults;

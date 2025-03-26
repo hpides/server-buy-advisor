@@ -36,7 +36,6 @@ const GeoMap: React.FC<GeomapProps> = ({ country, setCountry }) => {
     }
   }, []);
 
-
   const getOpacity = (featureCountry: any) => {
     if (GRID_INTENSITY[featureCountry] === null) return 0;
     if (featureCountry === country) return 0.5;
@@ -149,7 +148,7 @@ const GeoMap: React.FC<GeomapProps> = ({ country, setCountry }) => {
   }
 
   return (
-    <div className="w-full h-96 flex flex-col overflow-hidden rounded-lg border border-slate-500 my-4">
+    <div className="w-full h-96 flex flex-col overflow-hidden rounded-lg border border-slate-500">
       <MapContainer
         center={[30, 0]}
         zoom={2}
@@ -161,7 +160,7 @@ const GeoMap: React.FC<GeomapProps> = ({ country, setCountry }) => {
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
         />
         {/* @tsignore */}
         <GeoJSON data={test.features} onEachFeature={onEachFeature} style={style} />

@@ -12,8 +12,8 @@ import amdLogo from "../assets/AMD_epyc_logo.svg";
 import close from "../assets/close.png";
 import ToggleSelection from "../utility/ToggleSelection.tsx";
 
-const NEW_LABEL = "New Hardware";
-const OLD_LABEL = "Current Hardware";
+export const NEW_LABEL = "New Hardware";
+export const OLD_LABEL = "Current Hardware";
 
 export const RAM_CAPACITIES :number[] = [128, 256, 512];
 export const SSD_CAPACITIES :number[] = [512, 1024, 2048];
@@ -38,7 +38,8 @@ const getClosestLogo = (launchYear: number | null, make: CPUMake): string => {
 };
 
 const DISPLAY: Record<string, keyof CPUEntry> = {
-  Threads: "CORE_COUNT",
+  Cores: "CORE_COUNT",
+  Threads: "THREAD_COUNT",
   TDP: "TDP",
   Release: "LAUNCH_YEAR",
 };
@@ -68,6 +69,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
   const specs_selected :CPUEntry = CPU_DATA[thisConfig.cpu];
   const specs_compareTo :CPUEntry = CPU_DATA[otherConfig.cpu];
   const canToggle = label == NEW_LABEL;
+  const color = label == OLD_LABEL ? "Current" : "New";
 
   const [showDropdown, setShowDropdown] = useState<boolean>(canToggle ? false : true);
 
@@ -85,6 +87,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
   }
 
   const cpuLogo = getClosestLogo(specs_selected.LAUNCH_YEAR, specs_selected.MAKE);
+
 
   return (
     <div className="flex-1 flex flex-col gap-2 font-light relative">
@@ -131,6 +134,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           setState={thisConfig.setRAM}
           extraInput={true}
           flexGrow={true}
+          color={color}
         />
         <ToggleSelection<number>
           label="SSD (GB):"
@@ -139,6 +143,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           setState={thisConfig.setSSD}
           extraInput={true}
           flexGrow={true}
+          color={color}
         />
         <ToggleSelection<number>
           label="HDD (GB):"
@@ -147,6 +152,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           setState={thisConfig.setHDD}
           extraInput={true}
           flexGrow={true}
+          color={color}
         />
       </div>
       <div className="flex gap-4 mt-4">

@@ -109,15 +109,25 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
 
   const labels = Array.from(Array(breakEven).keys())
 
-  let xbreakEvenLabel: LabelPosition = 'end';
+  let xbreakEvenLabel: LabelPosition = 'start';
   let ybreakEvenLabel: LabelPosition = 'end';
-  const yEmbodied  = -15;
+  let embodiedCarbonLinePosition: LabelPosition = 'end';
+  let yEmbodied  = -15;
 
   const xBreakEven = intersect ? intersect.x : 0;
   const yBreakEven = intersect ? intersect.y : 0;
 
-  if ((xBreakEven / L) < 0.3) xbreakEvenLabel = 'start';
-  if ((yBreakEven / oldSystemOpex[L]) > 0.5) ybreakEvenLabel = 'start';
+  // trying my best to not let labels overlap or go out of bounds
+  if ((xBreakEven / L) > 0.15) xbreakEvenLabel = 'end';
+  if ((yBreakEven / oldSystemOpex[L]) > 0.95) ybreakEvenLabel = 'start';
+
+  const isBreakEvenUpperRight = xBreakEven / L > 0.6 && yBreakEven / oldSystemOpex[L] > 0.6;
+  const isEmbodiedUpperRight = embodiedCarbonLineHeight / oldSystemOpex[L] > 0.6;
+
+  // overlaps between breakeven and embodied only happen in upper right quadrant
+  if (isBreakEvenUpperRight && isEmbodiedUpperRight) {
+    yEmbodied = 15;
+  }
 
   const data = {
     labels: labels,
@@ -201,7 +211,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                   color: "red",
                   yAdjust: yEmbodied,
                   content: `${singleComparison ? "Current" : "New" } HW's embodied carbon`,
-                  position: 'end'
+                  position: embodiedCarbonLinePosition
                 },
               },
               breakEvenCircle: {
@@ -210,13 +220,13 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                 backgroundColor: "red",
                 pointStyle: "round",
                 radius: 5,
-                xValue: intersect ? intersect.x : 0,
-                yValue: intersect ? intersect.y : 0,
+                xValue: intersect ? intersect.x : -10,
+                yValue: intersect ? intersect.y : -10,
               },
               breakEvenLabel: {
                 display: !!intersect,
                 type: "label",
-                backgroundColor: "transparent",
+                backgroundColor: 'transparent',
                 content: intersect ? `${intersect.x.toFixed(1)} years` : "",
                 color: "red",
                 font: {
@@ -224,11 +234,13 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                   size: 18,
                   weight: 400,
                 },
+                borderRadius: 100,
+                borderColor: 'black',
                 padding: {
-                  top: 6,
-                  left: 6,
-                  right: 6,
-                  bottom: 12,
+                  top: 5,
+                  bottom: 5,
+                  left: 10,
+                  right: 10
                 },
                 position: {
                   x: xbreakEvenLabel,
@@ -246,9 +258,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
                 family: "serif",
                 size: 16,
               },
-              boxWidth: 8,
               boxHeight: 5,
-              padding: 0,
             },
           },
         },
@@ -263,8 +273,8 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
   }, [comparison]);
 
   return (
-    <figure className="h-96">
-      <canvas ref={canvas} width={400} height={400}></canvas>
+    <figure className="h-[25rem]">
+      <canvas ref={canvas} width={400} height={500}></canvas>
     </figure>
   );
 });

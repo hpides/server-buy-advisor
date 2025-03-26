@@ -6,7 +6,6 @@ export const CPU = 'CPU';
 export const RAM = 'RAM';
 export const SSD = 'SSD';
 export const HDD = 'HDD';
-
 export type Components = typeof CPU | typeof RAM | typeof SSD | typeof HDD;
 
 export interface CapexType extends Record<Components, number> {

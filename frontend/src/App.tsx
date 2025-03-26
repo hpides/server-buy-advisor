@@ -3,7 +3,7 @@ import desLogo from './assets/des_logo.png';
 import './style.css'
 import Compare from './partials/Compare';
 import BenchmarkSettings from './partials/BenchmarkSettings';
-import BenchmarkEvaluations from './partials/BenchmarkEvaluations';
+import BenchmarkResults from './partials/BenchmarkResults';
 
 type SectionsProps = {
   title: string;
@@ -16,7 +16,7 @@ const Sections: React.FC<SectionsProps> = ({ title, markup }) => {
       <section>
         <div className='w-full flex items-center gap-4'>
           <h2 className='text-lg'>{title}</h2>
-          <hr className='border-t-[#AF313A] grow border-t-2 border-r-full' />
+          <hr className='border-t-hpi-red grow border-t-2 border-r-full' />
         </div>
         {markup}
       </section>
@@ -40,7 +40,7 @@ function App() {
       </header>
       <main className='w-full px-10 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
         <section className='h-32 flex flex-col justify-end'>
-          <h1 className='text-3xl text-center'>Ecological Efficiency in Database Server Lifecycles</h1>
+          <h1 className='text-3xl text-center'>True Cost of Ownership and CO2</h1>
           <p className='text-cyan-700 underline underline-offset-2 text-lg text-center'>
             <a
               href='https://hpi.de/rabl/news/2024/paper-on-ecological-efficiency-of-database-servers-accepted-at-cidr-2025.html'
@@ -54,7 +54,7 @@ function App() {
             <Sections title='Benchmark Settings' markup={<BenchmarkSettings />} />
           </div>
           <div className='flex-1'>
-            <Sections title='Evaluated Benchmarks' markup={<BenchmarkEvaluations />} />
+            <Sections title='Benchmark Results' markup={<BenchmarkResults />} />
           </div>
         </section>
       </main>

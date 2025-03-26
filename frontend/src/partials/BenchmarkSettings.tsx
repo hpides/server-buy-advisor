@@ -18,12 +18,13 @@ export type CPUMake = typeof INTEL | typeof AMD;
 export interface CPUEntry {
   MAKE: CPUMake;
   LAUNCH_YEAR: number;
+  CORE_COUNT: number;
+  THREAD_COUNT: number;
   TDP: number;
   SORTED_TUPLES_PER_S: PerformanceType;
   TPCH_RUNS_PER_H: PerformanceType;
   SPECINT_RATE: PerformanceType;
   SPECINT: PerformanceType;
-  CORE_COUNT: number;
   SORTED_TUPLES_PER_JOULE: number | null;
   TPCH_RUNS_PER_KJOULE: number | null;
   SPECINT_PER_TDP: number;
@@ -99,9 +100,11 @@ function BenchmarkSettings() {
             />
             <p>%</p>
           </div>
-
       </div>
-      <GeoMap country={country} setCountry={setCountry} />
+      <div className="flex flex-col gap-2">
+        <p className="font-normal"><strong className="font-medium">Location: </strong> {country}</p>
+        <GeoMap country={country} setCountry={setCountry} />
+      </div>
     </div>
   )
 }
