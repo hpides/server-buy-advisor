@@ -71,7 +71,7 @@ for row_id, plot_title, color, plot_meta in [
                                   # (0, "ADAPTED_MT_SPECINT", "Result score", "SPECint 2017"),
                                   (0, "SPECINT_RATE", "Result Score", "SPECrate Integer 2017"),
                                   (1, "TPCH_RUNS_PER_H", "Runs per Hour", "TPC-H - High Load"),
-                                  (2, "K_SORTED_TUPLES_PER_S", "Million Tuples Sorted per Second", "Parallel std::sort")]),
+                                  (2, "M_SORTED_TUPLES_PER_S", "Million Tuples Sorted per Second", "Parallel std::sort")]),
         (1, "Efficiency", BAR2, [
                                  # (0, "SPECINT_PER_TDP", "Result score per Watt", "SPECint 2017"),
                                  (0, "SPECINTrate_PER_TDP", "Result Score per Watt", "SPECrate Integer 2017"),
