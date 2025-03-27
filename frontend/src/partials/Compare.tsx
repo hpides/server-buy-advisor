@@ -128,7 +128,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
       </div>
       <div className="flex flex-col gap-2 px-2">
         <ToggleSelection<number>
-          label="RAM (GB):"
+          label="RAM(GB):"
           options={RAM_CAPACITIES}
           currentState={thisConfig.ram}
           setState={thisConfig.setRAM}
@@ -137,7 +137,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           color={color}
         />
         <ToggleSelection<number>
-          label="SSD (GB):"
+          label="SSD(GB):"
           options={SSD_CAPACITIES}
           currentState={thisConfig.ssd}
           setState={thisConfig.setSSD}
@@ -146,7 +146,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
           color={color}
         />
         <ToggleSelection<number>
-          label="HDD (GB):"
+          label="HDD(GB):"
           options={HDD_CAPACITIES}
           currentState={thisConfig.hdd}
           setState={thisConfig.setHDD}
@@ -166,10 +166,10 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
               const compareValue = (specs_compareTo?.[prop] ?? selectedValue) || 0;
               return (
                 <tr key={key}>
-                  <td className="w-0 pr-4 align-top">{key}:</td>
+                  <td className="w-0 pr-4 align-top text-right">{key}:</td>
                   <td className="flex items-center gap-1">
                     <p>{selectedValue}</p>
-                    {selectedValue > compareValue && (
+                    {selectedValue > compareValue && !singleComparison && (
                       <img src={UP_ARROW} className="h-full" alt="up" />
                     )}
                   </td>

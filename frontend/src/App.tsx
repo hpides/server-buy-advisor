@@ -3,7 +3,8 @@ import desLogo from './assets/des_logo.png';
 import './style.css'
 import Compare from './partials/Compare';
 import BenchmarkSettings from './partials/BenchmarkSettings';
-import BenchmarkResults from './partials/BenchmarkResults';
+import LineChart from './charts/lineChart';
+import DetailedBreakdown from './partials/DetailedBreakdown';
 
 type SectionsProps = {
   title: string;
@@ -29,7 +30,7 @@ function App() {
 
   return (
     <>
-      <header className='h-32 pl-12 p-4 flex gap-10 absolute z-10'>
+      <header className='h-28 2xl:h-32 pl-12 p-4 flex gap-10'>
         <a href='https://hpi.de/'>
           <img src={hpiLogo} className='h-full hover:scale-105 duration-200' />
         </a>
@@ -39,8 +40,8 @@ function App() {
         </a>
       </header>
       <main className='w-full px-10 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
-        <section className='h-32 flex flex-col justify-end'>
-          <h1 className='text-3xl text-center'>TCO2: Analyzing the Carbon Footprint of Database Server
+        <section className='flex flex-col justify-center py-4'>
+          <h1 className='text-3xl text-center'>TCO<sub>2</sub>: Analyzing the Carbon Footprint of Database Server
 Replacements</h1>
           <p className='text-cyan-700 underline underline-offset-2 text-lg text-center'>
             <a
@@ -51,11 +52,12 @@ Replacements</h1>
         </section>
         <section className='flex gap-10'>
           <div className='flex-1 flex flex-col gap-8'>
-            <Sections title='Compare Configurations' markup={<Compare />} />
+            <Sections title='Server Configurations' markup={<Compare />} />
             <Sections title='Benchmark Settings' markup={<BenchmarkSettings />} />
           </div>
-          <div className='flex-1'>
-            <Sections title='Benchmark Results' markup={<BenchmarkResults />} />
+          <div className='flex-1 flex flex-col gap-8'>
+            <Sections title='Break-Even Analysis' markup={<LineChart />} />
+            <Sections title='Detailed Breakdown' markup={<DetailedBreakdown />} />
           </div>
         </section>
       </main>

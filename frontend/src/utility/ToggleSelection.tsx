@@ -1,6 +1,8 @@
 import { useState } from "react";
 import edit from "../assets/edit.png";
 
+const EXTRA_DEFAULT = "Custom";
+
 interface ToggleSelectionProps<T> {
   label: string;
   options: Array<T>;
@@ -25,16 +27,16 @@ const ToggleSelection = <T,>({
   color = 'None'
 }: ToggleSelectionProps<T>) => {
 
-  const [extra, setExtra] = useState('Other');
+  const [extra, setExtra] = useState(EXTRA_DEFAULT);
 
   const extraFocus = (value: any, initial: boolean = false) => {
-    setExtra((initial && value == "Other") ? "" : value);
+    setExtra((initial && value == EXTRA_DEFAULT) ? "" : value);
     if (value == Number(value)) setState(value as unknown as T);
   }
 
   const extraUnfocus = (value: any) => {
     if (value === "") {
-      setExtra("Other");
+      setExtra(EXTRA_DEFAULT);
       setState(options[0]);
       return;
     }
@@ -59,7 +61,7 @@ const ToggleSelection = <T,>({
 
   return (
     <div className="flex items-center flex-wrap w-full gap-2">
-      <p className="border-b-4 border-transparent">{label}</p>
+      <p className={`${flexGrow ? 'font-mono text-sm ' : ''} border-b-4 border-transparent`}>{label}</p>
       {options.map((option) => (
         <button
           key={String(option)}
@@ -72,7 +74,7 @@ ${capitalize ? " capitalize" : ""}
 ${disabled.includes(option) ? "cursor-not-allowed text-gray-300 hover:border-b-transparent" : "cursor-pointer"}
 `}
         >
-          {String(option)}
+            {String(option)}
         </button>
       ))}
       { extraInput &&

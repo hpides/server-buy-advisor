@@ -1,5 +1,4 @@
 import React from "react";
-import LineChart from "../charts/lineChart";
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
 import { addCommaToNumber, yearToYearAndMonth } from "../utility/UtilityFunctions";
 import CPU_DATA, { CPU_METRICS, CPUMetric } from "../assets/data";
@@ -109,11 +108,11 @@ const BreakdownCard: React.FC<BreakdownCardProp> = ({ title, breakdown, borderCo
       <p className="font-semibold">{title}</p>
       <div className="text-lg flex flex-col gap-1">
         {[CPU, RAM, SSD, HDD].map(value => (
-          <div key={value} className="grid grid-cols-10 w-full relative">
+          <div key={value} className="grid grid-cols-12 w-full relative">
             <p className="col-span-2">{value}:</p>
-            <p className="col-span-2">{calculatePercentage(breakdown[value as Components], breakdown)}</p>
+            <p className="col-span-2 text-right mr-1">{calculatePercentage(breakdown[value as Components], breakdown)}</p>
             <span
-              className="col-span-6 h-1 bg-green-600 my-auto duration-500"
+              className="col-span-8 h-1 bg-green-600 my-auto duration-500"
               style={{ width: `${(breakdown[value as Components] / breakdown.TOTAL) * 100}%` }}
             />
           </div>
@@ -123,8 +122,8 @@ const BreakdownCard: React.FC<BreakdownCardProp> = ({ title, breakdown, borderCo
   );
 };
 
-function BenchmarkResults() {
-  const { currentCPU, newCPU, comparison, country, utilization, intersect, workload, singleComparison, oldPerformanceIndicator, newPerformanceIndicator, capexBreakdown, opexBreakdown } = useBenchmarkContext();
+function DetailedBreakdown() {
+  const { currentCPU, newCPU, comparison, country, intersect, workload, singleComparison, oldPerformanceIndicator, newPerformanceIndicator, capexBreakdown, opexBreakdown } = useBenchmarkContext();
 
   const year = intersect ? yearToYearAndMonth(Number(intersect.x.toFixed(1))) : "No Break-Even";
   const intensity = GRID_INTENSITY[country]
@@ -143,12 +142,6 @@ function BenchmarkResults() {
 
   return (
     <div className="flex flex-col px-8 py-4 gap-10">
-      <div className="flex flex-col gap-2 w-full">
-        <LineChart />
-        <p className="text-center text-sm w-full mx-auto font-serif text-slate-700">
-          Figure: Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for a {workload} workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
-        </p>
-      </div>
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-10 gap-4">
           {/* Left Side - 2x2 Grid */}
@@ -164,7 +157,7 @@ function BenchmarkResults() {
               borderColor="border-hpi-red"
             />
             <ListItem
-              label={`${titleText} HW Embodied Carbon`}
+              label={`Embodied Carbon of ${titleText} Hardware`}
               value={`${addCommaToNumber(embodiedCarbon)} kgCO₂`}
               borderColor={singleComparison ? "border-hpi-current" : "border-hpi-new"}
             />
@@ -199,19 +192,19 @@ function BenchmarkResults() {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <BreakdownCard
-            title={`${titleText} HW Embodied Carbon Breakdown`}
+            title={`Embodied Carbon Breakdown of ${titleText} Hardware`}
             breakdown={capexBreakdown}
             borderColor={singleComparison ? "border-hpi-current" : "border-hpi-new"}
           />
           <BreakdownCard
-            title={`${titleText} HW Operational Carbon Breakdown`}
+            title={`Operational Carbon Breakdown of ${titleText} Hardware`}
             breakdown={opexBreakdown}
             borderColor={singleComparison ? "border-hpi-current" : "border-hpi-new"}
           />
         </div>
       </div>
       <div>
-        <table className="text-center w-7/8 mx-auto border-collapse text-base">
+        <table hidden={true} className="text-center w-7/8 mx-auto border-collapse text-base">
           <thead>
             <tr>
               <th className="w-1/5"></th>
@@ -265,4 +258,4 @@ function BenchmarkResults() {
   );
 }
 
-export default BenchmarkResults;
+export default DetailedBreakdown;

@@ -71,7 +71,7 @@ export function lineIntersect(
 
 const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
 
-  const { comparison, intersect, currentCPU, newCPU, oldSystemOpex, newSystemOpex, breakEven, singleComparison } = useBenchmarkContext();
+  const { workload, country, utilization, comparison, intersect, currentCPU, newCPU, oldSystemOpex, newSystemOpex, breakEven, singleComparison } = useBenchmarkContext();
 
   // @ts-ignore
   const [chart, setChart] = useState<Chart | null>(null);
@@ -118,7 +118,7 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
   const yBreakEven = intersect ? intersect.y : 0;
 
   // trying my best to not let labels overlap or go out of bounds
-  if ((xBreakEven / L) > 0.15) xbreakEvenLabel = 'end';
+  if ((xBreakEven / L) > 0.1) xbreakEvenLabel = 'end';
   if ((yBreakEven / oldSystemOpex[L]) > 0.95) ybreakEvenLabel = 'start';
 
   const isBreakEvenUpperRight = xBreakEven / L > 0.6 && yBreakEven / oldSystemOpex[L] > 0.6;
@@ -273,9 +273,15 @@ const LineChart: React.FC<LineChartProps> = memo(function LineChart() {
   }, [comparison]);
 
   return (
-    <figure className="h-[25rem]">
-      <canvas ref={canvas} width={400} height={500}></canvas>
-    </figure>
+
+    <div className="flex flex-col gap-2 w-full">
+      <figure className="h-96">
+        <canvas ref={canvas} width={400} height={500}></canvas>
+      </figure>
+      <p className="text-center text-sm w-full mx-auto font-serif text-slate-700">
+        Figure: Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for a {workload} workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
+      </p>
+    </div>
   );
 });
 

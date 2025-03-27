@@ -82,7 +82,7 @@ function BenchmarkSettings() {
         <div className="flex gap-4 items-center">
           <label><p>Utilization %:</p></label>
           <input
-            className="w-96 accent-red-500"
+            className="w-96 accent-orange-600"
             type="range"
             value={utilization}
             min={0}
