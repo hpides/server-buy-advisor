@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+path.leaflet-interactive:focus {
+    outline: none;
+}
+
+/* Remove bottom right leaflet attribution */
+.leaflet-control-attribution {
+  display: none;
+}
+
+@theme {
+  --text-medium: 1.063rem; /* 17px */
+  --color-hpi-current: #B4D8E7;
+  --color-hpi-new: #F1B16E;
+  --color-hpi-red: #A1223D;
+  --color-hpi-orange: #CE682A;
+  --color-hpi-yellow: #F1B16E;
+}
