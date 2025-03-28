@@ -6,14 +6,14 @@ from lifecycle_anslysis.plotting import create_projections_plot
 from lifecycle_anslysis.system import System
 
 # assumptions
-time_horizon = 20
+time_horizon = 17
 
 ##############################
 # Systems
 ##############################
 
 # shared specs
-lifetime = 20
+lifetime = 10
 dram_capacity = 8 * 64
 ssd_capacity = 2 * 1600
 hdd_capacity = 0
@@ -58,4 +58,4 @@ if __name__ == '__main__':
                     opex_calculation=GUPTA_MODEL)
 
             fig_size = (10, 5)
-            create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, step_size=2, fig_size=fig_size)
+            create_projections_plot(new_system_opex, old_system_opex, ratio, save_path, step_size=1, fig_size=fig_size)
