@@ -94,22 +94,6 @@ const CPU_DATA : CPUs= {
     "SPECINTrate_PER_TDP": 0.848484848484848,
     "DIE_SIZE": 754
   },
-  "Intel Xeon Gold 6240L": {
-    "MAKE": INTEL,
-    "LAUNCH_YEAR": 2019,
-    "CORE_COUNT": 18,
-    "THREAD_COUNT": 36,
-    "TDP": 150,
-    "SORTED_TUPLES_PER_S": 227705.108223,
-    "TPCH_RUNS_PER_H": 68.7827948245532,
-    "SPECINT_RATE": 222,
-    "SPECINT": 10.1,
-    "SORTED_TUPLES_PER_JOULE": null,
-    "TPCH_RUNS_PER_KJOULE": 0.184657181749119,
-    "SPECINT_PER_TDP": 2.424,
-    "SPECINTrate_PER_TDP": 0,
-    "DIE_SIZE": 471
-  },
   "Intel Xeon Platinum 8352Y": {
     "MAKE": INTEL,
     "LAUNCH_YEAR": 2021,
