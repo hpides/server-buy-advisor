@@ -90,7 +90,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
 
 
   return (
-    <div className="flex-1 flex flex-col gap-2 font-light relative">
+    <div className="col-span-1 flex flex-col gap-2 font-light relative">
       <div
         onClick={toggleShow}
         className={`${showDropdown ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'} z-10 cursor-pointer duration-150 absolute top-0 left-0 w-full h-full bg-white border-3 border-slate-400 rounded-xl flex items-center justify-center group hover:border-slate-300`}>
@@ -156,10 +156,10 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
         />
       </div>
       <div className="flex gap-4 mt-4">
-        <div className="min-w-40">
-          <img className="h-28 w-auto max-w-32 mx-auto" src={cpuLogo} />
+        <div className="bg-red-100 h-28">
+          <img className="h-full w-auto max-w-32 mx-auto" src={cpuLogo} />
         </div>
-        <table className="text-base grow border-collapse">
+        <table className="text-base grow bg-blue-100 border-collapse">
           <tbody>
             {Object.entries(DISPLAY).map(([key, prop]) => {
               const selectedValue = specs_selected[prop] || 0;
@@ -211,7 +211,7 @@ function Compare() {
   }
 
   return (
-    <div className="flex px-4 py-2 gap-5">
+    <div className="grid grid-cols-2 px-4 py-2 gap-5">
       <Dropdown
         label={OLD_LABEL}
         thisConfig={currentConfig}

@@ -42,6 +42,8 @@ interface BenchmarkContextType {
   newPerformanceIndicator: number;
   capexBreakdown: CapexType;
   opexBreakdown: OpexType;
+  oldPowerConsumption: number;
+  newPowerConsumption: number;
   setCurrentCPU: (value: string) => void;
   setCurrentRAM: (value: number) => void;
   setCurrentSSD: (value: number) => void;
@@ -148,9 +150,11 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
   const newSystemOpex = comparison.newSystemOpex.slice(0, breakEven);
   const capexBreakdown = comparison.capexBreakdown;
   const opexBreakdown = comparison.opexBreakdown;
+  const oldPowerConsumption = comparison.oldPowerConsumption;
+  const newPowerConsumption = comparison.newPowerConsumption;
 
   return (
-    <BenchmarkContext.Provider value={{ opexBreakdown, capexBreakdown, setSingleComparison, oldPerformanceIndicator, newPerformanceIndicator, comparison, oldSystemOpex, singleComparison, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentCPU, setCurrentCPU, newCPU, setNewCPU, currentRAM, currentSSD, newRAM, newSSD, setNewRAM, setNewSSD, setCurrentRAM, setCurrentSSD, currentHDD, setCurrentHDD, newHDD, setNewHDD }}>
+    <BenchmarkContext.Provider value={{ oldPowerConsumption, newPowerConsumption, opexBreakdown, capexBreakdown, setSingleComparison, oldPerformanceIndicator, newPerformanceIndicator, comparison, oldSystemOpex, singleComparison, newSystemOpex, intersect, breakEven, workload, utilization, country, setWorkload, setUtilization, setCountry, currentCPU, setCurrentCPU, newCPU, setNewCPU, currentRAM, currentSSD, newRAM, newSSD, setNewRAM, setNewSSD, setCurrentRAM, setCurrentSSD, currentHDD, setCurrentHDD, newHDD, setNewHDD }}>
       {children}
     </BenchmarkContext.Provider>
   );

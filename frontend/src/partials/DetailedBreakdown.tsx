@@ -1,6 +1,6 @@
 import React from "react";
 import { useBenchmarkContext } from "../utility/BenchmarkContext";
-import { addCommaToNumber, yearToYearAndMonth } from "../utility/UtilityFunctions";
+import { addCommaToNumber, yearToYearAndMonth, BLANK_SPACE } from "../utility/UtilityFunctions";
 import CPU_DATA, { CPU_METRICS, CPUMetric } from "../assets/data";
 import { GRID_INTENSITY } from "../assets/grid_intensities";
 import { CapexType, OpexType, CPU, RAM, SSD, HDD, Components } from "../utility/lifecycle_analysis/system";
@@ -123,7 +123,7 @@ const BreakdownCard: React.FC<BreakdownCardProp> = ({ title, breakdown, borderCo
 };
 
 function DetailedBreakdown() {
-  const { currentCPU, newCPU, comparison, country, intersect, workload, singleComparison, oldPerformanceIndicator, newPerformanceIndicator, capexBreakdown, opexBreakdown } = useBenchmarkContext();
+  const { currentCPU, newCPU, comparison, country, intersect, workload, singleComparison, oldPerformanceIndicator, newPerformanceIndicator, capexBreakdown, opexBreakdown, oldPowerConsumption, newPowerConsumption } = useBenchmarkContext();
 
   const year = intersect ? yearToYearAndMonth(Number(intersect.x.toFixed(1))) : "No Break-Even";
   const intensity = GRID_INTENSITY[country]
@@ -134,18 +134,22 @@ function DetailedBreakdown() {
 
   const titleText = singleComparison ? 'Current' : 'New'
 
-  const ratio = (newPerformanceIndicator / oldPerformanceIndicator).toFixed(3).replace(/\.000$/, '')
-  let oldFormatted = oldPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
-  let newFormatted = newPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
-  newFormatted = addCommaToNumber(Number(newFormatted));
-  oldFormatted = addCommaToNumber(Number(oldFormatted));
+  const perfRatio = (newPerformanceIndicator / oldPerformanceIndicator).toFixed(3).replace(/\.000$/, '');
+  const consumptionRatio = (newPowerConsumption / oldPowerConsumption).toFixed(3).replace(/\.000$/, '');
+  let oldPerfFormatted = oldPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
+  let newPerfFormatted = newPerformanceIndicator.toFixed(1).replace(/\.0$/, '');
+  let oldConsumptionFormatted = oldPowerConsumption.toFixed(3).replace(/\.0$/, '');
+  let newConsumptionFormatted = newPowerConsumption.toFixed(3).replace(/\.0$/, '');
+
+  newPerfFormatted = addCommaToNumber(Number(newPerfFormatted));
+  oldPerfFormatted = addCommaToNumber(Number(oldPerfFormatted));
 
   return (
-    <div className="flex flex-col px-8 py-4 gap-10">
+    <div className="flex flex-col px-2 py-4 gap-10">
       <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-10 gap-4">
+        <div className="grid grid-cols-9 gap-4">
           {/* Left Side - 2x2 Grid */}
-          <ul className="grid grid-cols-2 col-span-6 gap-4 grow">
+          <ul className="grid grid-cols-2 col-span-4 gap-4 grow">
             <ListItem
               label="Break-Even Time"
               value={`${year}`}
@@ -162,28 +166,86 @@ function DetailedBreakdown() {
               borderColor={singleComparison ? "border-hpi-current" : "border-hpi-new"}
             />
             <ListItem
-              label="Total Carbon Footprint until Break-Even"
+              label="Total CO₂ until Break-Even"
               value={`${total}`}
               borderColor="border-hpi-orange"
             />
           </ul>
-          <div className="flex flex-col border-[3px] border-hpi-orange rounded-lg gap-2 px-3 py-2 col-span-4">
-            <p className="font-semibold">Workload Performance indicator ({workload})</p>
+          <div className="flex flex-col border-[3px] border-hpi-orange rounded-lg px-1 py-1 col-span-5">
+            {
+              /*
+               * styling for table can be found in style.css
+               */
+            }
+            <table id="breakdown-table" className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="w-1/5 border-r">{BLANK_SPACE}</th>
+                  <th className="w-2/5 text-left border-r"><p>({workload})</p><p>Performance Indicator</p></th>
+                  <th className="w-2/5 text-left align-bottom">Power Consumption</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t">
+                  <td className="breakdown-table-first-col">Current Hardware</td>
+                  <td className="border-r table-val">{oldPerfFormatted}</td>
+                  <td className="table-val">{oldConsumptionFormatted} kW</td>
+                </tr>
+                {
+                  !singleComparison &&
+                    <>
+                      <tr className="border-t border-b">
+                        <td className="breakdown-table-first-col">New Hardware</td>
+                        <td className="border-r table-val">{newPerfFormatted}</td>
+                        <td className="table-val">{newConsumptionFormatted} kW</td>
+                      </tr>
+                      <tr className="border-t">
+                        <td className="breakdown-table-first-col">Ratio</td>
+                        <td className="border-r table-val">{perfRatio}</td>
+                        <td className="table-val">{consumptionRatio}</td>
+                      </tr>
+                    </>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div className="hidden flex-col border-[3px] border-hpi-orange rounded-lg px-3 py-2 col-span-5">
+            <p className="font-semibold">{workload} Performance indicator:</p>
             <table className="text-lg">
               <tr>
                 <td>Current Hardware:</td>
-                <td>{oldFormatted}</td>
+                <td>{oldPerfFormatted}</td>
               </tr>
               {
                 !singleComparison &&
                   <>
                     <tr>
                       <td>New Hardware:</td>
-                      <td>{newFormatted}</td>
+                      <td>{newPerfFormatted}</td>
                     </tr>
                     <tr>
                       <td>Ratio:</td>
-                      <td>{ratio}</td>
+                      <td>{perfRatio}</td>
+                    </tr>
+                  </>
+              }
+            </table>
+            <p className="font-semibold">Total Power Consumption:</p>
+            <table className="text-lg">
+              <tr>
+                <td>Current Hardware:</td>
+                <td>{oldConsumptionFormatted} kW</td>
+              </tr>
+              {
+                !singleComparison &&
+                  <>
+                    <tr>
+                      <td>New Hardware:</td>
+                      <td>{newConsumptionFormatted} kW</td>
+                    </tr>
+                    <tr>
+                      <td>Ratio:</td>
+                      <td>{consumptionRatio}</td>
                     </tr>
                   </>
               }

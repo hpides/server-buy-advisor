@@ -10,6 +10,8 @@ export interface ComparisonType {
   ratio: number[];
   capexBreakdown: CapexType;
   opexBreakdown: OpexType;
+  oldPowerConsumption: number;
+  newPowerConsumption: number;
 }
 
 // Function to generate a systems comparison
@@ -37,13 +39,16 @@ export function generateSystemsComparison(
   const newSystemCapex = newSystemCapexBreakdown.TOTAL;
 
   // Generate OPEX for the old system
-  let oldSystemOpex = oldSystem.generateAccumProjectedOpexEmissions(
+
+  const oldSystemEmissions = oldSystem.generateAccumProjectedOpexEmissions(
     timeHorizon,
     OLD_SYSTEM,
     country,
     utilization,
     opexCalculation
-  ).projected;
+  );
+
+  let oldSystemOpex = oldSystemEmissions.projected
 
   // Calculate performance factor
   const performanceFactor =
@@ -77,6 +82,8 @@ export function generateSystemsComparison(
     relativeSavings,
     ratio,
     capexBreakdown: newSystemCapexBreakdown,
-    opexBreakdown: newSystemEmissions.opexBreakdown
+    opexBreakdown: newSystemEmissions.opexBreakdown,
+    oldPowerConsumption: oldSystemEmissions.opexBreakdown.TOTAL,
+    newPowerConsumption: newSystemEmissions.opexBreakdown.TOTAL,
   };
 }

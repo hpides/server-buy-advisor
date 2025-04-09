@@ -22,3 +22,48 @@ path.leaflet-interactive:focus {
   --color-hpi-orange: #CE682A;
   --color-hpi-yellow: #F1B16E;
 }
+
+/* Default font size */
+html {
+  font-size: 16px;
+}
+
+/* Extra Small Devices (Mobile Phones) */
+@media (max-width: 1499px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Small Devices (Tablets & Large Phones) */
+@media (min-width: 1500px) and (max-width: 1900px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* Medium Devices (Tablets & Small Laptops) */
+@media (min-width: 1901px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.table-val {
+  text-align: right;
+  padding-right: 1rem;
+}
+
+#breakdown-table td,
+#breakdown-table th,
+#breakdown-table tr {
+  border-color: hsla(6 100% 0% / 0.40);
+  padding: 0 0.2rem;
+}
+
+/* border-r text-left font-semibold; */
+.breakdown-table-first-col {
+  border-right-width: 1px;
+  text-align: left;
+  font-weight: 600
+}

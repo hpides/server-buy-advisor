@@ -1,5 +1,5 @@
 import hpiLogo from './assets/hpi_logo.svg';
-import desLogo from './assets/des_logo.png';
+import desLogo from './assets/des_logo_transparent.png';
 import './style.css'
 import Compare from './partials/Compare';
 import BenchmarkSettings from './partials/BenchmarkSettings';
@@ -36,13 +36,13 @@ function App() {
         </a>
 
         <a href='https://hpi.de/en/research/research-groups/data-engineering-systems/'>
-        <img src={desLogo} className='h-full hover:scale-105 duration-200' />
+          <img src={desLogo} className='h-full hover:scale-105 duration-200' />
         </a>
       </header>
       <main className='w-full px-10 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
         <section className='flex flex-col justify-center py-4'>
           <h1 className='text-3xl text-center'>TCO<sub>2</sub>: Analyzing the Carbon Footprint of Database Server
-Replacements</h1>
+            Replacements</h1>
           <p className='text-cyan-700 underline underline-offset-2 text-lg text-center'>
             <a
               href='https://hpi.de/rabl/news/2024/paper-on-ecological-efficiency-of-database-servers-accepted-at-cidr-2025.html'
@@ -50,12 +50,12 @@ Replacements</h1>
             >Read Paper</a>
           </p>
         </section>
-        <section className='flex gap-10'>
-          <div className='flex-1 flex flex-col gap-8'>
+        <section className='grid grid-cols-1 lg:grid-cols-2 gap-10'>
+          <div className='col-span-1 flex flex-col gap-8'>
             <Sections title='Server Configurations' markup={<Compare />} />
             <Sections title='Benchmark Settings' markup={<BenchmarkSettings />} />
           </div>
-          <div className='flex-1 flex flex-col gap-8'>
+          <div className='col-span-1 flex flex-col gap-8'>
             <Sections title='Break-Even Analysis' markup={<LineChart />} />
             <Sections title='Detailed Breakdown' markup={<DetailedBreakdown />} />
           </div>
@@ -71,6 +71,11 @@ Replacements</h1>
           <p className='hover:underline w-fit'>
             <a href='https://hpi.de/rabl/home.html'>
               Data Engineering Systems Group
+            </a>
+          </p>
+          <p className='hover:underline w-fit'>
+            <a href='https://github.com/hpides'>
+              Github
             </a>
           </p>
           <p className='hover:underline w-fit'>
