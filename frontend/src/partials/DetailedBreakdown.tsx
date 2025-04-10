@@ -180,9 +180,9 @@ function DetailedBreakdown() {
             <table id="breakdown-table" className="w-full border-collapse">
               <thead>
                 <tr>
-                  <th className="w-1/5 border-r">{BLANK_SPACE}</th>
-                  <th className="w-2/5 text-left border-r"><p>({workload})</p><p>Performance Indicator</p></th>
-                  <th className="w-2/5 text-left align-bottom">Power Consumption</th>
+                  <th className="w-1/3 border-r">{BLANK_SPACE}</th>
+                  <th className="w-1/3 text-left border-r"><p>({workload})</p><p>Performance</p><p>Indicator</p></th>
+                  <th className="w-1/3 text-left align-bottom"><p>Power</p><p>Consumption</p></th>
                 </tr>
               </thead>
               <tbody>

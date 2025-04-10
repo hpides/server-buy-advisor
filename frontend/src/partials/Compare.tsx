@@ -156,10 +156,10 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisConfig, otherConfig }) =
         />
       </div>
       <div className="flex gap-4 mt-4">
-        <div className="bg-red-100 h-28">
+        <div className="h-28">
           <img className="h-full w-auto max-w-32 mx-auto" src={cpuLogo} />
         </div>
-        <table className="text-base grow bg-blue-100 border-collapse">
+        <table className="text-base grow border-collapse">
           <tbody>
             {Object.entries(DISPLAY).map(([key, prop]) => {
               const selectedValue = specs_selected[prop] || 0;

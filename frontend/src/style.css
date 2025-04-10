@@ -58,7 +58,7 @@ html {
 #breakdown-table th,
 #breakdown-table tr {
   border-color: hsla(6 100% 0% / 0.40);
-  padding: 0 0.2rem;
+  padding: 0.2rem 0.2rem;
 }
 
 /* border-r text-left font-semibold; */
