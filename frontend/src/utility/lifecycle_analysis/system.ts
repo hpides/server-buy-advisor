@@ -136,11 +136,12 @@ export class System {
     const hddEnergyConsumption =
       (this.hddCapacity > 0 ? 7 : 0) / 1000; // kW
 
-    const totalWatts =
+    let totalWatts =
       cpuEnergyConsumption +
       dramEnergyConsumption +
       ssdEnergyConsumption +
       hddEnergyConsumption;
+
     const totalWattsPerYear = 24 * 7 * 52 * totalWatts; // kWh
     const GCI = (GRID_INTENSITY[country] || 0) / 1000;
 
@@ -150,7 +151,7 @@ export class System {
       SSD: ssdEnergyConsumption,
       HDD: hddEnergyConsumption,
       TOTAL: totalWatts,
-      opexPerYear: totalWattsPerYear * GCI
+      opexPerYear: (totalWattsPerYear * GCI)
     }
 }
 }

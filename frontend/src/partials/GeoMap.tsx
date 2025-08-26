@@ -131,7 +131,7 @@ const GeoMap: React.FC<GeomapProps> = ({ country, setCountry }) => {
 
   return (
     <>
-      <div className="w-full relative h-full flex flex-col overflow-hidden rounded-lg border border-slate-500">
+      <div className="w-full relative h-96 flex flex-col overflow-hidden rounded-lg border border-slate-500">
         <MapContainer
           center={[30, 0]}
           zoom={2}
@@ -171,13 +171,13 @@ const GeoMap: React.FC<GeomapProps> = ({ country, setCountry }) => {
           </div>
         </div>
       </div>
-      <p className="text-sm font-light text-right -mt-2">
+      <p className="text-base font-light text-right">
         Source:{BLANK_SPACE}
         <a
           className="text-cyan-700 hover:underline duration-300"
           href="https://www.electricitymaps.com/"
         >
-          Electricity Maps
+          Electricity Maps - Yearly 2024
         </a>
       </p>
     </>

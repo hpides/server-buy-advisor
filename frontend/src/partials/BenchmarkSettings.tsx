@@ -103,7 +103,7 @@ function BenchmarkSettings() {
 
   useEffect(() => {
     if (scaling === "Utilization") {
-      const ratio = newPerformanceIndicator / oldPerformanceIndicator;
+      const ratio = oldPerformanceIndicator / newPerformanceIndicator;
       const scaledUtilization = clamp( currentServer.utilization as number * ratio, 0, 100);
       updateServer(newServer, { utilization: scaledUtilization });
     }
@@ -165,7 +165,7 @@ return (
         />
       </div>
     </div>
-    <div className={`${advancedSettings ? 'h-96' : 'h-96'} duration-300 ease-in-out overflow-hidden relative`}>
+    <div className={`duration-300 ease-in-out overflow-hidden relative`}>
       <GeoMap country={country} setCountry={setCountry} />
     </div>
   </div>

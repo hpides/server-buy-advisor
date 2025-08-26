@@ -37,6 +37,9 @@ export function generateSystemsComparison(
   );
   let newSystemOpex = newSystemEmissions.projected
 
+  console.log(newSystemEmissions);
+
+
   const newSystemCapexBreakdown = newSystem.calculateCapexEmissions();
   const newSystemCapex = newSystemCapexBreakdown.TOTAL;
 
@@ -60,8 +63,9 @@ export function generateSystemsComparison(
     // Adjust old system OPEX based on performance factor
     oldSystemOpex = oldSystemOpex.map((opex) => opex / performanceFactor);
   } else {
+    // utilization scaling
     // Adjust new system OPEX based on performance factor
-    newSystemOpex = newSystemOpex.map((opex) => opex * performanceFactor);
+    // newSystemOpex = newSystemOpex.map((opex) => opex * performanceFactor);
   }
 
   // Add CAPEX to OPEX for the new system at each time step

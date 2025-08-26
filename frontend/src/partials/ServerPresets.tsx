@@ -7,9 +7,10 @@ type ServerPresetsComponentProps = {
   updateComponent: (update: Partial<ServerType>, preset: string) => void;
   presetValue: keyof ServerPresets | typeof CUSTOM;
   setAdvancedOptions: (value: null | 'Mirror' | 'Scale') => void;
+  setAdvancedSettings: (value: boolean) => void;
 };
 
-const ServerPresetsComponent = ({ presetValue, updateComponent, setAdvancedOptions }: ServerPresetsComponentProps) => {
+const ServerPresetsComponent = ({ presetValue, updateComponent, setAdvancedOptions, setAdvancedSettings }: ServerPresetsComponentProps) => {
   const [showPresetMenu, setShowPresetMenu] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -35,6 +36,7 @@ const ServerPresetsComponent = ({ presetValue, updateComponent, setAdvancedOptio
 
   const handleSelectPreset = (key: keyof ServerPresets) => {
     setAdvancedOptions(null);
+    setAdvancedSettings(true);
     const preset = SERVER_PRESETS[key];
 
     const config: Partial<ServerType> = {

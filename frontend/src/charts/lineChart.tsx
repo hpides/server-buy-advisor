@@ -71,7 +71,7 @@ export function lineIntersect(
 
 const LineChart: React.FC<{}> = memo(function LineChart() {
 
-  const { workload, country, utilization, comparison, intersect, oldSystemOpex, newSystemOpex, breakEven, singleComparison } = useBenchmarkContext();
+  const { workload, country, currentServer, newServer, comparison, intersect, oldSystemOpex, newSystemOpex, breakEven, singleComparison } = useBenchmarkContext();
 
   // @ts-ignore
   const [chart, setChart] = useState<Chart | null>(null);
@@ -105,6 +105,9 @@ const LineChart: React.FC<{}> = memo(function LineChart() {
       order: 2
     })
   }
+
+  const currentUtilization = currentServer.utilization.toFixed(0);
+  const newUtilization = newServer.utilization.toFixed(0);
 
   const L = oldSystemOpex.length - 1;
   const isOneDecimalPlace = oldSystemOpex[L] > 1000 && newSystemOpex[L] > 1000;
@@ -325,7 +328,12 @@ const LineChart: React.FC<{}> = memo(function LineChart() {
         <canvas ref={canvas} width={400} height={500}></canvas>
       </figure>
       <p className="text-center text-sm w-full mx-auto font-serif text-slate-700">
-        Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for a {workload} workload, {utilization}% utilization with energy sourced from <span className="capitalize">{country}</span>.
+        {singleComparison ? 
+        `Projected CO2 accumulated emissions of current (blue) hardware for a ${workload} workload, operated at ${currentUtilization}% utilization, with electricity from ${country}.`
+          :
+        `Projected CO2 accumulated emissions of current (blue) and new (orange) hardware for a ${workload} workload, operated at ${currentUtilization}% and ${newUtilization}% utilization respectively, with electricity from ${country}.`
+
+        }
       </p>
     </div>
   );

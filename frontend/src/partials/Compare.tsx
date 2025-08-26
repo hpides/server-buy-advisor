@@ -52,7 +52,6 @@ const applyScaledUpdates = (
 
   const ratio = thisPerformanceIndicator / otherPerformanceIndicator;
 
-
   const scaleKeys: (keyof Pick<ServerType, 'ssd' | 'ram' | 'hdd'>)[] = ['ssd', 'ram', 'hdd'];
   const scaledUpdates: Partial<ServerType> = {};
 
@@ -84,7 +83,7 @@ interface DropdownProps {
 
 const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, showAdvanced, advancedOptions}) => {
 
-  const { singleComparison, updateServer, setSingleComparison, setAdvancedOptions, getPerformanceIndicator} = useBenchmarkContext();
+  const { singleComparison, workload, updateServer, setSingleComparison, setAdvancedOptions, setAdvancedSettings, getPerformanceIndicator} = useBenchmarkContext();
 
   const specs_selected :CPUEntry = CPU_DATA[thisServer.cpu];
   const specs_compareTo :CPUEntry = CPU_DATA[otherServer.cpu];
@@ -121,9 +120,9 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, sho
     if (onlyCPU) {
       updates = {
         cpu: updates.cpu,
-        ram: thisServer.ram,
-        ssd: thisServer.ssd,
-        hdd: thisServer.hdd,
+        ram: otherServer.ram,
+        ssd: otherServer.ssd,
+        hdd: otherServer.hdd,
       }
     }
 
@@ -141,8 +140,8 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, sho
     if (advancedOptions === 'Scale' && onlyCPU) {
       const scaledUpdates = applyScaledUpdates(
         updates,
-        getPerformanceIndicator(otherServer.cpu),
         getPerformanceIndicator(updates.cpu || thisServer.cpu),
+        getPerformanceIndicator(otherServer.cpu),
       );
       updateServer(thisServer, scaledUpdates);
       return;
@@ -152,8 +151,8 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, sho
     if (advancedOptions === 'Scale' && !onlyCPU) {
       const scaledUpdates = applyScaledUpdates(
         updates,
-        getPerformanceIndicator(updates.cpu || thisServer.cpu),
         getPerformanceIndicator(otherServer.cpu),
+        getPerformanceIndicator(updates.cpu || thisServer.cpu),
       );
       updateServer(otherServer, scaledUpdates);
       return;
@@ -181,7 +180,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, sho
       return;
     }
 
-  }, [advancedOptions])
+  }, [advancedOptions, workload])
 
   return (
     <div className="col-span-1 flex flex-col gap-2 font-light relative">
@@ -202,7 +201,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, sho
             className="h-5" />
         </button>
       </div>
-      <ServerPresetsComponent {...{ presetValue, updateComponent, setAdvancedOptions }} />
+      <ServerPresetsComponent {...{ presetValue, updateComponent, setAdvancedOptions, setAdvancedSettings }} />
       <div className={`${showDropdown ? 'opacity-100' : 'opacity-0 pointer-events-none'} relative duration-150`}>
         <select
           className="block appearance-none text-base w-full bg-gray-100 border-2 border-gray-400 py-1 px-2 pr-8 rounded focus:outline-none focus:bg-white focus:border-gray-500"
@@ -249,11 +248,12 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, sho
         <table className="text-base grow border-collapse">
           <tbody>
             {Object.entries(DISPLAY).map(([key, prop]) => {
-              const selectedValue = specs_selected[prop] || 0;
+              let selectedValue = specs_selected[prop] || 0;
               const compareValue = (specs_compareTo?.[prop] ?? selectedValue) || 0;
+              if (key == 'TDP') selectedValue = selectedValue + ' W';
               return (
                 <tr key={key}>
-                  <td className="w-0 pr-4 align-top text-right">{key}:</td>
+                  <td className="w-0 pr-4 align-top text-left">{key}:</td>
                   <td className="flex items-center gap-1">
                     <p>{selectedValue}</p>
                     {selectedValue > compareValue && !singleComparison && (

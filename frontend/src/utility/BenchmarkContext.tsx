@@ -145,8 +145,6 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
     CPU_DATA[newCPU].TDP// cpuTdp in Watts
   );
 
-  console.log(currentServer.utilization, newServer.utilization);
-
   const comparison :ComparisonType = generateSystemsComparison(
     (singleComparison ? oldSystem : newSystem), // new system object
     oldSystem, // old system object
@@ -187,6 +185,7 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
     return intersect;
   }
 
+  console.log(comparison)
   const intersect = calculateIntersect(singleComparison, comparison.oldSystemOpex, comparison.newSystemOpex)
   const breakEven = Math.ceil(intersect ? intersect.x + 1 : 3);
 
