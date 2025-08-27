@@ -248,14 +248,16 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, sho
         <table className="text-base grow border-collapse">
           <tbody>
             {Object.entries(DISPLAY).map(([key, prop]) => {
-              let selectedValue = specs_selected[prop] || 0;
+              const selectedValue = specs_selected[prop] || 0;
               const compareValue = (specs_compareTo?.[prop] ?? selectedValue) || 0;
-              if (key == 'TDP') selectedValue = selectedValue + ' W';
+
+              const selectedFormatted = selectedValue + (key == 'TDP' ? ' W' : '');
+
               return (
                 <tr key={key}>
                   <td className="w-0 pr-4 align-top text-left">{key}:</td>
                   <td className="flex items-center gap-1">
-                    <p>{selectedValue}</p>
+                    <p>{selectedFormatted}</p>
                     {selectedValue > compareValue && !singleComparison && (
                       <img src={UP_ARROW} className="h-full" alt="up" />
                     )}

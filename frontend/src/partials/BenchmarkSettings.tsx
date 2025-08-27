@@ -107,7 +107,16 @@ function BenchmarkSettings() {
       const scaledUtilization = clamp( currentServer.utilization as number * ratio, 0, 100);
       updateServer(newServer, { utilization: scaledUtilization });
     }
-  }, [scaling])
+
+    if (scaling === "Emissions") {
+      updateServer(newServer, { utilization: currentServer.utilization });
+    }
+
+    if (scaling === "None") {
+      updateServer(newServer, { utilization: currentServer.utilization });
+    }
+
+  }, [scaling, currentServer, newServer])
 
 return (
   <div className="flex z-30 flex-col text-medium font-medium flex-wrap px-4 py-2 gap-4">
