@@ -37,8 +37,6 @@ export function generateSystemsComparison(
   );
   let newSystemOpex = newSystemEmissions.projected
 
-  console.log(newSystemEmissions);
-
 
   const newSystemCapexBreakdown = newSystem.calculateCapexEmissions();
   const newSystemCapex = newSystemCapexBreakdown.TOTAL;

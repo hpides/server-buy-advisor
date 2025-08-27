@@ -29,7 +29,7 @@ Chart.register(
   annotationPlugin,
   BubbleController
 );
-import { useBenchmarkContext } from "../utility/BenchmarkContext";
+import { NO_BREAK_EVEN_TIME_HORIZON, useBenchmarkContext } from "../utility/BenchmarkContext";
 
 const BREAK_EVEN_TEXT = "Break-Even point";
 
@@ -141,7 +141,7 @@ const LineChart: React.FC<{}> = memo(function LineChart() {
     datasets: datasets,
   };
 
-  const labelXValue = intersect ? intersect.x : 1;
+  const labelXValue = intersect ? intersect.x : (NO_BREAK_EVEN_TIME_HORIZON - 1) / 2;
   const labelYValue = intersect ? intersect.y : (0.8 * newSystemOpex[2]);
 
   // if there is no intersect, we want 'No Break-Even' to be in the center

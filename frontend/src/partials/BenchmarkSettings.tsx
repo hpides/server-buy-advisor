@@ -90,7 +90,6 @@ function BenchmarkSettings() {
 
     if (scaling == 'Utilization') {
       const isNew = server === NEW_LABEL;
-      console.log(isNew)
       const base = isNew ? oldPerformanceIndicator : newPerformanceIndicator;
       const target = isNew ? newPerformanceIndicator : oldPerformanceIndicator;
 
@@ -101,11 +100,27 @@ function BenchmarkSettings() {
     }
   }
 
+  // updating new utilization in basic mode
+  useEffect(() => {
+    if (advancedSettings) return;
+
+    if (scaling === "Emissions") {
+      updateServer(newServer, { utilization: currentServer.utilization });
+    }
+
+    if (scaling === "None") {
+      updateServer(newServer, { utilization: currentServer.utilization });
+    }
+  }, [currentServer.utilization])
+
   useEffect(() => {
     if (scaling === "Utilization") {
       const ratio = oldPerformanceIndicator / newPerformanceIndicator;
       const scaledUtilization = clamp( currentServer.utilization as number * ratio, 0, 100);
-      updateServer(newServer, { utilization: scaledUtilization });
+      if (newServer.utilization !== scaledUtilization) {
+        updateServer(newServer, { utilization: scaledUtilization });
+      }
+      return;
     }
   }, [scaling, currentServer, newServer])
 

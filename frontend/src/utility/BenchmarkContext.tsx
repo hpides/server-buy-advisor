@@ -9,6 +9,7 @@ import CPU_DATA from '../assets/data';
 import { lineIntersect } from '../charts/lineChart';
 import { RAM_CAPACITIES, SSD_CAPACITIES } from '../partials/Compare';
 
+export const NO_BREAK_EVEN_TIME_HORIZON = 3
 export const FIRST_COUNTRY: Country = "Germany"
 
 export const NEW_LABEL = "New Hardware";
@@ -185,9 +186,8 @@ export const BenchmarkProvider: React.FC<BenchmarkProviderProps> = ({ children }
     return intersect;
   }
 
-  console.log(comparison)
   const intersect = calculateIntersect(singleComparison, comparison.oldSystemOpex, comparison.newSystemOpex)
-  const breakEven = Math.ceil(intersect ? intersect.x + 1 : 3);
+  const breakEven = Math.ceil(intersect ? intersect.x + 1 : NO_BREAK_EVEN_TIME_HORIZON);
 
   const oldSystemOpex = comparison.oldSystemOpex.slice(0, breakEven);
   const newSystemOpex = comparison.newSystemOpex.slice(0, breakEven);
