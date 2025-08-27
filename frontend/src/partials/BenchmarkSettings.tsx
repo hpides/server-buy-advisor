@@ -107,7 +107,11 @@ function BenchmarkSettings() {
       const scaledUtilization = clamp( currentServer.utilization as number * ratio, 0, 100);
       updateServer(newServer, { utilization: scaledUtilization });
     }
+  }, [scaling, currentServer, newServer])
 
+  // Only want the new slider to update of the scaling is clicked, not when the current
+  // slider is moved around, unlike the above useEffect
+  useEffect(() => {
     if (scaling === "Emissions") {
       updateServer(newServer, { utilization: currentServer.utilization });
     }
@@ -115,8 +119,7 @@ function BenchmarkSettings() {
     if (scaling === "None") {
       updateServer(newServer, { utilization: currentServer.utilization });
     }
-
-  }, [scaling, currentServer, newServer])
+  }, [scaling])
 
 return (
   <div className="flex z-30 flex-col text-medium font-medium flex-wrap px-4 py-2 gap-4">
