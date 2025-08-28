@@ -190,11 +190,11 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, sho
         <p className="text-6xl text-slate-500 group-hover:text-slate-400 duration-150">+</p>
       </div>
       <div className="flex justify-between">
-        <p className="text-medium font-medium">{label}</p>
+        <p className="text-medium text-center md:text-left w-full font-medium">{label}</p>
         <button
           hidden={!canToggle}
           onClick={toggleShow}
-          className="w-fit px-2 cursor-pointer hover:text-red-600 duration-200 scale-110 hover:scale-125"
+          className="w-fit px-2 absolute right-0 cursor-pointer hover:text-red-600 duration-200 scale-110 hover:scale-125"
         >
           <img 
             src={close} 
@@ -204,7 +204,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, thisServer, otherServer, sho
       <ServerPresetsComponent {...{ presetValue, updateComponent, setAdvancedOptions, setAdvancedSettings }} />
       <div className={`${showDropdown ? 'opacity-100' : 'opacity-0 pointer-events-none'} relative duration-150`}>
         <select
-          className="block appearance-none text-base w-full bg-gray-100 border-2 border-gray-400 py-1 px-2 pr-8 rounded focus:outline-none focus:bg-white focus:border-gray-500"
+          className="block appearance-none w-full bg-gray-100 border-2 border-gray-400 py-1 px-2 pr-8 rounded focus:outline-none focus:bg-white focus:border-gray-500"
           value={thisServer.cpu}
           onChange={(e) => updateComponent({cpu: (e.target.value)})}
         >
@@ -279,7 +279,7 @@ function Compare() {
 
   return (
     <>
-      <div className="grid grid-cols-2 px-4 py-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 px-4 py-2 gap-5">
         <Dropdown
           label={OLD_LABEL}
           showAdvanced={advancedSettings}

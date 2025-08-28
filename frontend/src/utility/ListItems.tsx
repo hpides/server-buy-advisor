@@ -7,7 +7,7 @@ interface ListItemProps {
 
 export const ListItem: React.FC<ListItemProps> = ({ label, value, borderColor }) => {
   return (
-    <li style={{borderColor: borderColor }} className={`border-2 rounded-lg flex flex-col items-start justify-start px-3 py-2 duration-200 ease-in-out`}>
+    <li style={{borderColor: borderColor }} className={`grow border-2 rounded-lg flex flex-col items-start justify-start px-3 py-2 duration-200 ease-in-out`}>
       <p className="text-base font-semibold flex flex-col text-wrap">
         {label}
       </p>

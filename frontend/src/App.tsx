@@ -32,7 +32,7 @@ function App() {
 
   return (
     <>
-      <header className='h-28 2xl:h-32 pl-12 p-4 flex gap-10'>
+      <header className='h-20 md:h-28 2xl:h-32 pl-12 p-4 flex gap-10'>
         <a href='https://hpi.de/'>
           <img src={hpiLogo} className='h-full hover:scale-105 duration-200' />
         </a>
@@ -41,7 +41,7 @@ function App() {
           <img src={desLogo} className='h-full hover:scale-105 duration-200' />
         </a>
       </header>
-      <main className='w-full px-10 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
+      <main className='w-full px-3 sm:px-10 max-w-[2000px] mx-auto relative flex flex-col gap-8'>
         <section className='flex flex-col justify-center py-4 gap-2'>
           <h1 className='text-3xl text-center font-medium'>TCO<sub>2</sub>: Total CO<sub>2</sub> Cost of Ownership</h1>
           <h2 className='text-lg text-center font-light text-slate-600'>Analyzing the Carbon Footprint of Database Server Replacements</h2>
@@ -60,7 +60,7 @@ function App() {
             </p>
           </div>
         </section>
-        <section className='grid grid-cols-1 lg:grid-cols-2 gap-10'>
+        <section className='grid grid-cols-1 xl:grid-cols-2 gap-10'>
           <div className='col-span-1 flex flex-col gap-8'>
             <Sections title='Server Configurations' markup={<Compare />} />
             <Sections title='Benchmark Settings' markup={<BenchmarkSettings />} />

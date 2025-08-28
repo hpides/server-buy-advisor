@@ -138,7 +138,7 @@ function BenchmarkSettings() {
 
 return (
   <div className="flex z-30 flex-col text-medium font-medium flex-wrap px-4 py-2 gap-4">
-    <div className="grid grid-cols-7 space-x-4">
+    <div className="flex flex-col gap-4 md:grid grid-cols-7 space-x-4">
       <div className="flex flex-col col-span-5 gap-5">
         <ToggleSelection<WorkloadType>
           label="Workload:"
@@ -177,7 +177,7 @@ return (
               />
           }
       </div>
-      <div className="flex font-normal gap-2 flex-col col-span-2">
+      <div className="flex font-normal gap-2 flex-col sm:flex-row md:flex-col col-span-2">
         <ListItemWithSearch
           label="Location"
           value={country}
