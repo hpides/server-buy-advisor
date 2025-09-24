@@ -27,6 +27,7 @@ path.leaflet-interactive:focus {
 /* Default font size */
 html {
   font-size: 16px;
+  scroll-behavior: smooth !important;
 }
 
 /* Extra Small Devices (Mobile Phones) */
@@ -67,4 +68,28 @@ html {
   border-right-width: 1px;
   text-align: left;
   font-weight: 600
+}
+
+#LearnMore {
+  font-size: large;
+  line-height: 2.08rem;
+}
+
+#LearnMore > div {
+  margin: 0 2rem 3rem 2rem;
+}
+
+#LearnMore > div > ul {
+  list-style-type: circle;
+  padding-left: 3rem;
+}
+
+#LearnMore > div > ul > li > span {
+  font-weight: 600;
+}
+
+#LearnMore > div > h3 {
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.4rem;
 }

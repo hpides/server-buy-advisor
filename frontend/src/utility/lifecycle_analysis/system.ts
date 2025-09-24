@@ -136,6 +136,9 @@ export class System {
     const hddEnergyConsumption =
       (this.hddCapacity > 0 ? 7 : 0) / 1000; // kW
 
+    console.log(this.cpuTdp, normalizedPowerUsage);
+    console.log(cpuEnergyConsumption, dramEnergyConsumption)
+
     let totalWatts =
       cpuEnergyConsumption +
       dramEnergyConsumption +

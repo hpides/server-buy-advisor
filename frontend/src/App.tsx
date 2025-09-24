@@ -5,6 +5,7 @@ import Compare from './partials/Compare';
 import BenchmarkSettings from './partials/BenchmarkSettings';
 import LineChart from './charts/lineChart';
 import DetailedBreakdown from './partials/DetailedBreakdown';
+import LearnMore from './partials/LearnMore';
 
 type SectionsProps = {
   title: string;
@@ -58,6 +59,11 @@ function App() {
                 target='_blank'
               >Server Lifecycle Paper</a>
             </p>
+            <p className='text-cyan-700 underline underline-offset-5 text-lg text-center'>
+              <a
+                href='#FurtherDetails'
+              >Further Details</a>
+            </p>
           </div>
         </section>
         <section className='grid grid-cols-1 xl:grid-cols-2 gap-10'>
@@ -70,11 +76,13 @@ function App() {
             <Sections title='Detailed Breakdown' markup={<DetailedBreakdown />} />
           </div>
         </section>
+        <LearnMore />
       </main>
       <section className='flex flex-col text-slate-600 w-full px-10 max-w-[2000px] mx-auto text-left mt-14'>
         <p>1. SPEC CPU Benchmark - <a className='underline hover:opacity-65' href='https://www.spec.org/cpu2017/'>spec.org/cpu2017</a></p>
         <p>2. TPC-H - <a className='underline hover:opacity-65' href='https://www.tpc.org/tpch/'>tpc.org/tpch</a></p>
         <p>3. Hyrise - Hyrise is a research in-memory database. <a className='underline hover:opacity-65' href='https://github.com/hyrise/hyrise'>github.com/hyrise/hyrise</a></p>
+        <p>4. <a className='underline hover:opacity-65' href='https://ugupta.com/files/Gupta_ISCA2022_ACT.pdf'>ACT: Designing Sustainable Computer Systems With An Architectural Carbon Modeling Tool</a></p>
       </section>
       <footer className='w-full flex flex-col py-10 items-center gap-3 bg-[#CE682A] text-white mt-6 bottom-0'>
         <div className='w-full md:w-3/4 px-2 lg:w-3/5 max-w-[2000px] text-lg flex flex-col gap-2'>

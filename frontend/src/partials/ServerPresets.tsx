@@ -52,13 +52,13 @@ const ServerPresetsComponent = ({ presetValue, updateComponent, setAdvancedOptio
   return (
     <div className="relative">
       {/* Trigger */}
-      <div
+      <button
         onClick={() => setShowPresetMenu(!showPresetMenu)}
         draggable="false"
-        className="cursor-pointer -mt-2"
+        className="cursor-pointer -mt-2 border-2 px-2 py-0.5 rounded-sm bg-gray-100 border-gray-400"
       >
         Server Configuration: {presetValue} {showPresetMenu ? '▼' : '▶'}
-      </div>
+      </button>
 
       {/* PresetMenu */}
       {showPresetMenu && (
