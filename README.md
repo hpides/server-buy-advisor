@@ -3,6 +3,7 @@ A tool for quantifying the total CO2 cost of ownership of database servers.
 
 ## Paper
 [A Case for Ecological Efficiency in Database Server Lifecycles](https://hpi.de/oldsite/fileadmin/user_upload/fachgebiete/rabl/publications/2025/serverlifecycles_cidr2025.pdf)
+
 [TCO2: Analyzing the Carbon Footprint of Database Server Replacements](https://hpi.de/oldsite/fileadmin/user_upload/fachgebiete/rabl/publications/2025/p2059-rabl.pdf)
 
 ## Web Interface
