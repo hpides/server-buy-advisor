@@ -64,6 +64,12 @@ function App() {
                 href='#FurtherDetails'
               >Further Details</a>
             </p>
+            <p className='text-cyan-700 underline underline-offset-5 text-lg text-center'>
+              <a
+                href='https://hpides.github.io/gpu-lifecycle-analysis/'
+                target='_blank'
+              >GPU Carbon Footprint Tool</a>
+            </p>
           </div>
         </section>
         <section className='grid grid-cols-1 xl:grid-cols-2 gap-10'>
