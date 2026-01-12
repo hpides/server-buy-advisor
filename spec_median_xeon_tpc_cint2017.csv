@@ -1,0 +1,69 @@
+,Processor,median_spec_int_perf
+68,Intel Core i7-4650U,46.5
+69,Intel Xeon 5160,10.475
+70,Intel Xeon 7140M,11.2
+71,Intel Xeon E5-2630,21.65
+72,Intel Xeon E5-2630 v2,25.2
+73,Intel Xeon E5-2630 v3,29.3
+74,Intel Xeon E5-2630 v4,31.65
+75,Intel Xeon E5-2630L,19.4
+76,Intel Xeon E5-2630L v2,22.95
+77,Intel Xeon E5-2630L v3,26.5
+78,Intel Xeon E5-2630L v4,29.45
+79,Intel Xeon E5-2670,26.2
+80,Intel Xeon E5-2670 v2,28.45
+81,Intel Xeon E5-2670 v3,29.424999999999997
+82,Intel Xeon E5-2680,27.65
+83,Intel Xeon E5-2680 v2,30.9
+84,Intel Xeon E5-2680 v3,31.125
+85,Intel Xeon E5-2680 v4,34.15
+86,Intel Xeon E5-2690,29.6
+87,Intel Xeon E5-2690 v2,30.95
+88,Intel Xeon E5-2690 v3,32.6
+89,Intel Xeon E5-2690 v4,35.75
+90,Intel Xeon E5-2699 v3,33.1
+91,Intel Xeon E5-2699 v4,36.7
+92,Intel Xeon E5-2699A v4,37.525
+93,Intel Xeon E5-2699R v4,37.474999999999994
+94,Intel Xeon E5-4650,13.475
+95,Intel Xeon E5-4650 v2,12.7
+96,Intel Xeon E5-4650 v3,13.15
+97,Intel Xeon E5-4650 v4,14.7
+98,Intel Xeon E5-4650L,12.5125
+99,Intel Xeon E5320,11.55
+100,Intel Xeon E5345,8.600000000000001
+101,Intel Xeon E5420,11.4
+102,Intel Xeon E5520,13.85
+103,Intel Xeon E7-4890 v2,14.975
+104,Intel Xeon E7-8870,4.925
+105,Intel Xeon E7-8870 v3,14.1
+106,Intel Xeon E7-8870 v4,16.05
+107,Intel Xeon E7-8890 v3,16.0125
+108,Intel Xeon E7-8890 v4,17.525
+109,Intel Xeon E7-8891 v2,15.9375
+110,Intel Xeon E7-8891 v3,16.487499999999997
+111,Intel Xeon E7-8891 v4,18.225
+112,Intel Xeon Gold 6148,40.349999999999994
+113,Intel Xeon Gold 6148F,33.0875
+114,Intel Xeon Gold 6150,39.7
+115,Intel Xeon Gold 6258R,49.05
+116,Intel Xeon Gold 6354,55.8
+117,Intel Xeon Platinum 8180,42.8625
+118,Intel Xeon Platinum 8180M,42.1
+119,Intel Xeon Silver 4110,31.815
+120,Intel Xeon Silver 4114,32.445
+121,Intel Xeon Silver 4114T,32.355000000000004
+122,Intel Xeon Silver 4210,36.292500000000004
+123,Intel Xeon Silver 4210R,37.7775
+124,Intel Xeon Silver 4410T,65.025
+125,Intel Xeon Silver 4410Y,64.8
+126,Intel Xeon X5355,10.35
+127,Intel Xeon X5365,12.15
+128,Intel Xeon X5460,13.8
+129,Intel Xeon X5570,18.05
+130,Intel Xeon X5650,18.45
+131,Intel Xeon X5680,20.95
+132,Intel Xeon X5690,23.3
+133,Intel Xeon X7350,6.125
+134,Intel Xeon X7460,6.275
+135,Intel Xeon X7560,8.15
