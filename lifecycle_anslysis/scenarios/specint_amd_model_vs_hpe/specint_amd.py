@@ -6,7 +6,7 @@ from lifecycle_anslysis.plotting import create_projections_plot
 from lifecycle_anslysis.system import System
 
 # assumptions
-time_horizon = 10
+time_horizon = 17
 
 ##############################
 # Systems
@@ -22,8 +22,8 @@ hdd_capacity = 0
 old_system = System(
     # cm^2; # Die size from: https://www.techpowerup.com/cpu-specs/epyc-7502p.c2260
     die_size=74 / 100,
-    # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
-    performance_indicator=285.44,
+    # according to https://www.spec.org/cpu2017/results/res2020q2/cpu2017-20200413-21933.pdf
+    performance_indicator=217,
     cpu_tdp=180,
     lifetime=lifetime,
     dram_capacity=dram_capacity,
@@ -34,8 +34,8 @@ old_system = System(
 # AMD 9334, 2.7 GHz
 new_system = System(
     die_size=4 * 72 / 100,  # cm^2,
-    # according to https://www.spec.org/cpu2006/results/ and https://www.spec.org/cpu2017/results/
-    performance_indicator=470.4,
+    # according to https://www.spec.org/cpu2017/results/res2023q1/cpu2017-20230130-33834.pdf
+    performance_indicator=363,
     cpu_tdp=210,
     lifetime=lifetime,
     dram_capacity=dram_capacity,
