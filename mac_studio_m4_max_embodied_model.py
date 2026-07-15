@@ -33,15 +33,21 @@ Sources:
 - https://www.apple.com/mac-studio/specs/
 - https://en.wikipedia.org/wiki/Apple_silicon
 - https://en.wikipedia.org/wiki/Transistor_count
+- https://en.wikipedia.org/wiki/Apple_M4
 """
 
 from lifecycle_anslysis.system import System
+from lifecycle_anslysis.constants import GERMANY
 
 
 # Apple Mac Studio (M4 Max) technical spec inputs
 DRAM_GB = 64
 SSD_GB = 1024
 HDD_GB = 0
+UTILIZATION = 60
+TIME_HORIZON_YEARS = 5
+COUNTRY = GERMANY
+CPU_TDP_WATTS = 62
 
 # Proxy package-area estimate for M4 Max.
 # This uses the density-preserving extrapolation described in the module docstring.
@@ -53,14 +59,20 @@ def main() -> None:
     system = System(
         die_size=PACKAGE_AREA_CM2,
         performance_indicator=1.0,
-        lifetime=1,
+        lifetime=TIME_HORIZON_YEARS,
         dram_capacity=DRAM_GB,
         ssd_capacity=SSD_GB,
         hdd_capacity=HDD_GB,
-        cpu_tdp=62,
+        cpu_tdp=CPU_TDP_WATTS,
     )
 
-    print(f"{system.calculate_capex_emissions():.2f} kg CO2e")
+    embodied = system.calculate_capex_emissions()
+    operational = system.calculate_opex_emissions(UTILIZATION, COUNTRY) * TIME_HORIZON_YEARS
+    total = embodied + operational
+
+    print(f"Embodied carbon: {embodied:.2f} kg CO2e")
+    print(f"Operational carbon ({TIME_HORIZON_YEARS}y, {UTILIZATION}%, Germany): {operational:.2f} kg CO2e")
+    print(f"Total carbon ({TIME_HORIZON_YEARS}y): {total:.2f} kg CO2e")
 
 
 if __name__ == "__main__":
