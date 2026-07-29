@@ -11,7 +11,7 @@ Inputs used:
 - CPU/package area:
   - Apple M4 die size = 169.35 mm^2 from Wikipedia's Apple silicon page
     (comparison table, M4 row; line 1085 in the page dump used here)
-    actual source: https://x.com/Kurnalsalts/status/2027777240772317622
+    exact page: https://en.wikipedia.org/wiki/Apple_silicon
   - Apple M4 transistor count = 28 billion from the same source
   - Apple M3 Max transistor count = 92 billion from Wikipedia's Transistor count page
   - We do not have a public M4 Max die/package area in the repo or from Apple.
@@ -45,14 +45,15 @@ DRAM_GB = 64
 SSD_GB = 1024
 HDD_GB = 0
 UTILIZATION = 60
-TIME_HORIZON_YEARS = 5
+TIME_HORIZON_YEARS = 6
 COUNTRY = GERMANY
 CPU_TDP_WATTS = 62
 
 # Proxy package-area estimate for M4 Max.
 # This uses the density-preserving extrapolation described in the module docstring.
 # The repo's model expects cm^2, so we convert mm^2 to cm^2 by dividing by 100.
-PACKAGE_AREA_CM2 = 556.44 / 100.0
+# 169.35 * 92 / 28 = 556.4357142857142 mm^2, which is 5.564357142857142 cm^2.
+PACKAGE_AREA_CM2 = 556.4357142857142 / 100.0
 
 
 def main() -> None:
