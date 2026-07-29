@@ -39,14 +39,14 @@ from lifecycle_anslysis.system import System
 
 # Raspberry Pi 5 (16 GB variant) technical spec inputs
 DRAM_GB = 16
-SSD_GB = 0
+SSD_GB = 500
 HDD_GB = 0
 
 # Memory/config source:
 # https://www.raspberrypi.com/news/16gb-raspberry-pi-5-on-sale-now-at-120/
 
 UTILIZATION = 60
-TIME_HORIZON_YEARS = 5
+TIME_HORIZON_YEARS = 6
 COUNTRY = GERMANY
 
 # Raspberry Pi 5 bare-board active current is documented as 800 mA.
