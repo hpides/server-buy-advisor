@@ -95,7 +95,7 @@ def estimate(
 
 
 def fmt(value: float) -> str:
-    return f"{round(value):.0f}"
+    return f"{round(value):,}".replace(",", " ")
 
 
 def main() -> None:
