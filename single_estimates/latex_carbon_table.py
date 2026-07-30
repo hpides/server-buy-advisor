@@ -41,6 +41,14 @@ from single_estimates.raspberry_pi_5_carbon_model import (
     SSD_GB as PI_SSD_GB,
     UTILIZATION as PI_UTILIZATION,
 )
+from single_estimates.zen_5_server_carbon_model import (
+    CPU_TDP_WATTS as ZEN5_CPU_TDP_WATTS,
+    DRAM_GB as ZEN5_DRAM_GB,
+    HDD_GB as ZEN5_HDD_GB,
+    PACKAGE_AREA_CM2 as ZEN5_PACKAGE_AREA_CM2,
+    SSD_GB as ZEN5_SSD_GB,
+    UTILIZATION as ZEN5_UTILIZATION,
+)
 
 
 TIME_HORIZON_YEARS = 6
@@ -87,7 +95,17 @@ def main() -> None:
                 utilization=AWS_UTILIZATION,
             ),
         ),
-        ("Server", None, None, None, None),
+        (
+            "Zen 5",
+            *estimate(
+                da_cm2=ZEN5_PACKAGE_AREA_CM2,
+                dram_gb=ZEN5_DRAM_GB,
+                ssd_gb=ZEN5_SSD_GB,
+                hdd_gb=ZEN5_HDD_GB,
+                cpu_tdp_watts=ZEN5_CPU_TDP_WATTS,
+                utilization=ZEN5_UTILIZATION,
+            ),
+        ),
         (
             "M4 Max",
             *estimate(
