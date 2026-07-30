@@ -41,6 +41,14 @@ from single_estimates.mac_studio_m1_max_carbon_model import (
     SSD_GB as M1_SSD_GB,
     UTILIZATION as M1_UTILIZATION,
 )
+from single_estimates.lenovo_thinkstation_p620_carbon_model import (
+    CPU_TDP_WATTS as LENOVO_CPU_TDP_WATTS,
+    DIE_AREA_CM2 as LENOVO_DIE_AREA_CM2,
+    DRAM_GB as LENOVO_DRAM_GB,
+    HDD_GB as LENOVO_HDD_GB,
+    SSD_GB as LENOVO_SSD_GB,
+    UTILIZATION as LENOVO_UTILIZATION,
+)
 from single_estimates.raspberry_pi_5_carbon_model import (
     CPU_TDP_WATTS as PI_CPU_TDP_WATTS,
     DRAM_GB as PI_DRAM_GB,
@@ -112,6 +120,17 @@ def main() -> None:
                 hdd_gb=ZEN5_HDD_GB,
                 cpu_tdp_watts=ZEN5_CPU_TDP_WATTS,
                 utilization=ZEN5_UTILIZATION,
+            ),
+        ),
+        (
+            "Lenovo",
+            *estimate(
+                da_cm2=LENOVO_DIE_AREA_CM2,
+                dram_gb=LENOVO_DRAM_GB,
+                ssd_gb=LENOVO_SSD_GB,
+                hdd_gb=LENOVO_HDD_GB,
+                cpu_tdp_watts=LENOVO_CPU_TDP_WATTS,
+                utilization=LENOVO_UTILIZATION,
             ),
         ),
         (

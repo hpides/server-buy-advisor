@@ -21,9 +21,9 @@ Inputs used:
 - Memory:
   - The deployment allocates 128 GiB of RAM.
 - Storage:
-  - The deployment allocates 1024 GB of SSD.
+  - The deployment allocates 500 GB of SSD for the normalized comparison.
 - Utilization:
-  - No workload utilization was provided, so we use 20% as a placeholder.
+  - We use 30%, consistent with the other rows.
 
 Sources:
 - AMD EPYC 9965 product page:
@@ -44,7 +44,7 @@ CCD_AREA_MM2 = 85.0
 IOD_AREA_MM2 = 426.0
 
 DRAM_GB = 128
-SSD_GB = 1024
+SSD_GB = 500
 HDD_GB = 0
 UTILIZATION = 30
 TIME_HORIZON_YEARS = 6

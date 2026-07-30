@@ -7,7 +7,7 @@ This is a proxy estimate, not a full cloud LCA.
 
 Inputs used:
 - Memory: 64 GiB from the AWS R6a instance family page
-- SSD: 0 GB
+- SSD: 500 GB, normalized for the comparison table
 - HDD: 0 GB
 - CPU/package area:
   - AWS says r6a instances are powered by 3rd generation AMD EPYC processors,
@@ -44,7 +44,7 @@ from lifecycle_anslysis.system import System
 # AWS r6a.2xlarge technical spec inputs
 VCPUS = 8
 DRAM_GB = 64
-SSD_GB = 0
+SSD_GB = 500
 HDD_GB = 0
 UTILIZATION = 30
 TIME_HORIZON_YEARS = 6

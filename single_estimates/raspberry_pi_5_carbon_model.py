@@ -6,7 +6,7 @@ This is a proxy estimate, not a full product LCA.
 
 Inputs used:
 - Memory: 16 GB, from Raspberry Pi 5 product page / release announcement
-- SSD: 0 GB
+- SSD: 500 GB, normalized for the comparison table
 - HDD: 0 GB
 - CPU/package area:
   - Raspberry Pi 5 uses the Broadcom BCM2712 application processor, per Raspberry Pi docs.

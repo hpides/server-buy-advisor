@@ -6,7 +6,7 @@ This is a proxy estimate, not a full product LCA.
 
 Inputs used:
 - Memory: 36 GB unified memory from Apple MacBook Pro technical specs
-- SSD: 1024 GB SSD from Apple MacBook Pro technical specs
+- SSD: 500 GB, normalized for the comparison table
 - HDD: 0 GB
 - CPU/die area:
   - A third-party AnandTech forum measurement puts M3 Max at about 429 mm^2.
@@ -32,7 +32,7 @@ from lifecycle_anslysis.system import System
 
 
 DRAM_GB = 36
-SSD_GB = 1024
+SSD_GB = 500
 HDD_GB = 0
 UTILIZATION = 60
 TIME_HORIZON_YEARS = 6

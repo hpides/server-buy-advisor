@@ -6,7 +6,7 @@ This is a proxy estimate, not Apple-reported product carbon.
 
 Inputs used:
 - Memory: 64 GB unified memory from Apple Mac Studio technical specs
-- SSD: 1024 GB SSD from Apple Mac Studio technical specs
+- SSD: 500 GB, normalized for the comparison table
 - HDD: 0 GB
 - CPU/package area:
   - Apple M4 die size = 169.35 mm^2 from Wikipedia's Apple silicon page
@@ -42,7 +42,7 @@ from lifecycle_anslysis.constants import GERMANY
 
 # Apple Mac Studio (M4 Max) technical spec inputs
 DRAM_GB = 64
-SSD_GB = 1024
+SSD_GB = 500
 HDD_GB = 0
 UTILIZATION = 30
 TIME_HORIZON_YEARS = 6

@@ -6,7 +6,7 @@ This is a proxy estimate, not a full product LCA.
 
 Inputs used:
 - Memory: 32 GB unified memory from Apple Mac Studio technical specs
-- SSD: 2048 GB SSD from Apple Mac Studio power-consumption table
+- SSD: 500 GB, normalized for the comparison table
 - HDD: 0 GB
 - CPU/die area:
   - AnandTech reports the M1 Max at about 432 mm^2.
@@ -30,7 +30,7 @@ from lifecycle_anslysis.system import System
 
 
 DRAM_GB = 32
-SSD_GB = 2048
+SSD_GB = 500
 HDD_GB = 0
 UTILIZATION = 30
 TIME_HORIZON_YEARS = 6
