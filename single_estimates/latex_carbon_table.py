@@ -33,6 +33,14 @@ from single_estimates.mac_studio_m4_max_carbon_model import (
     SSD_GB as M4_SSD_GB,
     UTILIZATION as M4_UTILIZATION,
 )
+from single_estimates.mac_studio_m1_max_carbon_model import (
+    CPU_TDP_WATTS as M1_CPU_TDP_WATTS,
+    DRAM_GB as M1_DRAM_GB,
+    HDD_GB as M1_HDD_GB,
+    PACKAGE_AREA_CM2 as M1_PACKAGE_AREA_CM2,
+    SSD_GB as M1_SSD_GB,
+    UTILIZATION as M1_UTILIZATION,
+)
 from single_estimates.raspberry_pi_5_carbon_model import (
     CPU_TDP_WATTS as PI_CPU_TDP_WATTS,
     DRAM_GB as PI_DRAM_GB,
@@ -115,6 +123,17 @@ def main() -> None:
                 hdd_gb=M4_HDD_GB,
                 cpu_tdp_watts=M4_CPU_TDP_WATTS,
                 utilization=M4_UTILIZATION,
+            ),
+        ),
+        (
+            "M1 Max",
+            *estimate(
+                da_cm2=M1_PACKAGE_AREA_CM2,
+                dram_gb=M1_DRAM_GB,
+                ssd_gb=M1_SSD_GB,
+                hdd_gb=M1_HDD_GB,
+                cpu_tdp_watts=M1_CPU_TDP_WATTS,
+                utilization=M1_UTILIZATION,
             ),
         ),
         (
