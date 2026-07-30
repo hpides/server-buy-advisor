@@ -45,7 +45,7 @@ HDD_GB = 0
 # Memory/config source:
 # https://www.raspberrypi.com/news/16gb-raspberry-pi-5-on-sale-now-at-120/
 
-UTILIZATION = 60
+UTILIZATION = 30
 TIME_HORIZON_YEARS = 6
 COUNTRY = GERMANY
 
