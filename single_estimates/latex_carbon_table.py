@@ -112,7 +112,7 @@ def main() -> None:
             ),
         ),
         (
-            "Zen 5",
+            r"\amdzenfive",
             *estimate(
                 da_cm2=ZEN5_PACKAGE_AREA_CM2,
                 dram_gb=ZEN5_DRAM_GB,
@@ -123,7 +123,7 @@ def main() -> None:
             ),
         ),
         (
-            "Lenovo",
+            r"\amdzentwo",
             *estimate(
                 da_cm2=LENOVO_DIE_AREA_CM2,
                 dram_gb=LENOVO_DRAM_GB,
@@ -134,7 +134,7 @@ def main() -> None:
             ),
         ),
         (
-            "M4 Max",
+            r"\mfourmax",
             *estimate(
                 da_cm2=M4_PACKAGE_AREA_CM2,
                 dram_gb=M4_DRAM_GB,
@@ -145,7 +145,7 @@ def main() -> None:
             ),
         ),
         (
-            "M1 Max",
+            r"\textit{Apple M1 Max}",
             *estimate(
                 da_cm2=M1_PACKAGE_AREA_CM2,
                 dram_gb=M1_DRAM_GB,
@@ -156,7 +156,7 @@ def main() -> None:
             ),
         ),
         (
-            "Rasp. Pi 5",
+            r"\raspi",
             *estimate(
                 da_cm2=PI_PACKAGE_AREA_CM2,
                 dram_gb=PI_DRAM_GB,
