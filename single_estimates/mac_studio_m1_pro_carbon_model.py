@@ -15,14 +15,6 @@ Inputs used:
   - This is a die-area proxy, not a package-footprint model.
 - Operational power:
   - Apple lists the Mac Studio (2022) M1 Max at 115 W max wall power.
-
-Sources:
-- Apple Support Mac Studio power consumption table:
-  https://support.apple.com/en-mide/102027
-- Apple Mac Studio technical specifications:
-  https://www.apple.com/mac-studio/specs/
-- AnandTech M1 Max article:
-  https://www.anandtech.com/show/17019/apple-announced-m1-pro-m1-max-giant-new-socs-with-allout-performance
 """
 
 from lifecycle_anslysis.constants import GERMANY
@@ -35,9 +27,12 @@ HDD_GB = 0
 UTILIZATION = 30
 TIME_HORIZON_YEARS = 6
 COUNTRY = GERMANY
-CPU_TDP_WATTS = 115
+# Apparently 21.5 Watts just for the CPU part: https://www.notebookcheck.com/M1-Pro-vs-M1-Max_13845_13843.247552.0.html
+CPU_TDP_WATTS = 21.5
 
+# https://macperformanceguide.com/blog/2021/20211020_1400-Apple-ARM-M1X-die-size.html
 # 432 mm^2 -> 4.32 cm^2
+# This includes the GPUs as well!
 PACKAGE_AREA_CM2 = 432.0 / 100.0
 
 

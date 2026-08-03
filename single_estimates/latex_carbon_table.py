@@ -33,7 +33,7 @@ from single_estimates.mac_studio_m4_max_carbon_model import (
     SSD_GB as M4_SSD_GB,
     UTILIZATION as M4_UTILIZATION,
 )
-from single_estimates.mac_studio_m1_max_carbon_model import (
+from single_estimates.mac_studio_m1_pro_carbon_model import (
     CPU_TDP_WATTS as M1_CPU_TDP_WATTS,
     DRAM_GB as M1_DRAM_GB,
     HDD_GB as M1_HDD_GB,
@@ -145,7 +145,7 @@ def main() -> None:
             ),
         ),
         (
-            r"\textit{Apple M1 Max}",
+            r"\monepro",
             *estimate(
                 da_cm2=M1_PACKAGE_AREA_CM2,
                 dram_gb=M1_DRAM_GB,

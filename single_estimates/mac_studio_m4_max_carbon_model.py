@@ -47,7 +47,8 @@ HDD_GB = 0
 UTILIZATION = 30
 TIME_HORIZON_YEARS = 6
 COUNTRY = GERMANY
-CPU_TDP_WATTS = 62
+# https://www.notebookcheck.net/Apple-MacBook-Pro-16-M4-Max-review-The-M4-Max-is-one-of-the-fastest-mobile-processors.929593.0.html
+CPU_TDP_WATTS = 57.0
 
 # Proxy package-area estimate for M4 Max.
 # This uses the density-preserving extrapolation described in the module docstring.
