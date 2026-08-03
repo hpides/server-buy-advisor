@@ -1,38 +1,21 @@
-#!/usr/bin/env python3
-"""
-Estimate embodied and 6-year operational carbon for a Mac Studio with M1 Max using the repo's model.
-
-This is a proxy estimate, not a full product LCA.
-
-Inputs used:
-- Memory: 32 GB unified memory from Apple Mac Studio technical specs
-- SSD: 500 GB, normalized for the comparison table
-- HDD: 0 GB
-- CPU/die area:
-  - AnandTech reports the M1 Max at about 432 mm^2.
-  - The repo model expects a single `die_size` input, so we use that die-area
-    estimate directly as the proxy for silicon area.
-  - This is a die-area proxy, not a package-footprint model.
-- Operational power:
-  - Apple lists the Mac Studio (2022) M1 Max at 115 W max wall power.
-"""
-
 from lifecycle_anslysis.constants import GERMANY
 from lifecycle_anslysis.system import System
 
-
-DRAM_GB = 32
-SSD_GB = 500
-HDD_GB = 0
 UTILIZATION = 30
 TIME_HORIZON_YEARS = 6
 COUNTRY = GERMANY
+SSD_GB = 500
+HDD_GB = 0
+
+# Our M1 has actually 96 GB, but for our experiments we limited it to 32GB
+DRAM_GB = 32
+# A MAc Studio M1 Max has ~30W; but since we use it to approximate an M1 Pro we take these numbers
 # Apparently 21.5 Watts just for the CPU part: https://www.notebookcheck.com/M1-Pro-vs-M1-Max_13845_13843.247552.0.html
 CPU_TDP_WATTS = 21.5
 
 # https://macperformanceguide.com/blog/2021/20211020_1400-Apple-ARM-M1X-die-size.html
 # 432 mm^2 -> 4.32 cm^2
-# This includes the GPUs as well!
+# NOTE: This is the entire chip, so also includes the GPUs
 PACKAGE_AREA_CM2 = 432.0 / 100.0
 
 

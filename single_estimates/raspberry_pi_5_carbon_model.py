@@ -1,58 +1,16 @@
-#!/usr/bin/env python3
-"""
-Estimate embodied and 5-year operational carbon for a Raspberry Pi 5 using the repo's model.
-
-This is a proxy estimate, not a full product LCA.
-
-Inputs used:
-- Memory: 16 GB, from Raspberry Pi 5 product page / release announcement
-- SSD: 500 GB, normalized for the comparison table
-- HDD: 0 GB
-- CPU/package area:
-  - Raspberry Pi 5 uses the Broadcom BCM2712 application processor, per Raspberry Pi docs.
-  - Jeff Geerling measured the BCM2712 C1 stepping at 6.47 mm x 8.63 mm
-    = 55.836 mm^2.
-  - We use that measured die area as the repo model's `die_size` proxy.
-  - This is a die-area proxy, not the package footprint and not a board-level
-    material model.
-- Operational power:
-  - Raspberry Pi docs list Raspberry Pi 5 typical bare-board active current consumption
-    as 800 mA.
-  - With the documented 5.1 V supply requirement, that is approximated as 4.08 W.
-
-Sources:
-- Raspberry Pi 5 product page:
-  https://www.raspberrypi.com/products/raspberry-pi-5/?variant=raspberry-pi-5-8gb
-- Raspberry Pi 5 16GB announcement:
-  https://www.raspberrypi.com/news/16gb-raspberry-pi-5-on-sale-now-at-120/
-- Raspberry Pi 5 product brief PDF:
-  https://pip.raspberrypi.com/categories/892-raspberry-pi-5
-- Raspberry Pi documentation power table:
-  https://www.raspberrypi.com/documentation/computers/raspberry-pi.html
-- Jeff Geerling BCM2712 die measurement:
-  https://www.jeffgeerling.com/blog/2024/new-2gb-pi-5-has-33-smaller-die-30-idle-power-savings
-"""
-
 from lifecycle_anslysis.constants import GERMANY
 from lifecycle_anslysis.system import System
 
-
-# Raspberry Pi 5 (16 GB variant) technical spec inputs
-DRAM_GB = 16
-SSD_GB = 500
-HDD_GB = 0
-
-# Memory/config source:
-# https://www.raspberrypi.com/news/16gb-raspberry-pi-5-on-sale-now-at-120/
-
+# Shared Across all Systems
 UTILIZATION = 30
 TIME_HORIZON_YEARS = 6
 COUNTRY = GERMANY
-
-# Power source:
+SSD_GB = 500
+HDD_GB = 0
+# https://www.raspberrypi.com/news/16gb-raspberry-pi-5-on-sale-now-at-120/
+DRAM_GB = 16
 # https://www.tomshardware.com/reviews/raspberry-pi-5
 CPU_TDP_WATTS = 7
-
 # Die measurement source:
 # https://www.jeffgeerling.com/blog/2024/new-2gb-pi-5-has-33-smaller-die-30-idle-power-savings
 # If i understood correctly, we have the version with the BCM2712 D0	6.30mm	X 5.98mm	-> 37.674mm2

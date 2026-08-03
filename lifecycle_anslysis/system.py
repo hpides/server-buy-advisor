@@ -7,7 +7,7 @@ from lifecycle_anslysis.constants import OPEX_PER_YEAR, DRAM_WATTS_PER_256GB, GC
 class System:
 
     def __init__(self, die_size: float, performance_indicator: float, lifetime: int, dram_capacity: int,
-                 ssd_capacity: int, hdd_capacity: int, cpu_tdp: int) -> None:
+                 ssd_capacity: int, hdd_capacity: int, cpu_tdp: float) -> None:
         """
         :param die_size: in cm^2
         :param performance_indicator:
