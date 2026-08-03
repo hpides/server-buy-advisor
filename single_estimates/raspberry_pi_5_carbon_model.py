@@ -49,11 +49,9 @@ UTILIZATION = 30
 TIME_HORIZON_YEARS = 6
 COUNTRY = GERMANY
 
-# Raspberry Pi 5 bare-board active current is documented as 800 mA.
-# At 5.1 V this is 4.08 W.
 # Power source:
-# https://www.raspberrypi.com/documentation/computers/raspberry-pi.html
-CPU_TDP_WATTS = 4.08
+# https://www.tomshardware.com/reviews/raspberry-pi-5
+CPU_TDP_WATTS = 7
 
 # Die measurement source:
 # https://www.jeffgeerling.com/blog/2024/new-2gb-pi-5-has-33-smaller-die-30-idle-power-savings
