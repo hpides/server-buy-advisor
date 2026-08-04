@@ -10,8 +10,10 @@ Semantics:
   3. A high-minus-10% diff table.
 - The high-utilization scenario is 40% by default. Selected systems can scale
   that high point by CPU cores from the cloud baseline.
-- For the diff table, counted embodied carbon is reported as 0, with the actual
-  embodied estimate shown in parentheses.
+- For the diff table, embodied carbon is shown as 0 with the actual embodied
+  estimate in parentheses. Savings uses the same notation: savings with
+  embodied counted as 0, followed by savings including actual embodied carbon
+  in parentheses.
 """
 
 from __future__ import annotations
@@ -226,46 +228,53 @@ def utilization_rows(utilization: float) -> list[tuple[str, str, str, float, flo
     return rows
 
 
-def diff_rows() -> list[tuple[str, str, float, float, float]]:
+def diff_rows() -> list[tuple[str, str, float, str]]:
     baseline = cloud_row()
     baseline_total = baseline[3]
-    rows = [baseline]
+    rows = [
+        (
+            baseline[0],
+            baseline[1],
+            baseline[2],
+            "0 (0)",
+        )
+    ]
 
     for name, system in local_systems():
         capex = embodied(system)
         opex_delta = incremental_operational(name, system)
-        total = opex_delta
+        savings_counting_embodied_zero = baseline_total - opex_delta
+        savings_counting_actual_embodied = baseline_total - (capex + opex_delta)
         rows.append(
             (
                 name,
                 rf"0 ({fmt(capex)})",
                 opex_delta,
-                total,
-                baseline_total - total,
+                rf"{fmt(savings_counting_embodied_zero)} ({fmt(savings_counting_actual_embodied)})",
             )
         )
 
     return rows
 
 
-def print_table(
-    rows: list[tuple[str, str, float, float, float]],
+def print_diff_table(
+    rows: list[tuple[str, str, float, str]],
     caption: str,
     label: str,
 ) -> None:
     print(r"\begin{table}[t]")
     print(r"\centering")
     print(r"\small")
-    print(r"\begin{tabular}{lrrrr}")
+    print(r"\begin{tabular}{lrrr}")
     print(r"\toprule")
-    print(r"\multirow{2}{*}{\shortstack[l]{System\\Name}} & \multicolumn{4}{c}{Carbon (kg CO$_2$e)} \\")
-    print(r" & \multicolumn{1}{c}{Embod.} & \multicolumn{1}{c}{Operat.} & \multicolumn{1}{c}{Total} & \multicolumn{1}{c}{Savings} \\")
+    print(r"\multirow{2}{*}{\shortstack[l]{System\\Name}} & \multicolumn{3}{c}{Carbon (kg CO$_2$e)} \\")
+    print(r" & \multicolumn{1}{c}{Embod.} & \multicolumn{1}{c}{Operat.} & \multicolumn{1}{c}{Saved} \\")
     print(r"\midrule")
-    for name, embodied_value, operational_value, total_value, savings_value in rows:
-        bold_savings = f"\\textbf{{{fmt(savings_value)}}}"
+    for name, embodied_value, operational_value, savings_value in rows:
+        bold_savings = f"\\textbf{{{savings_value}}}"
         print(
             f"{name} & {embodied_value} & {fmt(operational_value)} & "
-            f"{fmt(total_value)} & {bold_savings} \\\\"
+            f"{bold_savings} \\\\"
         )
     print(r"\bottomrule")
     print(r"\end{tabular}")
@@ -313,7 +322,7 @@ def main() -> None:
         "tab:advanced-single-estimates-carbon-40pct",
     )
     print()
-    print_table(
+    print_diff_table(
         diff_rows(),
         r"Advanced carbon comparison using the high-minus-10\% utilization delta for non-cloud systems.",
         "tab:advanced-single-estimates-carbon-diff",
