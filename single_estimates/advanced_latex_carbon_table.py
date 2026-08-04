@@ -119,7 +119,11 @@ def incremental_operational(name: str, system: System) -> float:
 
 
 def fmt(value: float) -> str:
-    return f"{round(value):,}".replace(",", " ")
+    return f"{rounded(value):,}".replace(",", " ")
+
+
+def rounded(value: float) -> int:
+    return round(value)
 
 
 def fmt_utilization(value: float) -> str:
@@ -136,7 +140,7 @@ def cloud_row() -> tuple[str, str, float, float, float]:
     )
     capex = embodied(system)
     opex = operational(system, CLOUD_UTILIZATION)
-    total = capex + opex
+    total = rounded(capex) + rounded(opex)
     return "r6a.2xlarge", fmt(capex), opex, total, 0.0
 
 
@@ -197,7 +201,7 @@ def local_systems() -> list[tuple[str, System]]:
 
 def utilization_rows(utilization: float) -> list[tuple[str, str, str, float, float, float]]:
     baseline = cloud_row()
-    baseline_total = baseline[3]
+    baseline_total = rounded(baseline[3])
     rows = [
         (
             baseline[0],
@@ -213,7 +217,7 @@ def utilization_rows(utilization: float) -> list[tuple[str, str, str, float, flo
         capex = embodied(system)
         row_utilization = high_utilization(name) if utilization == LOCAL_HIGH_UTILIZATION else utilization
         opex = operational(system, row_utilization)
-        total = capex + opex
+        total = rounded(capex) + rounded(opex)
         rows.append(
             (
                 name,
@@ -230,7 +234,7 @@ def utilization_rows(utilization: float) -> list[tuple[str, str, str, float, flo
 
 def diff_rows() -> list[tuple[str, str, float, str]]:
     baseline = cloud_row()
-    baseline_total = baseline[3]
+    baseline_total = rounded(baseline[3])
     rows = [
         (
             baseline[0],
@@ -243,8 +247,10 @@ def diff_rows() -> list[tuple[str, str, float, str]]:
     for name, system in local_systems():
         capex = embodied(system)
         opex_delta = incremental_operational(name, system)
-        savings_counting_embodied_zero = baseline_total - opex_delta
-        savings_counting_actual_embodied = baseline_total - (capex + opex_delta)
+        rounded_capex = rounded(capex)
+        rounded_opex_delta = rounded(opex_delta)
+        savings_counting_embodied_zero = baseline_total - rounded_opex_delta
+        savings_counting_actual_embodied = baseline_total - rounded_capex - rounded_opex_delta
         rows.append(
             (
                 name,
