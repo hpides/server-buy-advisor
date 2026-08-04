@@ -120,6 +120,10 @@ def fmt(value: float) -> str:
     return f"{round(value):,}".replace(",", " ")
 
 
+def fmt_utilization(value: float) -> str:
+    return f"{value:.2f}".rstrip("0").rstrip(".")
+
+
 def cloud_row() -> tuple[str, str, float, float, float]:
     system = build_system(
         da_cm2=AWS_PACKAGE_AREA_CM2,
@@ -189,17 +193,35 @@ def local_systems() -> list[tuple[str, System]]:
     ]
 
 
-def utilization_rows(utilization: float) -> list[tuple[str, str, float, float, float]]:
+def utilization_rows(utilization: float) -> list[tuple[str, str, str, float, float, float]]:
     baseline = cloud_row()
     baseline_total = baseline[3]
-    rows = [baseline]
+    rows = [
+        (
+            baseline[0],
+            fmt_utilization(CLOUD_UTILIZATION),
+            baseline[1],
+            baseline[2],
+            baseline[3],
+            baseline[4],
+        )
+    ]
 
     for name, system in local_systems():
         capex = embodied(system)
         row_utilization = high_utilization(name) if utilization == LOCAL_HIGH_UTILIZATION else utilization
         opex = operational(system, row_utilization)
         total = capex + opex
-        rows.append((name, fmt(capex), opex, total, baseline_total - total))
+        rows.append(
+            (
+                name,
+                fmt_utilization(row_utilization),
+                fmt(capex),
+                opex,
+                total,
+                baseline_total - total,
+            )
+        )
 
     return rows
 
@@ -252,14 +274,40 @@ def print_table(
     print(r"\end{table}")
 
 
+def print_utilization_table(
+    rows: list[tuple[str, str, str, float, float, float]],
+    caption: str,
+    label: str,
+) -> None:
+    print(r"\begin{table}[t]")
+    print(r"\centering")
+    print(r"\small")
+    print(r"\begin{tabular}{lrrrrr}")
+    print(r"\toprule")
+    print(r"\multirow{2}{*}{\shortstack[l]{System\\Name}} & \multicolumn{1}{c}{Util.} & \multicolumn{4}{c}{Carbon (kg CO$_2$e)} \\")
+    print(r" & \multicolumn{1}{c}{(\%)} & \multicolumn{1}{c}{Embod.} & \multicolumn{1}{c}{Operat.} & \multicolumn{1}{c}{Total} & \multicolumn{1}{c}{Savings} \\")
+    print(r"\midrule")
+    for name, utilization, embodied_value, operational_value, total_value, savings_value in rows:
+        bold_savings = f"\\textbf{{{fmt(savings_value)}}}"
+        print(
+            f"{name} & {utilization} & {embodied_value} & "
+            f"{fmt(operational_value)} & {fmt(total_value)} & {bold_savings} \\\\"
+        )
+    print(r"\bottomrule")
+    print(r"\end{tabular}")
+    print(rf"\caption{{{caption}}}")
+    print(rf"\label{{{label}}}")
+    print(r"\end{table}")
+
+
 def main() -> None:
-    print_table(
+    print_utilization_table(
         utilization_rows(LOCAL_LOW_UTILIZATION),
         r"Advanced carbon comparison with non-cloud systems at 10\% utilization.",
         "tab:advanced-single-estimates-carbon-10pct",
     )
     print()
-    print_table(
+    print_utilization_table(
         utilization_rows(LOCAL_HIGH_UTILIZATION),
         r"Advanced carbon comparison with the high-utilization scenario for non-cloud systems.",
         "tab:advanced-single-estimates-carbon-40pct",
