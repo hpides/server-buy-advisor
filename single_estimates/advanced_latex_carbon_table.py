@@ -6,8 +6,10 @@ Semantics:
 - The cloud baseline is the AWS r6a.2xlarge instance at 30% utilization.
 - The script prints three tables:
   1. Non-cloud rows at 10% utilization.
-  2. Non-cloud rows at 40% utilization.
-  3. A 40%-minus-10% diff table.
+  2. Non-cloud rows at the high-utilization scenario.
+  3. A high-minus-10% diff table.
+- The high-utilization scenario is 40% by default. Selected systems can scale
+  that high point by CPU cores from the cloud baseline.
 - For the diff table, counted embodied carbon is reported as 0, with the actual
   embodied estimate shown in parentheses.
 """
@@ -22,6 +24,7 @@ from single_estimates.aws_r6a_2xlarge_carbon_model import (
     HDD_GB as AWS_HDD_GB,
     PACKAGE_AREA_CM2 as AWS_PACKAGE_AREA_CM2,
     SSD_GB as AWS_SSD_GB,
+    VCPUS as AWS_VCPUS,
 )
 from single_estimates.lenovo_thinkstation_p620_carbon_model import (
     CPU_TDP_WATTS as LENOVO_CPU_TDP_WATTS,
@@ -65,6 +68,13 @@ COUNTRY = GERMANY
 CLOUD_UTILIZATION = 30
 LOCAL_LOW_UTILIZATION = 10
 LOCAL_HIGH_UTILIZATION = 40
+SCALED_HIGH_UTILIZATION_CORES = {
+    r"\amdzenfive": 192,
+    r"\amdzentwo": 64,
+    r"\mfourmax": 16,
+    r"\monepro": 10,
+    r"\raspi": 4,
+}
 
 
 def build_system(
@@ -93,8 +103,15 @@ def operational(system: System, utilization: float) -> float:
     return system.calculate_opex_emissions(utilization, COUNTRY) * TIME_HORIZON_YEARS
 
 
-def incremental_operational(system: System) -> float:
-    high = operational(system, LOCAL_HIGH_UTILIZATION)
+def high_utilization(name: str) -> float:
+    cpu_cores = SCALED_HIGH_UTILIZATION_CORES.get(name)
+    if cpu_cores is None:
+        return LOCAL_HIGH_UTILIZATION
+    return LOCAL_LOW_UTILIZATION + CLOUD_UTILIZATION * AWS_VCPUS / cpu_cores
+
+
+def incremental_operational(name: str, system: System) -> float:
+    high = operational(system, high_utilization(name))
     low = operational(system, LOCAL_LOW_UTILIZATION)
     return high - low
 
@@ -179,7 +196,8 @@ def utilization_rows(utilization: float) -> list[tuple[str, str, float, float, f
 
     for name, system in local_systems():
         capex = embodied(system)
-        opex = operational(system, utilization)
+        row_utilization = high_utilization(name) if utilization == LOCAL_HIGH_UTILIZATION else utilization
+        opex = operational(system, row_utilization)
         total = capex + opex
         rows.append((name, fmt(capex), opex, total, baseline_total - total))
 
@@ -193,7 +211,7 @@ def diff_rows() -> list[tuple[str, str, float, float, float]]:
 
     for name, system in local_systems():
         capex = embodied(system)
-        opex_delta = incremental_operational(system)
+        opex_delta = incremental_operational(name, system)
         total = opex_delta
         rows.append(
             (
@@ -243,13 +261,13 @@ def main() -> None:
     print()
     print_table(
         utilization_rows(LOCAL_HIGH_UTILIZATION),
-        r"Advanced carbon comparison with non-cloud systems at 40\% utilization.",
+        r"Advanced carbon comparison with the high-utilization scenario for non-cloud systems.",
         "tab:advanced-single-estimates-carbon-40pct",
     )
     print()
     print_table(
         diff_rows(),
-        r"Advanced carbon comparison using the 40\%-minus-10\% utilization delta for non-cloud systems.",
+        r"Advanced carbon comparison using the high-minus-10\% utilization delta for non-cloud systems.",
         "tab:advanced-single-estimates-carbon-diff",
     )
 
